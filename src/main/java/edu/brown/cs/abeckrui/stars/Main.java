@@ -1,9 +1,7 @@
-package edu.brown.cs.student.stars;
+package edu.brown.cs.abeckrui.stars;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 import joptsimple.OptionParser;
@@ -56,7 +54,15 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
-    // TODO: Process commands in a REPL
+    //need to figure out how to fill this in
+    Method stars = new Stars();
+    HashMap<String, Method> actions = new HashMap<>();
+    actions.put("stars", stars);
+    actions.put("naive_neighbors", stars);
+    actions.put("naive_radius", stars);
+    actions.put("mock",stars);
+    Repl repl = new Repl(actions);
+    repl.read();
   }
 
   private static FreeMarkerEngine createEngine() {

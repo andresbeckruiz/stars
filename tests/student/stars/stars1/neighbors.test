@@ -1,0 +1,8 @@
+ARGS
+--data data/stars/ten-star.csv
+INPUT
+naive_neighbors 2 -0.50359 -0.42128 -1.1767
+OUTPUT
+70667
+71457
+END

@@ -1,0 +1,7 @@
+ARGS
+--data data/stars/ten-star.csv
+INPUT
+naive_radius 0 -0.50362 -0.42139 -1.17665
+OUTPUT
+71457
+END

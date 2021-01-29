@@ -1,0 +1,8 @@
+ARGS
+--data data/stars/three-star.csv
+INPUT
+naive_radius 2 0 0 0
+OUTPUT
+1
+2
+END
