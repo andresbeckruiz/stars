@@ -1,6 +1,7 @@
 package edu.brown.cs.abeckrui.stars;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,13 +21,13 @@ public class Stars implements Method{
                 this.parseCSV(line);
                 break;
             case "naive_neighbors":
-                //System.out.println("naive_neighbors");
+                this.naive_neighbors(line);
                 break;
             case "naive_radius":
-                //System.out.println("naive_radius");
+                this.naive_radius(line);
                 break;
             default:
-                //System.out.println("mock");
+
         }
     }
 
@@ -46,32 +47,147 @@ public class Stars implements Method{
         }
     }
 
-    private void naive_neighbors(String [] line){
-        if (line.length == 3){
-            //checking that second argument is an int
-            try {
-                int test = Integer.parseInt(line[1]);
-            } catch (NumberFormatException e){
-                System.err.println("Error: Number of neighbors must be an int");
-                return;
-            }
-            //checking that third argument is a nonempty string
-            if (!(line[2] instanceof String) && (line[2] != "")) {
-                System.err.println("Error: Name must be a nonempty string");
-                return;
-            }
-
-
+    /**
+     * This method checks that the name is surrounded by quotes
+     * @param string
+     * @return boolean representing if the string has proper quotes or not
+     */
+    private boolean checkQuotes(String string){
+        int length = string.length();
+        String newString = string.replace("\"","");
+        if (newString.length() == length - 2){
+            return true;
         }
-        else if (line.length == 5){
-            //checking that rest of arguments are integers
-            for (int i = 1; i < 5; i++){
+        return false;
+    }
+
+    /**
+     * This method calculates 3D distance between two points
+     * @param x1
+     * @param y1
+     * @param z1
+     * @param x2
+     * @param y2
+     * @param z2
+     * @return distance as a double
+     */
+    private double calculateDistance(double x1, double y1, double z1, double x2, double y2, double z2){
+        return Math.sqrt(Math.pow((x1 - x2),2) + Math.pow((y1 - y2),2) + Math.pow((z1 - z2),2));
+    }
+
+    private void naive_neighbors(String [] line){
+        //checking that _starData is not empty or null
+        if (_starData.size() == 0 || _starData == null){
+            System.err.println("Error: Please load star data and try again");
+            return;
+        }
+        if (line.length == 3 || line.length == 5){
+            int neighbors = 0;
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            if (line.length == 3){
+                //checking that second argument is an int
                 try {
-                    int test = Integer.parseInt(line[i]);
+                    int test = Integer.parseInt(line[1]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Coordinates or neighbor number must be int");
+                    System.err.println("Error: Number of neighbors must be an int");
                     return;
                 }
+                //checking that third argument is a nonempty string
+                if (!(line[2] instanceof String) && (line[2] != "")) {
+                    System.err.println("Error: Name must be a nonempty string");
+                    return;
+                }
+                //checking to see if name is encased with quotation marks
+                if (!this.checkQuotes(line[2])){
+                    System.err.println("Error: Please enclose the star name in quotation marks");
+                    return;
+                }
+                String name = line[2].replace("\"","");
+                neighbors = Integer.parseInt(line[1]);
+                boolean starFound = false;
+                //searching for star with matching name
+                for (int i = 0; i < _starData.size(); i++){
+                    if (_starData.get(i).get(1) == name){
+                        starFound = true;
+                        x = Double.parseDouble(_starData.get(i).get(2));
+                        y = Double.parseDouble(_starData.get(i).get(3));
+                        z = Double.parseDouble(_starData.get(i).get(4));
+                    }
+                }
+                //print error and exit method if no star found with name provided
+                if (!starFound){
+                    System.err.println("Error: Star not found. Please check name entered");
+                    return;
+                }
+            }
+            else{
+                //checking that rest of arguments are integers
+                try {
+                    double test = Integer.parseInt(line[1]);
+                } catch (NumberFormatException e){
+                    System.err.println("Error: Neighbor number must be int");
+                    return;
+                }
+                for (int i = 2; i < 5; i++){
+                    try {
+                        double test = Integer.parseInt(line[i]);
+                    } catch (NumberFormatException e){
+                        System.err.println("Error: Coordinates must be int or double");
+                        return;
+                    }
+                }
+                neighbors = 0;
+                x = Double.parseDouble(line[2]);
+                y = Double.parseDouble(line[3]);
+                z = Double.parseDouble(line[4]);
+            }
+            //return nothing if neighbors is 0
+            if (neighbors == 0){
+                return;
+            }
+            //checking to see if number of neighbors > 0
+            if (neighbors < 0){
+                System.err.println("Error: Number of neighbors cannot be negative");
+                return;
+            }
+            List<List<Double>> neighborList = new ArrayList<>();
+            /**
+             * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
+             * and stars that are tied in distance are always placed in front in the order, each competing
+             * star has a equal random chance to be included in the final list
+             */
+            Collections.shuffle(_starData);
+            for (int i = 0; i < _starData.size(); i++){
+                double ID = Integer.parseInt(_starData.get(i).get(0));
+                double currentX = Double.parseDouble(_starData.get(i).get(2));
+                double currentY = Double.parseDouble(_starData.get(i).get(3));
+                double currentZ = Double.parseDouble(_starData.get(i).get(4));
+                //see helper method
+                double currentDistance = this.calculateDistance(x,y,z,currentX,currentY,currentZ);
+                List<Double> currentStar = new ArrayList<>();
+                currentStar.add(ID);
+                currentStar.add(currentDistance);
+                boolean added = false;
+                //add all neighbors to list to handle ties
+                for (int j = 0; j < neighborList.size(); j++) {
+                    if (neighborList.get(j).get(1) > currentDistance){
+                        neighborList.add(i,currentStar);
+                        if (neighborList.size() > neighbors){
+                            neighborList.remove(neighborList.size() - 1);
+                        }
+                    }
+                }
+                //case where we are first adding a star to the list
+                if (neighborList.size() == 0){
+                    neighborList.add(currentStar);
+                }
+            }
+            //printing out stars to console
+            for (int k = 0; k < neighborList.size(); k++){
+                System.out.println("got here!");
+                System.out.println(neighborList.get(k).get(0).toString());
             }
         }
         else {
@@ -80,12 +196,16 @@ public class Stars implements Method{
     }
 
     private void naive_radius(String [] line){
+        if (_starData.size() == 0 || _starData == null){
+            System.err.println("Error: Please load star data and try again");
+            return;
+        }
         if (line.length == 3){
             //checking that second argument is an int
             try {
                 int test = Integer.parseInt(line[1]);
             } catch (NumberFormatException e){
-                System.err.println("Error: Number of neighbors must be an int");
+                System.err.println("Error: Radius must be an int");
                 return;
             }
             //checking that third argument is a nonempty string
@@ -97,18 +217,18 @@ public class Stars implements Method{
 
         }
         else if (line.length == 5){
-            //checking that rest of arguments are integers
+            //checking that rest of arguments are integers or doubles
             for (int i = 1; i < 5; i++){
                 try {
-                    int test = Integer.parseInt(line[i]);
+                    double test = Integer.parseInt(line[i]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Coordinates or neighbor number must be int");
+                    System.err.println("Error: Coordinates or radius must be int or double");
                     return;
                 }
             }
         }
         else {
-            System.err.println("Error: Incorrect number or args provided. 3 or 5 expected for naive_neighbors");
+            System.err.println("Error: Incorrect number or args provided. 3 or 5 expected for naive_radius");
         }
     }
 
