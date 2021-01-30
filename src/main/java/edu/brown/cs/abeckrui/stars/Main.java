@@ -1,11 +1,14 @@
 package edu.brown.cs.abeckrui.stars;
 
-import java.io.*;
+import java.io.File;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.brown.cs.abeckrui.Method;
-import edu.brown.cs.abeckrui.mockaroo.MockPerson;
 import edu.brown.cs.abeckrui.mockaroo.MockPersonRunner;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -23,7 +26,6 @@ import freemarker.template.Configuration;
 
 /**
  * The Main class of our project. This is where execution begins.
- *
  */
 public final class Main {
 
@@ -32,8 +34,7 @@ public final class Main {
   /**
    * The initial method called when execution begins.
    *
-   * @param args
-   *          An array of command line arguments...
+   * @param args An array of command line arguments...
    */
   public static void main(String[] args) {
     new Main(args).run();
@@ -50,7 +51,7 @@ public final class Main {
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
-    .defaultsTo(DEFAULT_PORT);
+            .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(args);
 
     if (options.has("gui")) {
@@ -64,7 +65,7 @@ public final class Main {
     actions.put("stars", stars);
     actions.put("naive_neighbors", stars);
     actions.put("naive_radius", stars);
-    actions.put("mock",runner);
+    actions.put("mock", runner);
     Repl repl = new Repl(actions);
     repl.read();
   }
@@ -76,7 +77,7 @@ public final class Main {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
       System.out.printf("ERROR: Unable use %s for template loading.%n",
-          templates);
+              templates);
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
@@ -95,20 +96,18 @@ public final class Main {
 
   /**
    * Handle requests to the front page of our Stars website.
-   *
    */
   private static class FrontHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = ImmutableMap.of("title",
-          "Stars: Query the database");
+              "Stars: Query the database");
       return new ModelAndView(variables, "query.ftl");
     }
   }
 
   /**
    * Display an error page when an exception occurs in the server.
-   *
    */
   private static class ExceptionPrinter implements ExceptionHandler {
     @Override

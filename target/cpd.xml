@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+   <duplication lines="27" tokens="174">
+      <file line="109"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/Stars.java"/>
+      <file line="243"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/Stars.java"/>
+      <codefragment><![CDATA[        neighbors = Integer.parseInt(line[1]);
+        boolean starFound = false;
+        //searching for star with matching name
+        for (int i = 0; i < starData.size(); i++) {
+          if (starData.get(i).get(1).equals(name)) {
+            starFound = true;
+            x = Double.parseDouble(starData.get(i).get(2));
+            y = Double.parseDouble(starData.get(i).get(3));
+            z = Double.parseDouble(starData.get(i).get(4));
+          }
+        }
+        //print ERROR and exit method if no star found with name provided
+        if (!starFound) {
+          System.err.println("ERROR: Star not found. Please check name entered");
+          return;
+        }
+      } else {
+        //checking that rest of arguments are integers
+        try {
+          double test = Integer.parseInt(line[1]);
+        } catch (NumberFormatException e) {
+          System.err.println("ERROR: Neighbor number must be int");
+          return;
+        }
+        for (int i = 2; i < 5; i++) {
+          try {
+            double test = Double.parseDouble(line[i]);]]></codefragment>
+   </duplication>
+   <duplication lines="21" tokens="173">
+      <file line="155"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/Stars.java"/>
+      <file line="285"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/Stars.java"/>
+      <codefragment><![CDATA[      List<List<Double>> neighborList = new ArrayList<>();
+      /**
+       * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
+       * and stars that are tied in distance are always placed in front in the order, each competing
+       * star has a equal random chance to be included in the final list
+       */
+      Collections.shuffle(starData);
+      for (int i = 0; i < starData.size(); i++) {
+        //don't want to include star in list if queried by name
+        if (searchByName && starData.get(i).get(1).equals(name)) {
+          continue;
+        }
+        double iD = Integer.parseInt(starData.get(i).get(0));
+        double currentX = Double.parseDouble(starData.get(i).get(2));
+        double currentY = Double.parseDouble(starData.get(i).get(3));
+        double currentZ = Double.parseDouble(starData.get(i).get(4));
+        //see helper method
+        double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);
+        List<Double> currentStar = new ArrayList<>();
+        currentStar.add(iD);
+        currentStar.add(currentDistance);]]></codefragment>
+   </duplication>
+</pmd-cpd>
