@@ -48,20 +48,6 @@ public class Stars implements Method{
     }
 
     /**
-     * This method checks that the name is surrounded by quotes
-     * @param string
-     * @return boolean representing if the string has proper quotes or not
-     */
-    private boolean checkQuotes(String string){
-        int length = string.length();
-        String newString = string.replace("\"","");
-        if (newString.length() == length - 2){
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * This method calculates 3D distance between two points
      * @param x1
      * @param y1
@@ -75,7 +61,14 @@ public class Stars implements Method{
         return Math.sqrt(Math.pow((x1 - x2),2) + Math.pow((y1 - y2),2) + Math.pow((z1 - z2),2));
     }
 
+    /**
+     * Naive neighbors method
+     * @param line, an array of Strings parsed by the REPL
+     */
     private void naive_neighbors(String [] line){
+        //boolean to let me know if a name has been queried
+        boolean searchByName = false;
+        String name = "";
         //checking that _starData is not empty or null
         if (_starData.size() == 0 || _starData == null){
             System.err.println("Error: Please load star data and try again");
@@ -87,6 +80,7 @@ public class Stars implements Method{
             double y = 0;
             double z = 0;
             if (line.length == 3){
+                searchByName = true;
                 //checking that second argument is an int
                 try {
                     int test = Integer.parseInt(line[1]);
@@ -95,21 +89,16 @@ public class Stars implements Method{
                     return;
                 }
                 //checking that third argument is a nonempty string
-                if (!(line[2] instanceof String) && (line[2] != "")) {
+                if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
                     System.err.println("Error: Name must be a nonempty string");
                     return;
                 }
-                //checking to see if name is encased with quotation marks
-                if (!this.checkQuotes(line[2])){
-                    System.err.println("Error: Please enclose the star name in quotation marks");
-                    return;
-                }
-                String name = line[2].replace("\"","");
+                name = line[2].replace("\"","");
                 neighbors = Integer.parseInt(line[1]);
                 boolean starFound = false;
                 //searching for star with matching name
                 for (int i = 0; i < _starData.size(); i++){
-                    if (_starData.get(i).get(1) == name){
+                    if (_starData.get(i).get(1).equals(name)){
                         starFound = true;
                         x = Double.parseDouble(_starData.get(i).get(2));
                         y = Double.parseDouble(_starData.get(i).get(3));
@@ -138,7 +127,7 @@ public class Stars implements Method{
                         return;
                     }
                 }
-                neighbors = 0;
+                neighbors = Integer.parseInt(line[1]);
                 x = Double.parseDouble(line[2]);
                 y = Double.parseDouble(line[3]);
                 z = Double.parseDouble(line[4]);
@@ -160,6 +149,10 @@ public class Stars implements Method{
              */
             Collections.shuffle(_starData);
             for (int i = 0; i < _starData.size(); i++){
+                //don't want to include star in list if queried by name
+                if (searchByName && _starData.get(i).get(1).equals(name)){
+                    continue;
+                }
                 double ID = Integer.parseInt(_starData.get(i).get(0));
                 double currentX = Double.parseDouble(_starData.get(i).get(2));
                 double currentY = Double.parseDouble(_starData.get(i).get(3));
@@ -170,24 +163,31 @@ public class Stars implements Method{
                 currentStar.add(ID);
                 currentStar.add(currentDistance);
                 boolean added = false;
-                //add all neighbors to list to handle ties
+                //index to know where to add later
+                int addIndex = 0;
                 for (int j = 0; j < neighborList.size(); j++) {
                     if (neighborList.get(j).get(1) > currentDistance){
-                        neighborList.add(i,currentStar);
-                        if (neighborList.size() > neighbors){
-                            neighborList.remove(neighborList.size() - 1);
-                        }
+                        addIndex = j;
+                        added = true;
+                        break;
                     }
                 }
-                //case where we are first adding a star to the list
-                if (neighborList.size() == 0){
+                if (added) {
+                    neighborList.add(addIndex, currentStar);
+                }
+                else if (neighborList.size() < neighbors){
                     neighborList.add(currentStar);
+                }
+                //want to keep list at size of number of neighbors
+                if (neighborList.size() > neighbors){
+                    neighborList.remove(neighborList.size() - 1);
                 }
             }
             //printing out stars to console
             for (int k = 0; k < neighborList.size(); k++){
-                System.out.println("got here!");
-                System.out.println(neighborList.get(k).get(0).toString());
+                double doubleID = neighborList.get(k).get(0);
+                int toPrint = (int) doubleID ;
+                System.out.println(String.valueOf(toPrint));
             }
         }
         else {
@@ -195,36 +195,123 @@ public class Stars implements Method{
         }
     }
 
+    /**
+     * Naive radius method
+     * @param line, an array of strings parsed by the REPL
+     */
     private void naive_radius(String [] line){
+        //boolean to let me know if a name has been queried
+        boolean searchByName = false;
+        String name = "";
+        //checking that _starData is not empty or null
         if (_starData.size() == 0 || _starData == null){
             System.err.println("Error: Please load star data and try again");
             return;
         }
-        if (line.length == 3){
-            //checking that second argument is an int
-            try {
-                int test = Integer.parseInt(line[1]);
-            } catch (NumberFormatException e){
-                System.err.println("Error: Radius must be an int");
-                return;
-            }
-            //checking that third argument is a nonempty string
-            if (!(line[2] instanceof String) && (line[2] != "")) {
-                System.err.println("Error: Name must be a nonempty string");
-                return;
-            }
-
-
-        }
-        else if (line.length == 5){
-            //checking that rest of arguments are integers or doubles
-            for (int i = 1; i < 5; i++){
+        if (line.length == 3 || line.length == 5){
+            double radius = 0;
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            if (line.length == 3){
+                searchByName = true;
+                //checking that second argument is an int
                 try {
-                    double test = Integer.parseInt(line[i]);
+                    int test = Integer.parseInt(line[1]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Coordinates or radius must be int or double");
+                    System.err.println("Error: Radius must be an int or double");
                     return;
                 }
+                //checking that third argument is a nonempty string
+                if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
+                    System.err.println("Error: Name must be a nonempty string");
+                    return;
+                }
+                name = line[2].replace("\"","");
+                radius = Double.parseDouble(line[1]);
+                boolean starFound = false;
+                //searching for star with matching name
+                for (int i = 0; i < _starData.size(); i++){
+                    if (_starData.get(i).get(1).equals(name)){
+                        starFound = true;
+                        x = Double.parseDouble(_starData.get(i).get(2));
+                        y = Double.parseDouble(_starData.get(i).get(3));
+                        z = Double.parseDouble(_starData.get(i).get(4));
+                    }
+                }
+                //print error and exit method if no star found with name provided
+                if (!starFound){
+                    System.err.println("Error: Star not found. Please check name entered");
+                    return;
+                }
+            }
+            else{
+                //checking that rest of arguments are integers
+                try {
+                    double test = Integer.parseInt(line[1]);
+                } catch (NumberFormatException e){
+                    System.err.println("Error: Neighbor number must be int");
+                    return;
+                }
+                for (int i = 2; i < 5; i++){
+                    try {
+                        double test = Integer.parseInt(line[i]);
+                    } catch (NumberFormatException e){
+                        System.err.println("Error: Coordinates must be int or double");
+                        return;
+                    }
+                }
+                radius = Double.parseDouble(line[1]);
+                x = Double.parseDouble(line[2]);
+                y = Double.parseDouble(line[3]);
+                z = Double.parseDouble(line[4]);
+            }
+            //checking to see if radius > 0
+            if (radius < 0){
+                System.err.println("Error: Radius cannot be negative");
+                return;
+            }
+            List<List<Double>> radiusList = new ArrayList<>();
+            /**
+             * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
+             * and stars that are tied in distance are always placed in front in the order, each competing
+             * star has a equal random chance to be included in the final list
+             */
+            Collections.shuffle(_starData);
+            for (int i = 0; i < _starData.size(); i++){
+                //don't want to include star in list if queried by name
+                if (searchByName && _starData.get(i).get(1).equals(name)){
+                    continue;
+                }
+                double ID = Integer.parseInt(_starData.get(i).get(0));
+                double currentX = Double.parseDouble(_starData.get(i).get(2));
+                double currentY = Double.parseDouble(_starData.get(i).get(3));
+                double currentZ = Double.parseDouble(_starData.get(i).get(4));
+                //see helper method
+                double currentDistance = this.calculateDistance(x,y,z,currentX,currentY,currentZ);
+                List<Double> currentStar = new ArrayList<>();
+                currentStar.add(ID);
+                currentStar.add(currentDistance);
+                if (currentDistance <= radius) {
+                    boolean added = false;
+                    //index to know where to add later
+                    for (int j = 0; j < radiusList.size(); j++) {
+                        if (radiusList.get(j).get(1) > currentDistance) {
+                            radiusList.add(j,currentStar);
+                            added = true;
+                            break;
+                        }
+                    }
+                    if (!added) {
+                        radiusList.add(currentStar);
+                    }
+                }
+            }
+            //printing out stars to console
+            for (int k = 0; k < radiusList.size(); k++){
+                double doubleID = radiusList.get(k).get(0);
+                int toPrint = (int) doubleID;
+                System.out.println(String.valueOf(toPrint));
             }
         }
         else {
