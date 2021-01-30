@@ -1,11 +1,13 @@
 package edu.brown.cs.abeckrui.stars;
 
+import edu.brown.cs.abeckrui.Method;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Stars implements Method{
+public class Stars implements Method {
 
     private List<List<String>> _starData;
 
@@ -27,13 +29,14 @@ public class Stars implements Method{
                 this.naive_radius(line);
                 break;
             default:
-
+                System.err.println("ERROR: Command for stars not found.");
+                break;
         }
     }
 
     private void parseCSV(String [] line){
         if (line.length != 2){
-            System.err.println("Error: Incorrect number of args for command. 2 are expected");
+            System.err.println("ERROR: Incorrect number of args for command. 2 are expected");
         }
         else {
             Csv testParser = new Csv(new File(line[1]));
@@ -71,7 +74,7 @@ public class Stars implements Method{
         String name = "";
         //checking that _starData is not empty or null
         if (_starData.size() == 0 || _starData == null){
-            System.err.println("Error: Please load star data and try again");
+            System.err.println("ERROR: Please load star data and try again");
             return;
         }
         if (line.length == 3 || line.length == 5){
@@ -85,12 +88,12 @@ public class Stars implements Method{
                 try {
                     int test = Integer.parseInt(line[1]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Number of neighbors must be an int");
+                    System.err.println("ERROR: Number of neighbors must be an int");
                     return;
                 }
                 //checking that third argument is a nonempty string
                 if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
-                    System.err.println("Error: Name must be a nonempty string");
+                    System.err.println("ERROR: Name must be a nonempty string");
                     return;
                 }
                 name = line[2].replace("\"","");
@@ -105,9 +108,9 @@ public class Stars implements Method{
                         z = Double.parseDouble(_starData.get(i).get(4));
                     }
                 }
-                //print error and exit method if no star found with name provided
+                //print ERROR and exit method if no star found with name provided
                 if (!starFound){
-                    System.err.println("Error: Star not found. Please check name entered");
+                    System.err.println("ERROR: Star not found. Please check name entered");
                     return;
                 }
             }
@@ -116,14 +119,14 @@ public class Stars implements Method{
                 try {
                     double test = Integer.parseInt(line[1]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Neighbor number must be int");
+                    System.err.println("ERROR: Neighbor number must be int");
                     return;
                 }
                 for (int i = 2; i < 5; i++){
                     try {
-                        double test = Integer.parseInt(line[i]);
+                        double test = Double.parseDouble(line[i]);
                     } catch (NumberFormatException e){
-                        System.err.println("Error: Coordinates must be int or double");
+                        System.err.println("ERROR: Coordinates must be int or double");
                         return;
                     }
                 }
@@ -138,7 +141,7 @@ public class Stars implements Method{
             }
             //checking to see if number of neighbors > 0
             if (neighbors < 0){
-                System.err.println("Error: Number of neighbors cannot be negative");
+                System.err.println("ERROR: Number of neighbors cannot be negative");
                 return;
             }
             List<List<Double>> neighborList = new ArrayList<>();
@@ -191,7 +194,7 @@ public class Stars implements Method{
             }
         }
         else {
-            System.err.println("Error: Incorrect number or args provided. 3 or 5 expected for naive_neighbors");
+            System.err.println("ERROR: Incorrect number or args provided. 3 or 5 expected for naive_neighbors");
         }
     }
 
@@ -205,7 +208,7 @@ public class Stars implements Method{
         String name = "";
         //checking that _starData is not empty or null
         if (_starData.size() == 0 || _starData == null){
-            System.err.println("Error: Please load star data and try again");
+            System.err.println("ERROR: Please load star data and try again");
             return;
         }
         if (line.length == 3 || line.length == 5){
@@ -219,12 +222,12 @@ public class Stars implements Method{
                 try {
                     int test = Integer.parseInt(line[1]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Radius must be an int or double");
+                    System.err.println("ERROR: Radius must be an int or double");
                     return;
                 }
                 //checking that third argument is a nonempty string
                 if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
-                    System.err.println("Error: Name must be a nonempty string");
+                    System.err.println("ERROR: Name must be a nonempty string");
                     return;
                 }
                 name = line[2].replace("\"","");
@@ -239,9 +242,9 @@ public class Stars implements Method{
                         z = Double.parseDouble(_starData.get(i).get(4));
                     }
                 }
-                //print error and exit method if no star found with name provided
+                //print ERROR and exit method if no star found with name provided
                 if (!starFound){
-                    System.err.println("Error: Star not found. Please check name entered");
+                    System.err.println("ERROR: Star not found. Please check name entered");
                     return;
                 }
             }
@@ -250,14 +253,14 @@ public class Stars implements Method{
                 try {
                     double test = Integer.parseInt(line[1]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Neighbor number must be int");
+                    System.err.println("ERROR: Neighbor number must be int");
                     return;
                 }
                 for (int i = 2; i < 5; i++){
                     try {
                         double test = Integer.parseInt(line[i]);
                     } catch (NumberFormatException e){
-                        System.err.println("Error: Coordinates must be int or double");
+                        System.err.println("ERROR: Coordinates must be int or double");
                         return;
                     }
                 }
@@ -268,7 +271,7 @@ public class Stars implements Method{
             }
             //checking to see if radius > 0
             if (radius < 0){
-                System.err.println("Error: Radius cannot be negative");
+                System.err.println("ERROR: Radius cannot be negative");
                 return;
             }
             List<List<Double>> radiusList = new ArrayList<>();
@@ -315,10 +318,9 @@ public class Stars implements Method{
             }
         }
         else {
-            System.err.println("Error: Incorrect number or args provided. 3 or 5 expected for naive_radius");
+            System.err.println("ERROR: Incorrect number or args provided. 3 or 5 expected for naive_radius");
         }
     }
-
 
     /**
      * This
@@ -327,7 +329,8 @@ public class Stars implements Method{
      */
     public static boolean checkData(String[] data) {
         if (data.length != 5) {
-            System.err.println("Error: Incorrect number of data fields for line:" + data);
+            System.err.println("ERROR: Incorrect number of data fields for line:" + data);
+            return false;
         }
         for (int i = 0; i < data.length; i++) {
             //data type checking
@@ -335,19 +338,19 @@ public class Stars implements Method{
                 try {
                     int test = Integer.parseInt(data[i]);
                 } catch (NumberFormatException e){
-                    System.err.println("Error: Star ID must be an int ");
+                    System.err.println("ERROR: Star ID must be an int ");
                     return false;
                 }
             } else if (i == 1) {
                 if (!(data[i] instanceof String)) {
-                    System.err.println("Error: Starname must be a string" + data);
+                    System.err.println("ERROR: Starname must be a string" + data);
                     return false;
                 }
             } else {
                 try {
                     double test = Double.parseDouble(data[i]);
                 } catch (NumberFormatException e) {
-                    System.err.println("Error: Coordinates must be a double" + data);
+                    System.err.println("ERROR: Coordinates must be a double" + data);
                 }
             }
         }

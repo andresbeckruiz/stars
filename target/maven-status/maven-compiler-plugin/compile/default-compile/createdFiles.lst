@@ -1,7 +1,9 @@
 edu/brown/cs/abeckrui/stars/Main.class
 edu/brown/cs/abeckrui/stars/Main$FrontHandler.class
+edu/brown/cs/abeckrui/Method.class
 edu/brown/cs/abeckrui/stars/Main$ExceptionPrinter.class
 edu/brown/cs/abeckrui/stars/Stars.class
 edu/brown/cs/abeckrui/stars/Csv.class
-edu/brown/cs/abeckrui/stars/Method.class
+edu/brown/cs/abeckrui/mockaroo/MockPerson.class
 edu/brown/cs/abeckrui/stars/Repl.class
+edu/brown/cs/abeckrui/mockaroo/MockPersonRunner.class

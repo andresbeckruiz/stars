@@ -1,4 +1,4 @@
-package edu.brown.cs.abeckrui.stars;
+package edu.brown.cs.abeckrui;
 
 public interface Method {
 

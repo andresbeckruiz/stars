@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.brown.cs.abeckrui.Method;
+import edu.brown.cs.abeckrui.mockaroo.MockPerson;
+import edu.brown.cs.abeckrui.mockaroo.MockPersonRunner;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -56,11 +59,12 @@ public final class Main {
 
     //need to figure out how to fill this in
     Method stars = new Stars();
+    Method runner = new MockPersonRunner();
     HashMap<String, Method> actions = new HashMap<>();
     actions.put("stars", stars);
     actions.put("naive_neighbors", stars);
     actions.put("naive_radius", stars);
-    actions.put("mock",stars);
+    actions.put("mock",runner);
     Repl repl = new Repl(actions);
     repl.read();
   }

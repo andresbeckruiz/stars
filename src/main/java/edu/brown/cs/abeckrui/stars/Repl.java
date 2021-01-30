@@ -1,5 +1,7 @@
 package edu.brown.cs.abeckrui.stars;
 
+import edu.brown.cs.abeckrui.Method;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -63,9 +65,9 @@ public class Repl {
                     if (_actions.containsKey(command[0])){
                         _actions.get(command[0]).run(command);
                     }
-                    //command doesn't exist, throw error
+                    //command doesn't exist, throw ERROR
                     else {
-                        System.err.println("Error: Command does not exist");
+                        System.err.println("ERROR: Command does not exist");
                     }
                 }
                 //this happens when we reach EOD, terminate loop
@@ -73,9 +75,9 @@ public class Repl {
                     break;
                 }
             }
-            //handle error for readLine method
+            //handle ERROR for readLine method
             catch(IOException e){
-                System.err.println("Error: IOException in REPL" + e);
+                System.err.println("ERROR: IOException in REPL" + e);
             }
         }
     }
