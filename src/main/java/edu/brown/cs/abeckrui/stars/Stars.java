@@ -28,10 +28,10 @@ public class Stars implements Method {
       case "stars":
         this.parseCSV(line);
         break;
-      case "naiveNeighbors":
+      case "naive_neighbors":
         this.naiveNeighbors(line);
         break;
-      case "naiveRadius":
+      case "naive_radius":
         this.naiveRadius(line);
         break;
       default:
@@ -266,7 +266,7 @@ public class Stars implements Method {
         }
         for (int i = 2; i < 5; i++) {
           try {
-            double test = Integer.parseInt(line[i]);
+            double test = Double.parseDouble(line[i]);
           } catch (NumberFormatException e) {
             System.err.println("ERROR: Coordinates must be int or double");
             return;

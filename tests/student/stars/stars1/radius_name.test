@@ -1,0 +1,16 @@
+INPUT
+stars data/stars/ten-star.csv
+naive_radius 2 0 0 0
+naive_radius 2 "Sol"
+OUTPUT
+Read 10 stars from data/stars/ten-star.csv
+0
+70667
+71454
+71457
+87666
+70667
+71454
+71457
+87666
+END

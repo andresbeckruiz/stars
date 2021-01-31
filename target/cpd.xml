@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-   <duplication lines="27" tokens="174">
+   <duplication lines="32" tokens="201">
       <file line="109"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/Stars.java"/>
       <file line="243"
@@ -31,7 +31,12 @@
         }
         for (int i = 2; i < 5; i++) {
           try {
-            double test = Double.parseDouble(line[i]);]]></codefragment>
+            double test = Double.parseDouble(line[i]);
+          } catch (NumberFormatException e) {
+            System.err.println("ERROR: Coordinates must be int or double");
+            return;
+          }
+        }]]></codefragment>
    </duplication>
    <duplication lines="21" tokens="173">
       <file line="155"

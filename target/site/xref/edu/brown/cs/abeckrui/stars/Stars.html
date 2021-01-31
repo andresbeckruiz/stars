@@ -36,10 +36,10 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>        <strong class="jxr_keyword">case</strong> <span class="jxr_string">"stars"</span>:
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>          <strong class="jxr_keyword">this</strong>.parseCSV(line);
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>        <strong class="jxr_keyword">case</strong> <span class="jxr_string">"naiveNeighbors"</span>:
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>        <strong class="jxr_keyword">case</strong> <span class="jxr_string">"naive_neighbors"</span>:
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">this</strong>.naiveNeighbors(line);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>          <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>        <strong class="jxr_keyword">case</strong> <span class="jxr_string">"naiveRadius"</span>:
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>        <strong class="jxr_keyword">case</strong> <span class="jxr_string">"naive_radius"</span>:
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>          <strong class="jxr_keyword">this</strong>.naiveRadius(line);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          <strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>        <strong class="jxr_keyword">default</strong>:
@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a>         }
 <a class="jxr_linenumber" name="L267" href="#L267">267</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 2; i &lt; 5; i++) {
 <a class="jxr_linenumber" name="L268" href="#L268">268</a>           <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>             <strong class="jxr_keyword">double</strong> test = Integer.parseInt(line[i]);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>             <strong class="jxr_keyword">double</strong> test = Double.parseDouble(line[i]);
 <a class="jxr_linenumber" name="L270" href="#L270">270</a>           } <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
 <a class="jxr_linenumber" name="L271" href="#L271">271</a>             System.err.println(<span class="jxr_string">"ERROR: Coordinates must be int or double"</span>);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a>             <strong class="jxr_keyword">return</strong>;

@@ -1,8 +1,8 @@
-ARGS
---data data/stars/ten-star.csv
 INPUT
+stars data/stars/ten-star.csv
 naive_neighbors 2 -0.50359 -0.42128 -1.1767
 OUTPUT
-70667
+Read 10 stars from data/stars/ten-star.csv
+71454
 71457
 END

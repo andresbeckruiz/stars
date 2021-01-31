@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Stars.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stars</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.abeckrui.stars</a> &gt; <span class="el_source">Stars.java</span></div><h1>Stars.java</h1><pre class="source lang-java linenums">package edu.brown.cs.abeckrui.stars;
+
+import edu.brown.cs.abeckrui.Method;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+/**
+ * This class handles all the search methods, data checking, and star logic.
+ */
+public class Stars implements Method {
+
+  private List&lt;List&lt;String&gt;&gt; starData;
+
+  /**
+   * This constructor initializes starData, which holds all the star data.
+   */
+<span class="fc" id="L20">  public Stars() {</span>
+<span class="fc" id="L21">    starData = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L22">  }</span>
+
+
+  @Override
+  public void run(String[] line) {
+<span class="nc bnc" id="L27" title="All 4 branches missed.">    switch (line[0]) {</span>
+      case &quot;stars&quot;:
+<span class="nc" id="L29">        this.parseCSV(line);</span>
+<span class="nc" id="L30">        break;</span>
+      case &quot;naive_neighbors&quot;:
+<span class="nc" id="L32">        this.naiveNeighbors(line);</span>
+<span class="nc" id="L33">        break;</span>
+      case &quot;naive_radius&quot;:
+<span class="nc" id="L35">        this.naiveRadius(line);</span>
+<span class="nc" id="L36">        break;</span>
+      default:
+        //shouldn't reach this, but handle error just in case
+<span class="nc" id="L39">        System.err.println(&quot;ERROR: Command for stars not found.&quot;);</span>
+        break;
+    }
+<span class="nc" id="L42">  }</span>
+
+  private void parseCSV(String[] line) {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">    if (line.length != 2) {</span>
+<span class="nc" id="L46">      System.err.println(&quot;ERROR: Incorrect number of args for command. 2 are expected&quot;);</span>
+    } else {
+<span class="nc" id="L48">      Csv testParser = new Csv(new File(line[1]));</span>
+      //first check if data is invalid. if not, set it equal to starData
+<span class="nc bnc" id="L50" title="All 2 branches missed.">      if (testParser.parse() != null) {</span>
+<span class="nc" id="L51">        Csv parser = new Csv(new File(line[1]));</span>
+<span class="nc" id="L52">        starData = parser.parse();</span>
+        //output message
+<span class="nc" id="L54">        System.out.println(&quot;Read &quot; + starData.size() + &quot; stars from &quot; + line[1]);</span>
+      }
+    }
+<span class="nc" id="L57">  }</span>
+
+  /**
+   * This method calculates 3D distance between two points.
+   *
+   * @param x1 double x1
+   * @param y1 double y1
+   * @param z1 double z1
+   * @param x2 double x2
+   * @param y2 double y2
+   * @param z2 double z2
+   * @return distance as a double
+   */
+  private double calculateDistance(double x1, double y1, double z1, double x2,
+                                   double y2, double z2) {
+<span class="nc" id="L72">    return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));</span>
+  }
+
+  /**
+   * Naive neighbors method.
+   *
+   * @param line, an array of Strings parsed by the REPL
+   */
+  private void naiveNeighbors(String[] line) {
+    //boolean to let me know if a name has been queried
+<span class="nc" id="L82">    boolean searchByName = false;</span>
+<span class="nc" id="L83">    String name = &quot;&quot;;</span>
+    //checking that starData is not empty or null
+<span class="nc bnc" id="L85" title="All 4 branches missed.">    if (starData.size() == 0 || starData == null) {</span>
+<span class="nc" id="L86">      System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
+<span class="nc" id="L87">      return;</span>
+    }
+<span class="nc bnc" id="L89" title="All 4 branches missed.">    if (line.length == 3 || line.length == 5) {</span>
+<span class="nc" id="L90">      int neighbors = 0;</span>
+<span class="nc" id="L91">      double x = 0;</span>
+<span class="nc" id="L92">      double y = 0;</span>
+<span class="nc" id="L93">      double z = 0;</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">      if (line.length == 3) {</span>
+<span class="nc" id="L95">        searchByName = true;</span>
+        //checking that second argument is an int
+        try {
+<span class="nc" id="L98">          int test = Integer.parseInt(line[1]);</span>
+<span class="nc" id="L99">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L100">          System.err.println(&quot;ERROR: Number of neighbors must be an int&quot;);</span>
+<span class="nc" id="L101">          return;</span>
+<span class="nc" id="L102">        }</span>
+        //checking that third argument is a nonempty string
+<span class="nc bnc" id="L104" title="All 4 branches missed.">        if (!(line[2] instanceof String) || (line[2].equals(&quot;\&quot;\&quot;&quot;))) {</span>
+<span class="nc" id="L105">          System.err.println(&quot;ERROR: Name must be a nonempty string&quot;);</span>
+<span class="nc" id="L106">          return;</span>
+        }
+<span class="nc" id="L108">        name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="nc" id="L109">        neighbors = Integer.parseInt(line[1]);</span>
+<span class="nc" id="L110">        boolean starFound = false;</span>
+        //searching for star with matching name
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        for (int i = 0; i &lt; starData.size(); i++) {</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">          if (starData.get(i).get(1).equals(name)) {</span>
+<span class="nc" id="L114">            starFound = true;</span>
+<span class="nc" id="L115">            x = Double.parseDouble(starData.get(i).get(2));</span>
+<span class="nc" id="L116">            y = Double.parseDouble(starData.get(i).get(3));</span>
+<span class="nc" id="L117">            z = Double.parseDouble(starData.get(i).get(4));</span>
+          }
+        }
+        //print ERROR and exit method if no star found with name provided
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (!starFound) {</span>
+<span class="nc" id="L122">          System.err.println(&quot;ERROR: Star not found. Please check name entered&quot;);</span>
+<span class="nc" id="L123">          return;</span>
+        }
+<span class="nc" id="L125">      } else {</span>
+        //checking that rest of arguments are integers
+        try {
+<span class="nc" id="L128">          double test = Integer.parseInt(line[1]);</span>
+<span class="nc" id="L129">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L130">          System.err.println(&quot;ERROR: Neighbor number must be int&quot;);</span>
+<span class="nc" id="L131">          return;</span>
+<span class="nc" id="L132">        }</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        for (int i = 2; i &lt; 5; i++) {</span>
+          try {
+<span class="nc" id="L135">            double test = Double.parseDouble(line[i]);</span>
+<span class="nc" id="L136">          } catch (NumberFormatException e) {</span>
+<span class="nc" id="L137">            System.err.println(&quot;ERROR: Coordinates must be int or double&quot;);</span>
+<span class="nc" id="L138">            return;</span>
+<span class="nc" id="L139">          }</span>
+        }
+<span class="nc" id="L141">        neighbors = Integer.parseInt(line[1]);</span>
+<span class="nc" id="L142">        x = Double.parseDouble(line[2]);</span>
+<span class="nc" id="L143">        y = Double.parseDouble(line[3]);</span>
+<span class="nc" id="L144">        z = Double.parseDouble(line[4]);</span>
+      }
+      //return nothing if neighbors is 0
+<span class="nc bnc" id="L147" title="All 2 branches missed.">      if (neighbors == 0) {</span>
+<span class="nc" id="L148">        return;</span>
+      }
+      //checking to see if number of neighbors &gt; 0
+<span class="nc bnc" id="L151" title="All 2 branches missed.">      if (neighbors &lt; 0) {</span>
+<span class="nc" id="L152">        System.err.println(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
+<span class="nc" id="L153">        return;</span>
+      }
+<span class="nc" id="L155">      List&lt;List&lt;Double&gt;&gt; neighborList = new ArrayList&lt;&gt;();</span>
+      /**
+       * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
+       * and stars that are tied in distance are always placed in front in the order, each competing
+       * star has a equal random chance to be included in the final list
+       */
+<span class="nc" id="L161">      Collections.shuffle(starData);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">      for (int i = 0; i &lt; starData.size(); i++) {</span>
+        //don't want to include star in list if queried by name
+<span class="nc bnc" id="L164" title="All 4 branches missed.">        if (searchByName &amp;&amp; starData.get(i).get(1).equals(name)) {</span>
+<span class="nc" id="L165">          continue;</span>
+        }
+<span class="nc" id="L167">        double iD = Integer.parseInt(starData.get(i).get(0));</span>
+<span class="nc" id="L168">        double currentX = Double.parseDouble(starData.get(i).get(2));</span>
+<span class="nc" id="L169">        double currentY = Double.parseDouble(starData.get(i).get(3));</span>
+<span class="nc" id="L170">        double currentZ = Double.parseDouble(starData.get(i).get(4));</span>
+        //see helper method
+<span class="nc" id="L172">        double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);</span>
+<span class="nc" id="L173">        List&lt;Double&gt; currentStar = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L174">        currentStar.add(iD);</span>
+<span class="nc" id="L175">        currentStar.add(currentDistance);</span>
+<span class="nc" id="L176">        boolean added = false;</span>
+        //index to know where to add later
+<span class="nc" id="L178">        int addIndex = 0;</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        for (int j = 0; j &lt; neighborList.size(); j++) {</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">          if (neighborList.get(j).get(1) &gt; currentDistance) {</span>
+<span class="nc" id="L181">            addIndex = j;</span>
+<span class="nc" id="L182">            added = true;</span>
+<span class="nc" id="L183">            break;</span>
+          }
+        }
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (added) {</span>
+<span class="nc" id="L187">          neighborList.add(addIndex, currentStar);</span>
+          //want to include neighbors up to amount of neighbors asked for in command
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        } else if (neighborList.size() &lt; neighbors) {</span>
+<span class="nc" id="L190">          neighborList.add(currentStar);</span>
+        }
+        //want to keep list at size of number of neighbors
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        if (neighborList.size() &gt; neighbors) {</span>
+<span class="nc" id="L194">          neighborList.remove(neighborList.size() - 1);</span>
+        }
+      }
+      //printing out stars to console
+<span class="nc bnc" id="L198" title="All 2 branches missed.">      for (int k = 0; k &lt; neighborList.size(); k++) {</span>
+<span class="nc" id="L199">        double doubleID = neighborList.get(k).get(0);</span>
+<span class="nc" id="L200">        int toPrint = (int) doubleID;</span>
+<span class="nc" id="L201">        System.out.println(String.valueOf(toPrint));</span>
+      }
+<span class="nc" id="L203">    } else {</span>
+<span class="nc" id="L204">      System.err.println(&quot;ERROR: Incorrect number or args provided. 3 or 5 expected for &quot;</span>
+              + &quot;naiveNeighbors&quot;);
+    }
+<span class="nc" id="L207">  }</span>
+
+  /**
+   * Naive radius method.
+   *
+   * @param line, an array of strings parsed by the REPL
+   */
+  private void naiveRadius(String[] line) {
+    //boolean to let me know if a name has been queried
+<span class="nc" id="L216">    boolean searchByName = false;</span>
+<span class="nc" id="L217">    String name = &quot;&quot;;</span>
+    //checking that starData is not empty or null
+<span class="nc bnc" id="L219" title="All 4 branches missed.">    if (starData.size() == 0 || starData == null) {</span>
+<span class="nc" id="L220">      System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
+<span class="nc" id="L221">      return;</span>
+    }
+<span class="nc bnc" id="L223" title="All 4 branches missed.">    if (line.length == 3 || line.length == 5) {</span>
+<span class="nc" id="L224">      double radius = 0;</span>
+<span class="nc" id="L225">      double x = 0;</span>
+<span class="nc" id="L226">      double y = 0;</span>
+<span class="nc" id="L227">      double z = 0;</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">      if (line.length == 3) {</span>
+<span class="nc" id="L229">        searchByName = true;</span>
+        //checking that second argument is an int
+        try {
+<span class="nc" id="L232">          int test = Integer.parseInt(line[1]);</span>
+<span class="nc" id="L233">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L234">          System.err.println(&quot;ERROR: Radius must be an int or double&quot;);</span>
+<span class="nc" id="L235">          return;</span>
+<span class="nc" id="L236">        }</span>
+        //checking that third argument is a nonempty string
+<span class="nc bnc" id="L238" title="All 4 branches missed.">        if (!(line[2] instanceof String) || (line[2].equals(&quot;\&quot;\&quot;&quot;))) {</span>
+<span class="nc" id="L239">          System.err.println(&quot;ERROR: Name must be a nonempty string&quot;);</span>
+<span class="nc" id="L240">          return;</span>
+        }
+<span class="nc" id="L242">        name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="nc" id="L243">        radius = Double.parseDouble(line[1]);</span>
+<span class="nc" id="L244">        boolean starFound = false;</span>
+        //searching for star with matching name
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        for (int i = 0; i &lt; starData.size(); i++) {</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">          if (starData.get(i).get(1).equals(name)) {</span>
+<span class="nc" id="L248">            starFound = true;</span>
+<span class="nc" id="L249">            x = Double.parseDouble(starData.get(i).get(2));</span>
+<span class="nc" id="L250">            y = Double.parseDouble(starData.get(i).get(3));</span>
+<span class="nc" id="L251">            z = Double.parseDouble(starData.get(i).get(4));</span>
+          }
+        }
+        //print ERROR and exit method if no star found with name provided
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        if (!starFound) {</span>
+<span class="nc" id="L256">          System.err.println(&quot;ERROR: Star not found. Please check name entered&quot;);</span>
+<span class="nc" id="L257">          return;</span>
+        }
+<span class="nc" id="L259">      } else {</span>
+        //checking that rest of arguments are integers
+        try {
+<span class="nc" id="L262">          double test = Integer.parseInt(line[1]);</span>
+<span class="nc" id="L263">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L264">          System.err.println(&quot;ERROR: Neighbor number must be int&quot;);</span>
+<span class="nc" id="L265">          return;</span>
+<span class="nc" id="L266">        }</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        for (int i = 2; i &lt; 5; i++) {</span>
+          try {
+<span class="nc" id="L269">            double test = Double.parseDouble(line[i]);</span>
+<span class="nc" id="L270">          } catch (NumberFormatException e) {</span>
+<span class="nc" id="L271">            System.err.println(&quot;ERROR: Coordinates must be int or double&quot;);</span>
+<span class="nc" id="L272">            return;</span>
+<span class="nc" id="L273">          }</span>
+        }
+<span class="nc" id="L275">        radius = Double.parseDouble(line[1]);</span>
+<span class="nc" id="L276">        x = Double.parseDouble(line[2]);</span>
+<span class="nc" id="L277">        y = Double.parseDouble(line[3]);</span>
+<span class="nc" id="L278">        z = Double.parseDouble(line[4]);</span>
+      }
+      //checking to see if radius &gt; 0
+<span class="nc bnc" id="L281" title="All 2 branches missed.">      if (radius &lt; 0) {</span>
+<span class="nc" id="L282">        System.err.println(&quot;ERROR: Radius cannot be negative&quot;);</span>
+<span class="nc" id="L283">        return;</span>
+      }
+<span class="nc" id="L285">      List&lt;List&lt;Double&gt;&gt; radiusList = new ArrayList&lt;&gt;();</span>
+      /**
+       * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
+       * and stars that are tied in distance are always placed in front in the order, each competing
+       * star has a equal random chance to be included in the final list
+       */
+<span class="nc" id="L291">      Collections.shuffle(starData);</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">      for (int i = 0; i &lt; starData.size(); i++) {</span>
+        //don't want to include star in list if queried by name
+<span class="nc bnc" id="L294" title="All 4 branches missed.">        if (searchByName &amp;&amp; starData.get(i).get(1).equals(name)) {</span>
+<span class="nc" id="L295">          continue;</span>
+        }
+<span class="nc" id="L297">        double iD = Integer.parseInt(starData.get(i).get(0));</span>
+<span class="nc" id="L298">        double currentX = Double.parseDouble(starData.get(i).get(2));</span>
+<span class="nc" id="L299">        double currentY = Double.parseDouble(starData.get(i).get(3));</span>
+<span class="nc" id="L300">        double currentZ = Double.parseDouble(starData.get(i).get(4));</span>
+        //see helper method
+<span class="nc" id="L302">        double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);</span>
+<span class="nc" id="L303">        List&lt;Double&gt; currentStar = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L304">        currentStar.add(iD);</span>
+<span class="nc" id="L305">        currentStar.add(currentDistance);</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">        if (currentDistance &lt;= radius) {</span>
+<span class="nc" id="L307">          boolean added = false;</span>
+          //index to know where to add later
+<span class="nc bnc" id="L309" title="All 2 branches missed.">          for (int j = 0; j &lt; radiusList.size(); j++) {</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">            if (radiusList.get(j).get(1) &gt; currentDistance) {</span>
+<span class="nc" id="L311">              radiusList.add(j, currentStar);</span>
+<span class="nc" id="L312">              added = true;</span>
+<span class="nc" id="L313">              break;</span>
+            }
+          }
+<span class="nc bnc" id="L316" title="All 2 branches missed.">          if (!added) {</span>
+<span class="nc" id="L317">            radiusList.add(currentStar);</span>
+          }
+        }
+      }
+      //printing out stars to console
+<span class="nc bnc" id="L322" title="All 2 branches missed.">      for (int k = 0; k &lt; radiusList.size(); k++) {</span>
+<span class="nc" id="L323">        double doubleID = radiusList.get(k).get(0);</span>
+<span class="nc" id="L324">        int toPrint = (int) doubleID;</span>
+<span class="nc" id="L325">        System.out.println(String.valueOf(toPrint));</span>
+      }
+<span class="nc" id="L327">    } else {</span>
+<span class="nc" id="L328">      System.err.println(&quot;ERROR: Incorrect number or args provided. 3 or 5 expected &quot;</span>
+              + &quot;for naiveRadius&quot;);
+    }
+<span class="nc" id="L331">  }</span>
+
+  /**
+   * This method checks if the starData is valid or not.
+   *
+   * @param data an array of strings representing the CSV star data
+   * @return boolean indicating true if data is valid and false if not
+   */
+  public static boolean checkData(String[] data) {
+<span class="nc bnc" id="L340" title="All 2 branches missed.">    if (data.length != 5) {</span>
+<span class="nc" id="L341">      System.err.println(&quot;ERROR: Incorrect number of data fields for line:&quot; + data);</span>
+<span class="nc" id="L342">      return false;</span>
+    }
+<span class="nc bnc" id="L344" title="All 2 branches missed.">    for (int i = 0; i &lt; data.length; i++) {</span>
+      //data type checking
+<span class="nc bnc" id="L346" title="All 2 branches missed.">      if (i == 0) {</span>
+        try {
+<span class="nc" id="L348">          int test = Integer.parseInt(data[i]);</span>
+<span class="nc" id="L349">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L350">          System.err.println(&quot;ERROR: Star ID must be an int &quot;);</span>
+<span class="nc" id="L351">          return false;</span>
+<span class="nc" id="L352">        }</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">      } else if (i == 1) {</span>
+<span class="nc bnc" id="L354" title="All 2 branches missed.">        if (!(data[i] instanceof String)) {</span>
+<span class="nc" id="L355">          System.err.println(&quot;ERROR: Starname must be a string&quot; + data);</span>
+<span class="nc" id="L356">          return false;</span>
+        }
+      } else {
+        try {
+<span class="nc" id="L360">          double test = Double.parseDouble(data[i]);</span>
+<span class="nc" id="L361">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L362">          System.err.println(&quot;ERROR: Coordinates must be a double&quot; + data);</span>
+<span class="nc" id="L363">        }</span>
+      }
+    }
+<span class="nc" id="L366">    return true;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

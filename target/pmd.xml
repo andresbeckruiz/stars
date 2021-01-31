@@ -2,7 +2,7 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.13.0" timestamp="2021-01-30T17:33:00.718">
+    version="6.13.0" timestamp="2021-01-30T22:37:31.062">
 <file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/Stars.java">
 <violation beginline="72" endline="72" begincolumn="32" endcolumn="38" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="Stars" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.

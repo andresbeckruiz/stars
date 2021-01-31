@@ -1,0 +1,9 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+stars,edu.brown.cs.abeckrui.stars,Main.FrontHandler,10,0,0,0,2,0,1,0,1,0
+stars,edu.brown.cs.abeckrui.stars,Main,137,0,2,0,36,0,6,0,5,0
+stars,edu.brown.cs.abeckrui.stars,Repl,71,15,8,0,21,4,5,1,1,1
+stars,edu.brown.cs.abeckrui.stars,Main.ExceptionPrinter,26,0,0,0,8,0,1,0,1,0
+stars,edu.brown.cs.abeckrui.stars,Csv,212,0,42,0,52,0,23,0,2,0
+stars,edu.brown.cs.abeckrui.stars,Stars,876,8,102,0,203,3,58,1,6,1
+stars,edu.brown.cs.abeckrui.mockaroo,MockPersonRunner,236,8,30,0,48,3,18,1,3,1
+stars,edu.brown.cs.abeckrui.mockaroo,MockPerson,37,0,0,0,10,0,2,0,2,0
