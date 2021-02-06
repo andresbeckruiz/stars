@@ -1,13 +1,13 @@
 package edu.brown.cs.abeckrui;
 
-public class Node {
+public class Node<T extends CordComparable> {
 
   private Node left;
   private Node right;
   //this is the comparable object the Node will store
-  private Comparable compObject;
+  private T compObject;
 
-  public Node(Comparable comparableObject){
+  public Node(T comparableObject){
     left = null;
     right = null;
     compObject = comparableObject;
@@ -17,8 +17,22 @@ public class Node {
     return left;
   }
 
+  public boolean hasLeft(){
+    if (left == null){
+      return false;
+    }
+    return true;
+  }
+
   public Node getRight(){
     return right;
+  }
+
+  public boolean hasRight(){
+    if (right == null){
+      return false;
+    }
+    return true;
   }
 
   public void setLeft(Node leftChild){
@@ -29,7 +43,7 @@ public class Node {
     right = rightChild;
   }
 
-  public Comparable getCompObject(){
+  public T getCompObject(){
     return compObject;
   }
 }

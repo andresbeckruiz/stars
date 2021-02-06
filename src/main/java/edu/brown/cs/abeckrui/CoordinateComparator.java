@@ -12,8 +12,8 @@ public class CoordinateComparator implements Comparator<Node>{
 
   @Override
   public int compare(Node node1,Node node2){
-    Comparable comparable1 = node1.getCompObject();
-    Comparable comparable2 = node2.getCompObject();
+    CordComparable comparable1 = node1.getCompObject();
+    CordComparable comparable2 = node2.getCompObject();
     if (comparable1.getCoordinate(dimension) > comparable2.getCoordinate(dimension)){
       return 1;
     } else if (comparable1.getCoordinate(dimension) < comparable2.getCoordinate(dimension)){

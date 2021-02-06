@@ -1,8 +1,11 @@
 package edu.brown.cs.abeckrui.stars;
 
-import edu.brown.cs.abeckrui.Comparable;
+import edu.brown.cs.abeckrui.CordComparable;
 
-public class Star implements Comparable {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Star implements CordComparable {
 
   private int id;
   private String name;
@@ -35,6 +38,15 @@ public class Star implements Comparable {
       return z;
     }
   }
+
+  @Override
+  public List<String> getInfo(){
+    List<String> info = new ArrayList<>();
+    info.add(Integer.toString(id));
+    info.add(name);
+    return info;
+  }
+
 
   /**
    * Gets star ID.
