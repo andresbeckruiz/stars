@@ -1,16 +1,15 @@
 package edu.brown.cs.abeckrui.stars;
 
 import edu.brown.cs.abeckrui.Method;
-import edu.brown.cs.abeckrui.mockaroo.MockPersonRunner;
+import edu.brown.cs.abeckrui.Repl;
+import edu.brown.cs.abeckrui.mockaroo.MockPersonLogic;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import static org.junit.Assert.*;
+
 import static org.junit.Assert.assertFalse;
 
 public class Stars1Test {
@@ -19,8 +18,8 @@ public class Stars1Test {
 
   @Before
   public void setUp() {
-    Method stars = new Stars();
-    Method runner = new MockPersonRunner();
+    Method stars = new StarsLogic();
+    Method runner = new MockPersonLogic();
     HashMap<String, Method> actions = new HashMap<>();
     actions.put("stars", stars);
     actions.put("naive_neighbors", stars);

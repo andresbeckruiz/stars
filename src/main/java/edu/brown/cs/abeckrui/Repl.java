@@ -1,6 +1,5 @@
-package edu.brown.cs.abeckrui.stars;
+package edu.brown.cs.abeckrui;
 
-import edu.brown.cs.abeckrui.Method;
 
 import java.io.BufferedReader;
 import java.io.IOException;

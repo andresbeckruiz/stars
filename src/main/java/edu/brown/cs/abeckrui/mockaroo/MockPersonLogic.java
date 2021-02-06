@@ -1,7 +1,7 @@
 package edu.brown.cs.abeckrui.mockaroo;
 
 import edu.brown.cs.abeckrui.Method;
-import edu.brown.cs.abeckrui.stars.Csv;
+import edu.brown.cs.abeckrui.Csv;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,14 +12,14 @@ import java.util.regex.Pattern;
 /**
  * This class handles the logic of checking and parsing data for each MockPerson.
  */
-public class MockPersonRunner implements Method {
+public class MockPersonLogic implements Method {
 
   private List<List<String>> personData;
 
   /**
    * Constructor initialized personData instance variable.
    */
-  public MockPersonRunner() {
+  public MockPersonLogic() {
     personData = new ArrayList<>();
   }
 
@@ -47,8 +47,8 @@ public class MockPersonRunner implements Method {
       return false;
     }
     /**
-     * Link to this regex checker code: https://www.tutorialspoint.com/how-
-     * to-validate-given-date-formats-like-mm-dd-yyyy-using-regex-in-java
+     * Link to this regex checker code: https://www.tutorialspoint.com
+     * /how-to-validate-given-date-formats-like-mm-dd-yyyy-using-regex-in-java
      */
     String date = data[2];
     //checks for dd/mm/yyyy format

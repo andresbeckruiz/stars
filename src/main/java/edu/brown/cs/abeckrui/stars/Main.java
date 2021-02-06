@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.brown.cs.abeckrui.Method;
-import edu.brown.cs.abeckrui.mockaroo.MockPersonRunner;
+import edu.brown.cs.abeckrui.Repl;
+import edu.brown.cs.abeckrui.mockaroo.MockPersonLogic;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -58,14 +59,16 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
-    //need to figure out how to fill this in
-    Method stars = new Stars();
-    Method runner = new MockPersonRunner();
+    //populating my method hashmap
+    Method starLogic = new StarsLogic();
+    Method mockPersonLogic = new MockPersonLogic();
     HashMap<String, Method> actions = new HashMap<>();
-    actions.put("stars", stars);
-    actions.put("naive_neighbors", stars);
-    actions.put("naive_radius", stars);
-    actions.put("mock", runner);
+    actions.put("stars", starLogic);
+    actions.put("naive_neighbors", starLogic);
+    actions.put("naive_radius", starLogic);
+    actions.put("neighbors",starLogic);
+    actions.put("radius",starLogic);
+    actions.put("mock", mockPersonLogic);
     Repl repl = new Repl(actions);
     repl.read();
   }

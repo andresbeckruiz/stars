@@ -1,6 +1,8 @@
-package edu.brown.cs.abeckrui.stars;
+package edu.brown.cs.abeckrui;
 
-import edu.brown.cs.abeckrui.mockaroo.MockPersonRunner;
+import edu.brown.cs.abeckrui.mockaroo.MockPersonLogic;
+import edu.brown.cs.abeckrui.stars.StarsLogic;
+
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
@@ -80,7 +82,7 @@ public class Csv {
           List<String> currDataList = new ArrayList<String>();
           //see stars class for specific
           if (mock) {
-            if (MockPersonRunner.checkData(currData)) {
+            if (MockPersonLogic.checkData(currData)) {
               //converting array to list
               for (int i = 0; i < currData.length; i++) {
                 currDataList.add(currData[i]);
@@ -90,7 +92,7 @@ public class Csv {
               return null;
             }
           } else {
-            if (Stars.checkData(currData)) {
+            if (StarsLogic.checkData(currData)) {
               //converting array to list
               for (int i = 0; i < currData.length; i++) {
                 currDataList.add(currData[i]);

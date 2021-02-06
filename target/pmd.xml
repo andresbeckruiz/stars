@@ -2,46 +2,57 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.13.0" timestamp="2021-01-30T22:37:31.062">
-<file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/Stars.java">
-<violation beginline="72" endline="72" begincolumn="32" endcolumn="38" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="Stars" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+    version="6.13.0" timestamp="2021-02-04T02:26:37.856">
+<file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/Comparable.java">
+<violation beginline="5" endline="5" begincolumn="10" endcolumn="41" rule="UnnecessaryModifier" ruleset="Code Style" package="edu.brown.cs.abeckrui" class="Comparable" method="getCoordinate" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#unnecessarymodifier" priority="3">
+Unnecessary modifier 'public' on method 'getCoordinate': the method is declared in an interface type
+</violation>
+</file>
+<file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java">
+<violation beginline="19" endline="19" begincolumn="18" endcolumn="23" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" variable="kdTree" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'kdTree'.
+</violation>
+<violation beginline="86" endline="86" begincolumn="32" endcolumn="38" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="72" endline="72" begincolumn="57" endcolumn="63" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="Stars" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="86" endline="86" begincolumn="57" endcolumn="63" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="72" endline="72" begincolumn="82" endcolumn="88" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="Stars" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="86" endline="86" begincolumn="82" endcolumn="88" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="98" endline="98" begincolumn="15" endcolumn="18" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveNeighbors" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="112" endline="112" begincolumn="15" endcolumn="18" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveNeighbors" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
 </violation>
-<violation beginline="104" endline="104" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveNeighbors" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="118" endline="118" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveNeighbors" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="128" endline="128" begincolumn="18" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveNeighbors" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="142" endline="142" begincolumn="18" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveNeighbors" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
 </violation>
-<violation beginline="135" endline="135" begincolumn="20" endcolumn="23" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveNeighbors" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="149" endline="149" begincolumn="20" endcolumn="23" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveNeighbors" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
 </violation>
-<violation beginline="232" endline="232" begincolumn="15" endcolumn="18" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveRadius" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="246" endline="246" begincolumn="18" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveRadius" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
 </violation>
-<violation beginline="238" endline="238" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveRadius" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="252" endline="252" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveRadius" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="262" endline="262" begincolumn="18" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveRadius" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="276" endline="276" begincolumn="18" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveRadius" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
 </violation>
-<violation beginline="269" endline="269" begincolumn="20" endcolumn="23" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="naiveRadius" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="283" endline="283" begincolumn="20" endcolumn="23" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="naiveRadius" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
 </violation>
-<violation beginline="348" endline="348" begincolumn="15" endcolumn="18" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="checkData" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="363" endline="363" begincolumn="15" endcolumn="18" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="checkData" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
 </violation>
-<violation beginline="360" endline="360" begincolumn="18" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="Stars" method="checkData" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+<violation beginline="375" endline="375" begincolumn="18" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="checkData" variable="test" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
 Avoid unused local variables such as 'test'.
+</violation>
+<violation beginline="387" endline="387" begincolumn="16" endcolumn="26" rule="UnusedPrivateMethod" ruleset="Best Practices" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="buildTree" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatemethod" priority="3">
+Avoid unused private methods such as 'buildTree()'.
 </violation>
 </file>
 </pmd>

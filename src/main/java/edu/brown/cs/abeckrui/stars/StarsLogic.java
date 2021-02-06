@@ -1,6 +1,9 @@
 package edu.brown.cs.abeckrui.stars;
 
+import edu.brown.cs.abeckrui.Csv;
+import edu.brown.cs.abeckrui.Kdtree;
 import edu.brown.cs.abeckrui.Method;
+import edu.brown.cs.abeckrui.Node;
 
 import java.io.File;
 import java.util.Collections;
@@ -10,15 +13,16 @@ import java.util.ArrayList;
 /**
  * This class handles all the search methods, data checking, and star logic.
  */
-public class Stars implements Method {
+public class StarsLogic implements Method {
 
-  private List<List<String>> starData;
+  private List<Star> stars;
+  private Kdtree kdTree;
 
   /**
    * This constructor initializes starData, which holds all the star data.
    */
-  public Stars() {
-    starData = new ArrayList<>();
+  public StarsLogic() {
+    stars = new ArrayList<>();
   }
 
 
@@ -33,6 +37,12 @@ public class Stars implements Method {
         break;
       case "naive_radius":
         this.naiveRadius(line);
+        break;
+      case "neighbors":
+        this.neighbors(line);
+        break;
+      case "radius":
+        this.radius(line);
         break;
       default:
         //shouldn't reach this, but handle error just in case
@@ -49,7 +59,19 @@ public class Stars implements Method {
       //first check if data is invalid. if not, set it equal to starData
       if (testParser.parse() != null) {
         Csv parser = new Csv(new File(line[1]));
+        List<List<String>> starData = new ArrayList<>();
         starData = parser.parse();
+        //loop through starData, create list of star objects
+        for (int i = 0; i < starData.size(); i++){
+          int id = Integer.parseInt(starData.get(i).get(0));
+          String name = starData.get(i).get(1);
+          double x = Double.parseDouble(starData.get(i).get(2));
+          double y = Double.parseDouble(starData.get(i).get(3));
+          double z = Double.parseDouble(starData.get(i).get(4));
+          stars.add(new Star(id, name, x, y, z));
+        }
+        //builds KD tree
+        this.buildTree();
         //output message
         System.out.println("Read " + starData.size() + " stars from " + line[1]);
       }
@@ -72,6 +94,11 @@ public class Stars implements Method {
     return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));
   }
 
+  private boolean checkCommand(String[] line){
+    return true;
+  }
+
+
   /**
    * Naive neighbors method.
    *
@@ -82,7 +109,7 @@ public class Stars implements Method {
     boolean searchByName = false;
     String name = "";
     //checking that starData is not empty or null
-    if (starData.size() == 0 || starData == null) {
+    if (stars.size() == 0 || stars == null) {
       System.err.println("ERROR: Please load star data and try again");
       return;
     }
@@ -109,12 +136,12 @@ public class Stars implements Method {
         neighbors = Integer.parseInt(line[1]);
         boolean starFound = false;
         //searching for star with matching name
-        for (int i = 0; i < starData.size(); i++) {
-          if (starData.get(i).get(1).equals(name)) {
+        for (int i = 0; i < stars.size(); i++) {
+          if (stars.get(i).getName().equals(name)) {
             starFound = true;
-            x = Double.parseDouble(starData.get(i).get(2));
-            y = Double.parseDouble(starData.get(i).get(3));
-            z = Double.parseDouble(starData.get(i).get(4));
+            x = stars.get(i).getX();
+            y = stars.get(i).getY();
+            z = stars.get(i).getZ();
           }
         }
         //print ERROR and exit method if no star found with name provided
@@ -158,16 +185,16 @@ public class Stars implements Method {
        * and stars that are tied in distance are always placed in front in the order, each competing
        * star has a equal random chance to be included in the final list
        */
-      Collections.shuffle(starData);
-      for (int i = 0; i < starData.size(); i++) {
+      Collections.shuffle(stars);
+      for (int i = 0; i < stars.size(); i++) {
         //don't want to include star in list if queried by name
-        if (searchByName && starData.get(i).get(1).equals(name)) {
+        if (searchByName && stars.get(i).getName().equals(name)) {
           continue;
         }
-        double iD = Integer.parseInt(starData.get(i).get(0));
-        double currentX = Double.parseDouble(starData.get(i).get(2));
-        double currentY = Double.parseDouble(starData.get(i).get(3));
-        double currentZ = Double.parseDouble(starData.get(i).get(4));
+        double iD = stars.get(i).getID();
+        double currentX = stars.get(i).getX();
+        double currentY = stars.get(i).getY();
+        double currentZ = stars.get(i).getZ();
         //see helper method
         double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);
         List<Double> currentStar = new ArrayList<>();
@@ -196,8 +223,8 @@ public class Stars implements Method {
       }
       //printing out stars to console
       for (int k = 0; k < neighborList.size(); k++) {
-        double doubleID = neighborList.get(k).get(0);
-        int toPrint = (int) doubleID;
+        double iD = neighborList.get(k).get(0);
+        int toPrint = (int) iD;
         System.out.println(String.valueOf(toPrint));
       }
     } else {
@@ -216,7 +243,7 @@ public class Stars implements Method {
     boolean searchByName = false;
     String name = "";
     //checking that starData is not empty or null
-    if (starData.size() == 0 || starData == null) {
+    if (stars.size() == 0 || stars == null) {
       System.err.println("ERROR: Please load star data and try again");
       return;
     }
@@ -229,7 +256,7 @@ public class Stars implements Method {
         searchByName = true;
         //checking that second argument is an int
         try {
-          int test = Integer.parseInt(line[1]);
+          double test = Double.parseDouble(line[1]);
         } catch (NumberFormatException e) {
           System.err.println("ERROR: Radius must be an int or double");
           return;
@@ -243,12 +270,12 @@ public class Stars implements Method {
         radius = Double.parseDouble(line[1]);
         boolean starFound = false;
         //searching for star with matching name
-        for (int i = 0; i < starData.size(); i++) {
-          if (starData.get(i).get(1).equals(name)) {
+        for (int i = 0; i < stars.size(); i++) {
+          if (stars.get(i).getName().equals(name)) {
             starFound = true;
-            x = Double.parseDouble(starData.get(i).get(2));
-            y = Double.parseDouble(starData.get(i).get(3));
-            z = Double.parseDouble(starData.get(i).get(4));
+            x = stars.get(i).getX();
+            y = stars.get(i).getY();
+            z = stars.get(i).getZ();
           }
         }
         //print ERROR and exit method if no star found with name provided
@@ -259,9 +286,9 @@ public class Stars implements Method {
       } else {
         //checking that rest of arguments are integers
         try {
-          double test = Integer.parseInt(line[1]);
+          double test = Double.parseDouble(line[1]);
         } catch (NumberFormatException e) {
-          System.err.println("ERROR: Neighbor number must be int");
+          System.err.println("ERROR: Radius must be an int or double");
           return;
         }
         for (int i = 2; i < 5; i++) {
@@ -288,16 +315,16 @@ public class Stars implements Method {
        * and stars that are tied in distance are always placed in front in the order, each competing
        * star has a equal random chance to be included in the final list
        */
-      Collections.shuffle(starData);
-      for (int i = 0; i < starData.size(); i++) {
+      Collections.shuffle(stars);
+      for (int i = 0; i < stars.size(); i++) {
         //don't want to include star in list if queried by name
-        if (searchByName && starData.get(i).get(1).equals(name)) {
+        if (searchByName && stars.get(i).getName().equals(name)) {
           continue;
         }
-        double iD = Integer.parseInt(starData.get(i).get(0));
-        double currentX = Double.parseDouble(starData.get(i).get(2));
-        double currentY = Double.parseDouble(starData.get(i).get(3));
-        double currentZ = Double.parseDouble(starData.get(i).get(4));
+        double iD = stars.get(i).getID();
+        double currentX = stars.get(i).getX();
+        double currentY = stars.get(i).getY();
+        double currentZ = stars.get(i).getZ();
         //see helper method
         double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);
         List<Double> currentStar = new ArrayList<>();
@@ -313,6 +340,7 @@ public class Stars implements Method {
               break;
             }
           }
+          //add at end of list if furthest away from cordinates given
           if (!added) {
             radiusList.add(currentStar);
           }
@@ -320,8 +348,8 @@ public class Stars implements Method {
       }
       //printing out stars to console
       for (int k = 0; k < radiusList.size(); k++) {
-        double doubleID = radiusList.get(k).get(0);
-        int toPrint = (int) doubleID;
+        double iD = radiusList.get(k).get(0);
+        int toPrint = (int) iD;
         System.out.println(String.valueOf(toPrint));
       }
     } else {
@@ -365,4 +393,31 @@ public class Stars implements Method {
     }
     return true;
   }
+
+  /**
+   * Helper method that builds KD tree
+   */
+  private void buildTree(){
+    if (stars.size() == 0 || stars == null) {
+      System.err.println("ERROR: Please load star data and try again");
+      return;
+    }
+    List<Node> nodes = new ArrayList<>();
+    //creating nodes for every
+    for (int i = 0; i < stars.size(); i++){
+      nodes.add(new Node(stars.get(i)));
+    }
+    kdTree = new Kdtree(nodes);
+  }
+
+  private void neighbors(String[] line){
+    System.out.println("Neighbors Working");
+  }
+
+  private void radius(String[] line){
+    System.out.println("Radius working");
+  }
+
+
+
 }
