@@ -12,6 +12,7 @@ public class Star implements CordComparable {
   private double x;
   private double y;
   private double z;
+  private static final int DIMENSION = 3;
 
   public Star(int iD, String starName, double xcord, double ycord, double zcord){
     id = iD;
@@ -28,10 +29,10 @@ public class Star implements CordComparable {
    */
   @Override
   public double getCoordinate(int k){
-    if (k % 3 == 0){
+    if (k % DIMENSION == 0){
       return x;
     }
-    else if (k % 3 == 1){
+    else if (k % DIMENSION == 1){
       return y;
     }
     else{

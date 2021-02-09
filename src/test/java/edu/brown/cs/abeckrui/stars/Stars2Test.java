@@ -1,11 +1,13 @@
 package edu.brown.cs.abeckrui.stars;
 
+import edu.brown.cs.abeckrui.CordComparable;
 import edu.brown.cs.abeckrui.Kdtree;
 import edu.brown.cs.abeckrui.Node;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class Stars2Test {
 
@@ -103,6 +105,36 @@ public class Stars2Test {
     nodeList.add(nodeH);
     Kdtree tree = new Kdtree(nodeList);
     assertTrue(tree.getRoot() == nodeA || tree.getRoot() == nodeC);
+  }
+
+  @Test
+  public void testPriorityComparator(){
+    Star A = new Star(0,"A",3.2,6.5,2.9);
+    Star B = new Star(1,"B", 0,0,0);
+    Star C = new Star(2,"C", 3.2,-5,3);
+    Star D = new Star(3,"D", 8,4, -89);
+    Star E = new Star(4,"E", -4,50,8);
+    Star F = new Star(5,"F", 7,-2.54,34.2);
+    Star G = new Star(6,"G",-1,3,4);
+    Star H = new Star(7,"H",9,9,1);
+    PriorityQueue<CordComparable> neighborQueue = new PriorityQueue<>(new PriorityComparator(0,0,0));
+    neighborQueue.add(D);
+    neighborQueue.add(B);
+    neighborQueue.add(C);
+    neighborQueue.add(F);
+    assert(neighborQueue.poll() == D);
+    neighborQueue.add(G);
+    assert(neighborQueue.poll() == F);
+    neighborQueue.add(A);
+    assert(neighborQueue.peek() == A);
+    neighborQueue.add(E);
+    neighborQueue.add(H);
+    assert(neighborQueue.poll() == E);
+    assert(neighborQueue.poll() == H);
+    assert(neighborQueue.poll() == A);
+    assert(neighborQueue.poll() == C);
+    assert(neighborQueue.poll() == G);
+    assert(neighborQueue.poll() == B);
   }
 
 }

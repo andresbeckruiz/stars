@@ -15,15 +15,16 @@ public class PriorityComparator implements Comparator<CordComparable> {
     y = yVal;
     z = zVal;
   }
+
   @Override
   public int compare(CordComparable a, CordComparable b){
     double ax = a.getCoordinate(0);
     double ay = a.getCoordinate(1);
     double az = a.getCoordinate(2);
     double aDist = StarsLogic.calculateDistance(ax,ay,az,x,y,z);
-    double bx = a.getCoordinate(0);
-    double by = a.getCoordinate(1);
-    double bz = a.getCoordinate(2);
+    double bx = b.getCoordinate(0);
+    double by = b.getCoordinate(1);
+    double bz = b.getCoordinate(2);
     double bDist = StarsLogic.calculateDistance(bx,by,bz,x,y,z);
     return (-1 * Double.compare(aDist,bDist));
   }

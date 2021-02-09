@@ -22,8 +22,12 @@ public class Kdtree {
     if (nodes.size() == 0){
       return null;
     }
-    //if list is one, just return this as root node
+    //base case if list is one, just return this as root node
     if (nodes.size() == 1){
+      if (nodes.get(0).getLeft() != null || nodes.get(0).getRight() != null){
+        System.err.println("ERROR: Children not null!");
+        System.out.println("Left child:" + nodes.get(0).getLeft());
+      }
       return nodes.get(0);
     }
     Collections.sort(nodes, new CoordinateComparator(depth));
@@ -35,8 +39,9 @@ public class Kdtree {
     while (medianIndex > 0) {
       if (nodes.get(medianIndex - 1).getCompObject().getCoordinate(depth) != medianCoordinate) {
         break;
+      } else {
+        medianIndex--;
       }
-      medianIndex--;
     }
     List<Node> leftList = nodes.subList(0,medianIndex);
     List<Node> rightList = nodes.subList(medianIndex + 1, nodes.size());

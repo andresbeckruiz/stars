@@ -35,11 +35,14 @@ public class Node<T extends CordComparable> {
     return true;
   }
 
-  public void setLeft(Node leftChild){
+  public void setLeft(Node<T> leftChild){
+    if (left != null){
+      System.err.println("ERROR: Left child is not null!");
+    }
     left = leftChild;
   }
 
-  public void setRight(Node rightChild){
+  public void setRight(Node<T> rightChild){
     right = rightChild;
   }
 
