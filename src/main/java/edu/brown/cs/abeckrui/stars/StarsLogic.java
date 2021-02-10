@@ -429,21 +429,9 @@ public class StarsLogic implements Method {
     }
     PriorityQueue<CordComparable> neighborQueue = new PriorityQueue<>(new PriorityComparator(x,y,z));
     Node rootNode = kdTree.getRoot();
-//    List<Node> checkingList = kdTree.getNodeList();
-//    for (int i = 0; i < checkingList.size(); i++){
-//      Node currentNode = checkingList.get(i);
-//      System.out.println("Current Object ID" + currentNode.getCompObject().getInfo().get(0));
-//      if (currentNode.hasLeft()){
-//        System.out.println("Left ID" + currentNode.getLeft().getCompObject().getInfo().get(0));
-//      }
-//      if (currentNode.hasRight()){
-//        System.out.println("Right ID" + currentNode.getRight().getCompObject().getInfo().get(0));
-//      }
-//      System.out.println("-----");
-//    }
     //our target star, or point in space, where we are trying to compare with
     CordComparable target = new Star(-1,"",x,y,z);
-    this.neighbors_helper(searchByName,name,neighbors,target,0,neighborQueue,rootNode);
+    this.neighborsHelper(searchByName,name,neighbors,target,0,neighborQueue,rootNode);
     List<CordComparable> print = new ArrayList<>();
     while (!neighborQueue.isEmpty()){
       print.add(neighborQueue.poll());
@@ -463,18 +451,9 @@ public class StarsLogic implements Method {
    * @param currentNode
    */
 
-  private void neighbors_helper(boolean searchByName, String name, int neighbors,
+  private void neighborsHelper(boolean searchByName, String name, int neighbors,
                                 CordComparable target, int depth,
                                 PriorityQueue<CordComparable> neighborQueue, Node currentNode){
-    if (currentNode.hasLeft() && currentNode.hasRight()){
-      System.out.println("Current node" + currentNode.getCompObject().getInfo().get(0) + "Depth" + depth + ",Current left: " + currentNode.getLeft().getCompObject().getInfo().get(0) + ",Current right: " + currentNode.getRight().getCompObject().getInfo().get(0));
-    } else if (currentNode.hasLeft()){
-      System.out.println("Current node" + currentNode.getCompObject().getInfo().get(0) + "Depth" + depth + ",Current left: " + currentNode.getLeft().getCompObject().getInfo().get(0));
-    } else if (currentNode.hasRight()) {
-      System.out.println("Current node" + currentNode.getCompObject().getInfo().get(0) + "Depth" + depth + ",Current right: " + currentNode.getRight().getCompObject().getInfo().get(0));
-    } else {
-      System.out.println("Current node" + currentNode.getCompObject().getInfo().get(0) + "Depth" + depth);
-    }
     double currX = currentNode.getCompObject().getCoordinate(0);
     double currY = currentNode.getCompObject().getCoordinate(1);
     double currZ = currentNode.getCompObject().getCoordinate(2);
@@ -483,7 +462,6 @@ public class StarsLogic implements Method {
     double targetZ = target.getCoordinate(2);
     double currentDistance = this.calculateDistance(currX,currY,currZ,targetX,targetY,targetZ);
     double furthestDistance = Double.MAX_VALUE;
-    System.out.println("Current node: " + currentNode.getCompObject().getInfo().get(0) + ",Current distance: " + currentDistance + ",Current depth: " + depth);
     //want to add neighbors to queue if size is less than neighbors we are looking for
     if (neighborQueue.size() < neighbors){
       //ensure we don't add name of node if querying by name
@@ -497,7 +475,6 @@ public class StarsLogic implements Method {
       double furthestZ = furthest.getCoordinate(2);
       furthestDistance = this.calculateDistance(furthestX, furthestY, furthestZ,
               targetX, targetY, targetZ);
-      System.out.println("Current node: " + currentNode.getCompObject().getInfo().get(0) + ",Furthest distance: " + furthestDistance + ",ID: " + furthest.getInfo().get(0));
       if (currentDistance < furthestDistance) {
         if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))) {
           //remove furthest neighbors
@@ -514,40 +491,140 @@ public class StarsLogic implements Method {
       double furthestZ = furthest.getCoordinate(2);
       furthestDistance = this.calculateDistance(targetX, targetY, targetZ, furthestX, furthestY,
               furthestZ);
-      System.out.println("Current node: " + currentNode.getCompObject().getInfo().get(0) + ", Updated Furthest distance: " + furthestDistance + ", ID: " + furthest.getInfo().get(0));
     }
     //check if we need to recur on both children or just one
     if (neighborQueue.size() < neighbors || furthestDistance > Math.abs(currentNode.getCompObject().getCoordinate(depth) -
             target.getCoordinate(depth))){
       if (currentNode.hasLeft()){
-        this.neighbors_helper(searchByName,name,neighbors,target,depth+1,neighborQueue,
+        this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
                 currentNode.getLeft());
       }
       if (currentNode.hasRight()){
-        this.neighbors_helper(searchByName,name,neighbors,target,depth+1,neighborQueue,
+        this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
                 currentNode.getRight());
       }
     } else{
-      if(currentNode.getCompObject().getCoordinate(depth) < target.getCoordinate(depth)){
-        if (currentNode.hasLeft()){
-          this.neighbors_helper(searchByName,name,neighbors,target,depth+1,neighborQueue,
-                  currentNode.getLeft());
+      if(currentNode.getCompObject().getCoordinate(depth) <= target.getCoordinate(depth)){
+        if (currentNode.hasRight()){
+          this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
+                  currentNode.getRight());
         }
       } else{
-        if (currentNode.hasRight()){
-          this.neighbors_helper(searchByName,name,neighbors,target,depth+1,neighborQueue,
-                  currentNode.getRight());
+        if (currentNode.hasLeft()){
+          this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
+                  currentNode.getLeft());
         }
       }
     }
   }
 
-
-
+  /**
+   *
+   * @param line
+   */
   private void radius(String[] line){
-   System.out.println("working!");
+    if (stars.size() == 0 || stars == null) {
+      System.err.println("ERROR: Please load star data and try again");
+      return;
+    }
+    //see helper method- checks if whole command is valid
+    if (!this.checkCommandRadius(line)){
+      return;
+    }
+    String name = "";
+    //boolean to let me know if a name has been queried
+    boolean searchByName = false;
+    double radius = Double.parseDouble(line[1]);
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    if (line.length == 3){
+      searchByName = true;
+      name = line[2].replace("\"", "");
+      for (int i = 0; i < stars.size(); i++) {
+        if (stars.get(i).getName().equals(name)) {
+          x = stars.get(i).getX();
+          y = stars.get(i).getY();
+          z = stars.get(i).getZ();
+        }
+      }
+    }
+    else {
+      x = Double.parseDouble(line[2]);
+      y = Double.parseDouble(line[3]);
+      z = Double.parseDouble(line[4]);
+    }
+    //checking to see if number of neighbors > 0
+    if (radius < 0) {
+      System.err.println("ERROR: Radius cannot be negative");
+      return;
+    }
+    PriorityQueue<CordComparable> radiusQueue = new PriorityQueue<>(new PriorityComparator(x,y,z));
+    Node rootNode = kdTree.getRoot();
+    //our target star, or point in space, where we are trying to compare with
+    CordComparable target = new Star(-1,"",x,y,z);
+    this.radiusHelper(searchByName,name,radius,target,0,radiusQueue,rootNode);
+    List<CordComparable> print = new ArrayList<>();
+    while (!radiusQueue.isEmpty()){
+      print.add(radiusQueue.poll());
+    }
+    for (int j = print.size() - 1; j >= 0; j--){
+      System.out.println(print.get(j).getInfo().get(0));
+    }
   }
 
+
+  /**
+   *
+   * @param searchByName
+   * @param name
+   * @param radius
+   * @param target
+   * @param depth
+   * @param radiusQueue
+   * @param currentNode
+   */
+  private void radiusHelper(boolean searchByName, String name, double radius,
+                            CordComparable target, int depth,
+                            PriorityQueue<CordComparable> radiusQueue, Node currentNode){
+    double currX = currentNode.getCompObject().getCoordinate(0);
+    double currY = currentNode.getCompObject().getCoordinate(1);
+    double currZ = currentNode.getCompObject().getCoordinate(2);
+    double targetX = target.getCoordinate(0);
+    double targetY = target.getCoordinate(1);
+    double targetZ = target.getCoordinate(2);
+    double currentDistance = this.calculateDistance(currX,currY,currZ,targetX,targetY,targetZ);
+    //add node to queue if within radius
+    if (currentDistance <= radius) {
+      if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))) {
+        radiusQueue.add(currentNode.getCompObject());
+      }
+    }
+    //check if we need to recur on both children or just one
+    if (radius > Math.abs(currentNode.getCompObject().getCoordinate(depth) -
+            target.getCoordinate(depth))){
+      if (currentNode.hasLeft()){
+        this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+                currentNode.getLeft());
+      }
+      if (currentNode.hasRight()){
+        this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+                currentNode.getRight());
+      }
+    } else{
+      if(currentNode.getCompObject().getCoordinate(depth) <= target.getCoordinate(depth)){
+        if (currentNode.hasRight()){
+          this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+                  currentNode.getRight());
+        }
+      } else{
+        if (currentNode.hasLeft()){
+          this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+                  currentNode.getLeft());
+        }
+      }
+    }
+  }
 
   /**
    * This method checks if the starData is valid or not.
