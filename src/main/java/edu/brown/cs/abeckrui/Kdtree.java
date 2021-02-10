@@ -17,7 +17,7 @@ public class Kdtree {
    * This function builds the KD tree recursively given a list of nodes
    * @return Node representing root node of current recursion
    */
-  private Node buildTree(List<Node> nodes, int depth){
+  private Node buildTree(List<Node> nodes, int depth) {
     //edge case if list is empty - this means the root will be null, or wont exist
     if (nodes.size() == 0){
       return null;

@@ -431,7 +431,7 @@ public class StarsLogic implements Method {
     Node rootNode = kdTree.getRoot();
 //    List<Node> checkingList = kdTree.getNodeList();
 //    for (int i = 0; i < checkingList.size(); i++){
-//      currentNode = checkingList.get(i);
+//      Node currentNode = checkingList.get(i);
 //      System.out.println("Current Object ID" + currentNode.getCompObject().getInfo().get(0));
 //      if (currentNode.hasLeft()){
 //        System.out.println("Left ID" + currentNode.getLeft().getCompObject().getInfo().get(0));
@@ -489,10 +489,8 @@ public class StarsLogic implements Method {
       //ensure we don't add name of node if querying by name
       if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))){
         neighborQueue.add(currentNode.getCompObject());
-      }
-    }
-    //don't want to check this if neighborQueue size is 0
-    if (neighborQueue.size() != 0) {
+      } //check if we have found a closer node
+    } else {
       CordComparable furthest = neighborQueue.peek();
       double furthestX = furthest.getCoordinate(0);
       double furthestY = furthest.getCoordinate(1);
@@ -505,16 +503,18 @@ public class StarsLogic implements Method {
           //remove furthest neighbors
           neighborQueue.poll();
           neighborQueue.add(currentNode.getCompObject());
-          //update new furthest distance after updating list
-          furthest = neighborQueue.peek();
-          furthestX = furthest.getCoordinate(0);
-          furthestY = furthest.getCoordinate(1);
-          furthestZ = furthest.getCoordinate(2);
-          furthestDistance = this.calculateDistance(targetX, targetY, targetZ, furthestX, furthestY,
-                  furthestZ);
-          System.out.println("Current node: " + currentNode.getCompObject().getInfo().get(0) + ", Updated Furthest distance: " + furthestDistance + ", ID: " + furthest.getInfo().get(0));
         }
       }
+    }
+    if (neighborQueue.size() != 0){
+      //update new furthest distance after potentially updating list
+      CordComparable furthest = neighborQueue.peek();
+      double furthestX = furthest.getCoordinate(0);
+      double furthestY = furthest.getCoordinate(1);
+      double furthestZ = furthest.getCoordinate(2);
+      furthestDistance = this.calculateDistance(targetX, targetY, targetZ, furthestX, furthestY,
+              furthestZ);
+      System.out.println("Current node: " + currentNode.getCompObject().getInfo().get(0) + ", Updated Furthest distance: " + furthestDistance + ", ID: " + furthest.getInfo().get(0));
     }
     //check if we need to recur on both children or just one
     if (neighborQueue.size() < neighbors || furthestDistance > Math.abs(currentNode.getCompObject().getCoordinate(depth) -
