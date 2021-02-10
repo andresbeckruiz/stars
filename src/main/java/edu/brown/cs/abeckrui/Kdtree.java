@@ -24,25 +24,20 @@ public class Kdtree {
     }
     //base case if list is one, just return this as root node
     if (nodes.size() == 1){
-      if (nodes.get(0).getLeft() != null || nodes.get(0).getRight() != null){
-        System.err.println("ERROR: Children not null!");
-        System.out.println("Left child:" + nodes.get(0).getLeft());
-      }
       return nodes.get(0);
     }
     Collections.sort(nodes, new CoordinateComparator(depth));
     int medianIndex = (nodes.size() - 1) / 2;
-    Node median = nodes.get(medianIndex);
     //variable to compare median coordinates with duplicates
-    double medianCoordinate = median.getCompObject().getCoordinate(depth);
+    double medianCoordinate = nodes.get(medianIndex).getCompObject().getCoordinate(depth);
     //want to get furthest left median (if there are multiple objects with same value)
     while (medianIndex > 0) {
       if (nodes.get(medianIndex - 1).getCompObject().getCoordinate(depth) != medianCoordinate) {
         break;
-      } else {
-        medianIndex--;
       }
+      medianIndex--;
     }
+    Node median = nodes.get(medianIndex);
     List<Node> leftList = nodes.subList(0,medianIndex);
     List<Node> rightList = nodes.subList(medianIndex + 1, nodes.size());
     //recurse to set left and right children
