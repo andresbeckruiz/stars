@@ -2,21 +2,29 @@ package edu.brown.cs.abeckrui;
 
 import java.util.Comparator;
 
-public class CoordinateComparator implements Comparator<Node>{
+/**
+ * This class is a custom comparator for objects that implement the CordComparable
+ * interface.
+ */
+public class CoordinateComparator implements Comparator<Node> {
 
-  private int dimension;
+  private int level;
 
-  public CoordinateComparator(int dimensionVal){
-    dimension = dimensionVal;
+  /**
+   * In the constructor, I initialize my level instance variable.
+   * @param levelVal representing current level being searched in KD tree.
+   */
+  public CoordinateComparator(int levelVal) {
+    level = levelVal;
   }
 
   @Override
-  public int compare(Node node1,Node node2){
+  public int compare(Node node1, Node node2) {
     CordComparable comparable1 = node1.getCompObject();
     CordComparable comparable2 = node2.getCompObject();
-    if (comparable1.getCoordinate(dimension) > comparable2.getCoordinate(dimension)){
+    if (comparable1.getCoordinate(level) > comparable2.getCoordinate(level)) {
       return 1;
-    } else if (comparable1.getCoordinate(dimension) < comparable2.getCoordinate(dimension)){
+    } else if (comparable1.getCoordinate(level) < comparable2.getCoordinate(level)) {
       return -1;
     }
     return 0;

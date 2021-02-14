@@ -100,17 +100,17 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L219">219</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L235">235</a></td></tr>
 <tr class="a">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L414">414</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L441">441</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>  private List&lt;String&gt; naiveNeighbors(String[] line) {
     List&lt;String&gt; neighborData = new ArrayList&lt;&gt;();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandNeighbors(line);
-    if (!returnString.equals(&quot;&quot;)){
+    if (!returnString.equals(&quot;&quot;)) {
       neighborData.add(returnString);
       return neighborData;
     }
@@ -121,7 +121,8 @@
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);
       for (int i = 0; i &lt; stars.size(); i++) {
@@ -131,8 +132,7 @@
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -153,17 +153,17 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L324">324</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L343">343</a></td></tr>
 <tr class="a">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L566">566</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L601">601</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>  private List&lt;String&gt; naiveRadius(String[] line) {
     List&lt;String&gt; radiusData = new ArrayList&lt;&gt;();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandRadius(line);
-    if (!returnString.equals(&quot;&quot;)){
+    if (!returnString.equals(&quot;&quot;)) {
       radiusData.add(returnString);
       return radiusData;
     }
@@ -174,7 +174,8 @@
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);
       for (int i = 0; i &lt; stars.size(); i++) {
@@ -184,8 +185,7 @@
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -202,10 +202,10 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L115">115</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L127">127</a></td></tr>
 <tr class="a">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L172">172</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L186">186</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>      }
@@ -214,6 +214,7 @@
         System.err.println(&quot;ERROR: Please load star data and try again&quot;);
         return &quot;ERROR: Please load star data and try again&quot;;
       }
+      //checking whether named was queried
       if (line.length == 3) {
         //checking that third argument is a nonempty string
         if (!(line[2] instanceof String) || (line[2].equals(&quot;\&quot;\&quot;&quot;))) {
@@ -244,6 +245,7 @@
           }
         }
       }
+      //represents command is valid
       return &quot;&quot;;
     } else {
       System.err.println(&quot;ERROR: Incorrect number or args provided. 3 or 5 expected for &quot;
@@ -254,23 +256,24 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L230">230</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L246">246</a></td></tr>
 <tr class="a">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L335">335</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L354">354</a></td></tr>
 <tr class="b">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L425">425</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L452">452</a></td></tr>
 <tr class="a">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L577">577</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L612">612</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>    int neighbors = Integer.parseInt(line[1]);
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);
       for (int i = 0; i &lt; stars.size(); i++) {
@@ -280,8 +283,7 @@
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -294,10 +296,10 @@
 <th>Line</th></tr>
 <tr class="b">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L262">262</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L278">278</a></td></tr>
 <tr class="a">
 <td>edu/brown/cs/abeckrui/stars/StarsLogic.java</td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L363">363</a></td></tr>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L382">382</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>    List&lt;Star&gt; neighborStarList = new ArrayList&lt;&gt;();

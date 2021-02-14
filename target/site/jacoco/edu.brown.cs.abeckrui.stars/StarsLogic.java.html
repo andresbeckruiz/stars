@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StarsLogic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stars</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.abeckrui.stars</a> &gt; <span class="el_source">StarsLogic.java</span></div><h1>StarsLogic.java</h1><pre class="source lang-java linenums">package edu.brown.cs.abeckrui.stars;
 
-import edu.brown.cs.abeckrui.*;
 
+import edu.brown.cs.abeckrui.CordComparable;
+import edu.brown.cs.abeckrui.Csv;
+import edu.brown.cs.abeckrui.Kdtree;
+import edu.brown.cs.abeckrui.Method;
+import edu.brown.cs.abeckrui.Node;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -9,79 +13,87 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 /**
- * This class handles all the search methods, data checking, and star logic...
+ * This class handles all the search methods, data checking, and star logic. It also builds my
+ * KD tree and stores all the stardata.
  */
 public class StarsLogic implements Method {
 
   private List&lt;Star&gt; stars;
   private Kdtree kdTree;
+  private static final double RANDOM_BOUND = 0.5;
 
   /**
    * This constructor initializes starData, which holds all the star data.
    */
-<span class="fc" id="L22">  public StarsLogic() {</span>
-<span class="fc" id="L23">    stars = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L24">  }</span>
+<span class="fc" id="L28">  public StarsLogic() {</span>
+<span class="fc" id="L29">    stars = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L30">  }</span>
 
 
   @Override
   public List&lt;String&gt; run(String[] line) {
-<span class="fc" id="L29">    List&lt;String&gt; toPrint = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L30" title="1 of 6 branches missed.">    switch (line[0]) {</span>
+    //toPrint is what is printed on the front end, representing the search results
+<span class="fc" id="L36">    List&lt;String&gt; toPrint = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L37" title="1 of 6 branches missed.">    switch (line[0]) {</span>
       case &quot;stars&quot;:
-<span class="nc" id="L32">        this.parseCSV(line);</span>
-<span class="nc" id="L33">        break;</span>
+<span class="nc" id="L39">        this.parseCSV(line);</span>
+<span class="nc" id="L40">        break;</span>
       case &quot;naive_neighbors&quot;:
-<span class="fc" id="L35">        toPrint = this.naiveNeighbors(line);</span>
-<span class="fc" id="L36">        break;</span>
+<span class="fc" id="L42">        toPrint = this.naiveNeighbors(line);</span>
+<span class="fc" id="L43">        break;</span>
       case &quot;naive_radius&quot;:
-<span class="fc" id="L38">        toPrint = this.naiveRadius(line);</span>
-<span class="fc" id="L39">        break;</span>
+<span class="fc" id="L45">        toPrint = this.naiveRadius(line);</span>
+<span class="fc" id="L46">        break;</span>
       case &quot;neighbors&quot;:
-<span class="fc" id="L41">        toPrint = this.neighbors(line);</span>
-<span class="fc" id="L42">        break;</span>
+<span class="fc" id="L48">        toPrint = this.neighbors(line);</span>
+<span class="fc" id="L49">        break;</span>
       case &quot;radius&quot;:
-<span class="fc" id="L44">        toPrint = this.radius(line);</span>
-<span class="fc" id="L45">        break;</span>
+<span class="fc" id="L51">        toPrint = this.radius(line);</span>
+<span class="fc" id="L52">        break;</span>
       default:
         //shouldn't reach this, but handle error just in case
-<span class="fc" id="L48">        System.err.println(&quot;ERROR: Command for stars not found.&quot;);</span>
-<span class="fc" id="L49">        toPrint.add(&quot;ERROR: Command for stars not found.&quot;);</span>
+<span class="fc" id="L55">        System.err.println(&quot;ERROR: Command for stars not found.&quot;);</span>
+<span class="fc" id="L56">        toPrint.add(&quot;ERROR: Command for stars not found.&quot;);</span>
         break;
     }
-<span class="fc" id="L52">    return toPrint;</span>
+<span class="fc" id="L59">    return toPrint;</span>
   }
 
+  /**
+   * This helper method instantiates an instance of the CSV class to parse a CSV file
+   * and stores the data in the stars instance variable.
+   * @param line representing command parsed from REPL
+   */
   public void parseCSV(String[] line) {
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">    if (line.length != 2) {</span>
-<span class="nc" id="L57">      System.err.println(&quot;ERROR: Incorrect number of args for command. 2 are expected&quot;);</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">    if (line.length != 2) {</span>
+<span class="nc" id="L69">      System.err.println(&quot;ERROR: Incorrect number of args for command. 2 are expected&quot;);</span>
     } else {
-<span class="fc" id="L59">      Csv testParser = new Csv(new File(line[1]));</span>
+<span class="fc" id="L71">      Csv testParser = new Csv(new File(line[1]));</span>
       //first check if data is invalid. if not, set it equal to starData
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">      if (testParser.parse() != null) {</span>
-<span class="fc" id="L62">        Csv parser = new Csv(new File(line[1]));</span>
-<span class="fc" id="L63">        List&lt;List&lt;String&gt;&gt; starData = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L64">        starData = parser.parse();</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">      if (testParser.parse() != null) {</span>
+<span class="fc" id="L74">        Csv parser = new Csv(new File(line[1]));</span>
+<span class="fc" id="L75">        List&lt;List&lt;String&gt;&gt; starData = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L76">        starData = parser.parse();</span>
         //clear old star data
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (!stars.isEmpty()){</span>
-<span class="nc" id="L67">          stars.clear();</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (!stars.isEmpty()) {</span>
+<span class="nc" id="L79">          stars.clear();</span>
         }
         //loop through starData, create list of star objects
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (int i = 0; i &lt; starData.size(); i++){</span>
-<span class="fc" id="L71">          int id = Integer.parseInt(starData.get(i).get(0));</span>
-<span class="fc" id="L72">          String name = starData.get(i).get(1);</span>
-<span class="fc" id="L73">          double x = Double.parseDouble(starData.get(i).get(2));</span>
-<span class="fc" id="L74">          double y = Double.parseDouble(starData.get(i).get(3));</span>
-<span class="fc" id="L75">          double z = Double.parseDouble(starData.get(i).get(4));</span>
-<span class="fc" id="L76">          stars.add(new Star(id, name, x, y, z));</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        for (int i = 0; i &lt; starData.size(); i++) {</span>
+<span class="fc" id="L83">          int id = Integer.parseInt(starData.get(i).get(0));</span>
+<span class="fc" id="L84">          String name = starData.get(i).get(1);</span>
+<span class="fc" id="L85">          double x = Double.parseDouble(starData.get(i).get(2));</span>
+<span class="fc" id="L86">          double y = Double.parseDouble(starData.get(i).get(3));</span>
+<span class="fc" id="L87">          double z = Double.parseDouble(starData.get(i).get(4));</span>
+<span class="fc" id="L88">          stars.add(new Star(id, name, x, y, z));</span>
         }
         //builds KD tree
-<span class="fc" id="L79">        this.buildTree();</span>
+<span class="fc" id="L91">        this.buildTree();</span>
         //output message
-<span class="fc" id="L81">        System.out.println(&quot;Read &quot; + starData.size() + &quot; stars from &quot; + line[1]);</span>
+<span class="fc" id="L93">        System.out.println(&quot;Read &quot; + starData.size() + &quot; stars from &quot; + line[1]);</span>
       }
     }
-<span class="fc" id="L84">  }</span>
+<span class="fc" id="L96">  }</span>
 
   /**
    * This method calculates 3D distance between two points.
@@ -96,640 +108,667 @@ public class StarsLogic implements Method {
    */
   public static double calculateDistance(double x1, double y1, double z1, double x2,
                                    double y2, double z2) {
-<span class="fc" id="L99">    return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));</span>
+<span class="fc" id="L111">    return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));</span>
   }
 
   /**
-   * This helper method checks that for valid commands for both neighbor methods
+   * This helper method checks for valid commands for both neighbor methods.
    * @param line a String array representing the user input line parsed by the REPL
    * @return a string representing if command is valid (&quot;&quot; if valid, error message if not)
    */
   private String checkCommandNeighbors(String[] line) {
-    //boolean to let me know if a name has been queried
-<span class="fc bfc" id="L109" title="All 4 branches covered.">    if (line.length == 3 || line.length == 5) {</span>
+    //checking for correct command length
+<span class="fc bfc" id="L121" title="All 4 branches covered.">    if (line.length == 3 || line.length == 5) {</span>
       try {
-<span class="fc" id="L111">        Integer.parseInt(line[1]);</span>
-<span class="fc" id="L112">      } catch (NumberFormatException e) {</span>
-<span class="fc" id="L113">        System.err.println(&quot;ERROR: Number of neighbors must be an int&quot;);</span>
-<span class="fc" id="L114">        return &quot;ERROR: Number of neighbors must be an int&quot;;</span>
-<span class="fc" id="L115">      }</span>
+<span class="fc" id="L123">        Integer.parseInt(line[1]);</span>
+<span class="fc" id="L124">      } catch (NumberFormatException e) {</span>
+<span class="fc" id="L125">        System.err.println(&quot;ERROR: Number of neighbors must be an int&quot;);</span>
+<span class="fc" id="L126">        return &quot;ERROR: Number of neighbors must be an int&quot;;</span>
+<span class="fc" id="L127">      }</span>
       //checking if star data is null or empty
-<span class="pc bpc" id="L117" title="1 of 4 branches missed.">      if (stars.size() == 0 || stars == null) {</span>
-<span class="fc" id="L118">        System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
-<span class="fc" id="L119">        return &quot;ERROR: Please load star data and try again&quot;;</span>
+<span class="pc bpc" id="L129" title="1 of 4 branches missed.">      if (stars.size() == 0 || stars == null) {</span>
+<span class="fc" id="L130">        System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
+<span class="fc" id="L131">        return &quot;ERROR: Please load star data and try again&quot;;</span>
       }
-<span class="fc bfc" id="L121" title="All 2 branches covered.">      if (line.length == 3) {</span>
+      //checking whether named was queried
+<span class="fc bfc" id="L134" title="All 2 branches covered.">      if (line.length == 3) {</span>
         //checking that third argument is a nonempty string
-<span class="pc bpc" id="L123" title="1 of 4 branches missed.">        if (!(line[2] instanceof String) || (line[2].equals(&quot;\&quot;\&quot;&quot;))) {</span>
-<span class="fc" id="L124">          System.err.println(&quot;ERROR: Name must be a nonempty string&quot;);</span>
-<span class="fc" id="L125">          return &quot;ERROR: Name must be a nonempty string&quot;;</span>
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">        if (!(line[2] instanceof String) || (line[2].equals(&quot;\&quot;\&quot;&quot;))) {</span>
+<span class="fc" id="L137">          System.err.println(&quot;ERROR: Name must be a nonempty string&quot;);</span>
+<span class="fc" id="L138">          return &quot;ERROR: Name must be a nonempty string&quot;;</span>
         }
-<span class="fc" id="L127">        String name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
-<span class="fc" id="L128">        boolean starFound = false;</span>
+<span class="fc" id="L140">        String name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="fc" id="L141">        boolean starFound = false;</span>
         //searching for star with matching name
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        for (int i = 0; i &lt; stars.size(); i++) {</span>
-<span class="fc bfc" id="L131" title="All 2 branches covered.">          if (stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L132">            starFound = true;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">          if (stars.get(i).getName().equals(name)) {</span>
+<span class="fc" id="L145">            starFound = true;</span>
           }
         }
         //print ERROR and exit method if no star found with name provided
-<span class="fc bfc" id="L136" title="All 2 branches covered.">        if (!starFound) {</span>
-<span class="fc" id="L137">          System.err.println(&quot;ERROR: Star not found. Please check name entered&quot;);</span>
-<span class="fc" id="L138">          return &quot;ERROR: Star not found. Please check name entered&quot;;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (!starFound) {</span>
+<span class="fc" id="L150">          System.err.println(&quot;ERROR: Star not found. Please check name entered&quot;);</span>
+<span class="fc" id="L151">          return &quot;ERROR: Star not found. Please check name entered&quot;;</span>
         }
-<span class="fc" id="L140">      } else {</span>
+<span class="fc" id="L153">      } else {</span>
         //checking that rest of arguments are doubles
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        for (int i = 2; i &lt; 5; i++) {</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        for (int i = 2; i &lt; 5; i++) {</span>
           try {
-<span class="fc" id="L144">            Double.parseDouble(line[i]);</span>
-<span class="fc" id="L145">          } catch (NumberFormatException e) {</span>
-<span class="fc" id="L146">            System.err.println(&quot;ERROR: Coordinates must be int or double&quot;);</span>
-<span class="fc" id="L147">            return &quot;ERROR: Coordinates must be int or double&quot;;</span>
-<span class="fc" id="L148">          }</span>
+<span class="nc" id="L157">            Double.parseDouble(line[i]);</span>
+<span class="fc" id="L158">          } catch (NumberFormatException e) {</span>
+<span class="fc" id="L159">            System.err.println(&quot;ERROR: Coordinates must be int or double&quot;);</span>
+<span class="fc" id="L160">            return &quot;ERROR: Coordinates must be int or double&quot;;</span>
+<span class="nc" id="L161">          }</span>
         }
       }
-<span class="fc" id="L151">      return &quot;&quot;;</span>
+      //represents command is valid
+<span class="fc" id="L165">      return &quot;&quot;;</span>
     } else {
-<span class="fc" id="L153">      System.err.println(&quot;ERROR: Incorrect number or args provided. 3 or 5 expected for &quot;</span>
+<span class="fc" id="L167">      System.err.println(&quot;ERROR: Incorrect number or args provided. 3 or 5 expected for &quot;</span>
               + &quot;neighbors methods&quot;);
-<span class="fc" id="L155">      return &quot;ERROR: Incorrect number or args provided. 3 or 5 expected for neighbors methods&quot;;</span>
+<span class="fc" id="L169">      return &quot;ERROR: Incorrect number or args provided. 3 or 5 expected for neighbors methods&quot;;</span>
     }
   }
 
   /**
-   * This helper method checks that for valid commands for both radius methods
+   * This helper method checks for valid commands for both radius methods.
    * @param line a String array representing the user input line parsed by the REPL
    * @return a boolean representing if command is valid (true if valid)
    */
   private String checkCommandRadius(String[] line) {
-    //boolean to let me know if a name has been queried
-<span class="pc bpc" id="L166" title="1 of 4 branches missed.">    if (line.length == 3 || line.length == 5) {</span>
+    //checking for correct command length
+<span class="pc bpc" id="L180" title="3 of 4 branches missed.">    if (line.length == 3 || line.length == 5) {</span>
       try {
-<span class="fc" id="L168">        Double.parseDouble(line[1]);</span>
-<span class="fc" id="L169">      } catch (NumberFormatException e) {</span>
-<span class="fc" id="L170">        System.err.println(&quot;ERROR: Radius must be an int or double&quot;);</span>
-<span class="fc" id="L171">        return &quot;ERROR: Radius must be an int or double&quot;;</span>
-<span class="fc" id="L172">      }</span>
+<span class="fc" id="L182">        Double.parseDouble(line[1]);</span>
+<span class="fc" id="L183">      } catch (NumberFormatException e) {</span>
+<span class="fc" id="L184">        System.err.println(&quot;ERROR: Radius must be an int or double&quot;);</span>
+<span class="fc" id="L185">        return &quot;ERROR: Radius must be an int or double&quot;;</span>
+<span class="fc" id="L186">      }</span>
       //checking if star data is null or empty
-<span class="pc bpc" id="L174" title="1 of 4 branches missed.">      if (stars.size() == 0 || stars == null) {</span>
-<span class="fc" id="L175">        System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
-<span class="fc" id="L176">        return &quot;ERROR: Please load star data and try again&quot;;</span>
+<span class="pc bpc" id="L188" title="1 of 4 branches missed.">      if (stars.size() == 0 || stars == null) {</span>
+<span class="fc" id="L189">        System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
+<span class="fc" id="L190">        return &quot;ERROR: Please load star data and try again&quot;;</span>
       }
-<span class="fc bfc" id="L178" title="All 2 branches covered.">      if (line.length == 3) {</span>
+      //checking for if name is queried
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">      if (line.length == 3) {</span>
         //checking that third argument is a nonempty string
-<span class="pc bpc" id="L180" title="1 of 4 branches missed.">        if (!(line[2] instanceof String) || (line[2].equals(&quot;\&quot;\&quot;&quot;))) {</span>
-<span class="fc" id="L181">          System.err.println(&quot;ERROR: Name must be a nonempty string&quot;);</span>
-<span class="fc" id="L182">          return &quot;ERROR: Name must be a nonempty string&quot;;</span>
+<span class="pc bpc" id="L195" title="1 of 4 branches missed.">        if (!(line[2] instanceof String) || (line[2].equals(&quot;\&quot;\&quot;&quot;))) {</span>
+<span class="fc" id="L196">          System.err.println(&quot;ERROR: Name must be a nonempty string&quot;);</span>
+<span class="fc" id="L197">          return &quot;ERROR: Name must be a nonempty string&quot;;</span>
         }
-<span class="fc" id="L184">        String name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
-<span class="fc" id="L185">        boolean starFound = false;</span>
+<span class="fc" id="L199">        String name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="fc" id="L200">        boolean starFound = false;</span>
         //searching for star with matching name
-<span class="fc bfc" id="L187" title="All 2 branches covered.">        for (int i = 0; i &lt; stars.size(); i++) {</span>
-<span class="fc bfc" id="L188" title="All 2 branches covered.">          if (stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L189">            starFound = true;</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">          if (stars.get(i).getName().equals(name)) {</span>
+<span class="fc" id="L204">            starFound = true;</span>
           }
         }
         //print ERROR and exit method if no star found with name provided
-<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (!starFound) {</span>
-<span class="fc" id="L194">          System.err.println(&quot;ERROR: Star not found. Please check name entered&quot;);</span>
-<span class="fc" id="L195">          return &quot;ERROR: Star not found. Please check name entered&quot;;</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (!starFound) {</span>
+<span class="fc" id="L209">          System.err.println(&quot;ERROR: Star not found. Please check name entered&quot;);</span>
+<span class="fc" id="L210">          return &quot;ERROR: Star not found. Please check name entered&quot;;</span>
         }
-<span class="fc" id="L197">      } else {</span>
+<span class="fc" id="L212">      } else {</span>
         //checking that rest of arguments are doubles
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        for (int i = 2; i &lt; 5; i++) {</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        for (int i = 2; i &lt; 5; i++) {</span>
           try {
-<span class="fc" id="L201">            Double.parseDouble(line[i]);</span>
-<span class="nc" id="L202">          } catch (NumberFormatException e) {</span>
-<span class="nc" id="L203">            System.err.println(&quot;ERROR: Coordinates must be int or double&quot;);</span>
-<span class="nc" id="L204">            return &quot;ERROR: Coordinates must be int or double&quot;;</span>
-<span class="fc" id="L205">          }</span>
+<span class="nc" id="L216">            Double.parseDouble(line[i]);</span>
+<span class="nc" id="L217">          } catch (NumberFormatException e) {</span>
+<span class="nc" id="L218">            System.err.println(&quot;ERROR: Coordinates must be int or double&quot;);</span>
+<span class="nc" id="L219">            return &quot;ERROR: Coordinates must be int or double&quot;;</span>
+<span class="nc" id="L220">          }</span>
         }
       }
-<span class="fc" id="L208">      return &quot;&quot;;</span>
+<span class="fc" id="L223">      return &quot;&quot;;</span>
     } else {
-<span class="nc" id="L210">      System.err.println(&quot;ERROR: Incorrect number or args provided. 3 or 5 expected for &quot;</span>
+<span class="nc" id="L225">      System.err.println(&quot;ERROR: Incorrect number or args provided. 3 or 5 expected for &quot;</span>
               + &quot;radius methods&quot;);
-<span class="nc" id="L212">      return &quot;ERROR: Incorrect number or args provided. 3 or 5 expected for radius methods&quot;;</span>
+<span class="nc" id="L227">      return &quot;ERROR: Incorrect number or args provided. 3 or 5 expected for radius methods&quot;;</span>
     }
   }
   /**
    * Naive neighbors method.
    * @param line, an array of Strings parsed by the REPL
+   * @return List representing star data for front end
    */
   private List&lt;String&gt; naiveNeighbors(String[] line) {
-<span class="fc" id="L220">    List&lt;String&gt; neighborData = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L236">    List&lt;String&gt; neighborData = new ArrayList&lt;&gt;();</span>
     //see helper method- checks if whole command is valid
-<span class="fc" id="L222">    String returnString = this.checkCommandNeighbors(line);</span>
-<span class="fc bfc" id="L223" title="All 2 branches covered.">    if (!returnString.equals(&quot;&quot;)){</span>
-<span class="fc" id="L224">      neighborData.add(returnString);</span>
-<span class="fc" id="L225">      return neighborData;</span>
+<span class="fc" id="L238">    String returnString = this.checkCommandNeighbors(line);</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">    if (!returnString.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L240">      neighborData.add(returnString);</span>
+<span class="fc" id="L241">      return neighborData;</span>
     }
-<span class="fc" id="L227">    String name = &quot;&quot;;</span>
+<span class="fc" id="L243">    String name = &quot;&quot;;</span>
     //boolean to let me know if a name has been queried
-<span class="fc" id="L229">    boolean searchByName = false;</span>
-<span class="fc" id="L230">    int neighbors = Integer.parseInt(line[1]);</span>
-<span class="fc" id="L231">    double x = 0;</span>
-<span class="fc" id="L232">    double y = 0;</span>
-<span class="fc" id="L233">    double z = 0;</span>
-<span class="fc bfc" id="L234" title="All 2 branches covered.">    if (line.length == 3){</span>
-<span class="fc" id="L235">      searchByName = true;</span>
-<span class="fc" id="L236">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
-<span class="fc bfc" id="L237" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
-<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L239">          x = stars.get(i).getX();</span>
-<span class="fc" id="L240">          y = stars.get(i).getY();</span>
-<span class="fc" id="L241">          z = stars.get(i).getZ();</span>
+<span class="fc" id="L245">    boolean searchByName = false;</span>
+<span class="fc" id="L246">    int neighbors = Integer.parseInt(line[1]);</span>
+<span class="fc" id="L247">    double x = 0;</span>
+<span class="fc" id="L248">    double y = 0;</span>
+<span class="fc" id="L249">    double z = 0;</span>
+    //finding star by name
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">    if (line.length == 3) {</span>
+<span class="fc" id="L252">      searchByName = true;</span>
+<span class="fc" id="L253">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
+<span class="fc" id="L256">          x = stars.get(i).getX();</span>
+<span class="fc" id="L257">          y = stars.get(i).getY();</span>
+<span class="fc" id="L258">          z = stars.get(i).getZ();</span>
         }
       }
-    }
-    else {
-<span class="fc" id="L246">      x = Double.parseDouble(line[2]);</span>
-<span class="fc" id="L247">      y = Double.parseDouble(line[3]);</span>
-<span class="fc" id="L248">      z = Double.parseDouble(line[4]);</span>
+    } else {
+<span class="nc" id="L262">      x = Double.parseDouble(line[2]);</span>
+<span class="nc" id="L263">      y = Double.parseDouble(line[3]);</span>
+<span class="nc" id="L264">      z = Double.parseDouble(line[4]);</span>
     }
     //return nothing if neighbors is 0
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">    if (neighbors == 0) {</span>
-<span class="nc" id="L252">      return neighborData;</span>
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">    if (neighbors == 0) {</span>
+<span class="nc" id="L268">      return neighborData;</span>
     }
     //checking to see if number of neighbors &gt; 0
-<span class="fc bfc" id="L255" title="All 2 branches covered.">    if (neighbors &lt; 0) {</span>
-<span class="fc" id="L256">      System.err.println(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
-<span class="fc" id="L257">      neighborData.add(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
-<span class="fc" id="L258">      return neighborData;</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">    if (neighbors &lt; 0) {</span>
+<span class="fc" id="L272">      System.err.println(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
+<span class="fc" id="L273">      neighborData.add(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
+<span class="fc" id="L274">      return neighborData;</span>
     }
-<span class="fc" id="L260">    List&lt;List&lt;Double&gt;&gt; neighborList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L276">    List&lt;List&lt;Double&gt;&gt; neighborList = new ArrayList&lt;&gt;();</span>
     //this is the list I use to return the star data
-<span class="fc" id="L262">    List&lt;Star&gt; neighborStarList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L278">    List&lt;Star&gt; neighborStarList = new ArrayList&lt;&gt;();</span>
     /**
      * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
      * and stars that are tied in distance are always placed in front in the order, each competing
      * star has a equal random chance to be included in the final list
      */
-<span class="fc" id="L268">    Collections.shuffle(stars);</span>
-<span class="fc bfc" id="L269" title="All 2 branches covered.">    for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="nc" id="L284">    Collections.shuffle(stars);</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">    for (int i = 0; i &lt; stars.size(); i++) {</span>
       //don't want to include star in list if queried by name
-<span class="fc bfc" id="L271" title="All 4 branches covered.">      if (searchByName &amp;&amp; stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L272">        continue;</span>
+<span class="nc bnc" id="L287" title="All 4 branches missed.">      if (searchByName &amp;&amp; stars.get(i).getName().equals(name)) {</span>
+<span class="nc" id="L288">        continue;</span>
       }
-<span class="fc" id="L274">      double iD = stars.get(i).getID();</span>
-<span class="fc" id="L275">      double currentX = stars.get(i).getX();</span>
-<span class="fc" id="L276">      double currentY = stars.get(i).getY();</span>
-<span class="fc" id="L277">      double currentZ = stars.get(i).getZ();</span>
+<span class="nc" id="L290">      double iD = stars.get(i).getID();</span>
+<span class="nc" id="L291">      double currentX = stars.get(i).getX();</span>
+<span class="nc" id="L292">      double currentY = stars.get(i).getY();</span>
+<span class="nc" id="L293">      double currentZ = stars.get(i).getZ();</span>
       //see helper method
-<span class="fc" id="L279">      double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);</span>
-<span class="fc" id="L280">      List&lt;Double&gt; currentStar = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L281">      currentStar.add(iD);</span>
-<span class="fc" id="L282">      currentStar.add(currentDistance);</span>
-<span class="fc" id="L283">      boolean added = false;</span>
+<span class="nc" id="L295">      double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);</span>
+<span class="nc" id="L296">      List&lt;Double&gt; currentStar = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L297">      currentStar.add(iD);</span>
+<span class="nc" id="L298">      currentStar.add(currentDistance);</span>
+<span class="nc" id="L299">      boolean added = false;</span>
       //index to know where to add later
-<span class="fc" id="L285">      int addIndex = 0;</span>
-<span class="fc bfc" id="L286" title="All 2 branches covered.">      for (int j = 0; j &lt; neighborList.size(); j++) {</span>
-<span class="fc bfc" id="L287" title="All 2 branches covered.">        if (neighborList.get(j).get(1) &gt; currentDistance) {</span>
-<span class="fc" id="L288">          addIndex = j;</span>
-<span class="fc" id="L289">          added = true;</span>
-<span class="fc" id="L290">          break;</span>
+<span class="nc" id="L301">      int addIndex = 0;</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">      for (int j = 0; j &lt; neighborList.size(); j++) {</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">        if (neighborList.get(j).get(1) &gt; currentDistance) {</span>
+<span class="nc" id="L304">          addIndex = j;</span>
+<span class="nc" id="L305">          added = true;</span>
+<span class="nc" id="L306">          break;</span>
         }
       }
-<span class="fc bfc" id="L293" title="All 2 branches covered.">      if (added) {</span>
-<span class="fc" id="L294">        neighborList.add(addIndex, currentStar);</span>
-<span class="fc" id="L295">        neighborStarList.add(addIndex, stars.get(i));</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">      if (added) {</span>
+<span class="nc" id="L310">        neighborList.add(addIndex, currentStar);</span>
+<span class="nc" id="L311">        neighborStarList.add(addIndex, stars.get(i));</span>
         //want to include neighbors up to amount of neighbors asked for in command
-<span class="fc bfc" id="L297" title="All 2 branches covered.">      } else if (neighborList.size() &lt; neighbors) {</span>
-<span class="fc" id="L298">        neighborList.add(currentStar);</span>
-<span class="fc" id="L299">        neighborStarList.add(stars.get(i));</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">      } else if (neighborList.size() &lt; neighbors) {</span>
+<span class="nc" id="L314">        neighborList.add(currentStar);</span>
+<span class="nc" id="L315">        neighborStarList.add(stars.get(i));</span>
       }
       //want to keep list at size of number of neighbors
-<span class="fc bfc" id="L302" title="All 2 branches covered.">      if (neighborList.size() &gt; neighbors) {</span>
-<span class="fc" id="L303">        neighborList.remove(neighborList.size() - 1);</span>
-<span class="fc" id="L304">        neighborStarList.remove(neighborStarList.size() - 1);</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">      if (neighborList.size() &gt; neighbors) {</span>
+<span class="nc" id="L319">        neighborList.remove(neighborList.size() - 1);</span>
+<span class="nc" id="L320">        neighborStarList.remove(neighborStarList.size() - 1);</span>
       }
     }
     //printing out stars to console
-<span class="fc bfc" id="L308" title="All 2 branches covered.">    for (int k = 0; k &lt; neighborList.size(); k++) {</span>
-<span class="fc" id="L309">      double iD = neighborList.get(k).get(0);</span>
-<span class="fc" id="L310">      int toPrint = (int) iD;</span>
-<span class="fc" id="L311">      System.out.println(String.valueOf(toPrint));</span>
-<span class="fc" id="L312">      neighborData.add(&quot;ID: &quot; + neighborStarList.get(k).getID() + &quot; | Name: &quot; + neighborStarList.get(k).getName()</span>
-<span class="fc" id="L313">              + &quot; | &quot; + &quot;Coordinates: &quot; + neighborStarList.get(k).getX() + &quot;, &quot; + neighborStarList.get(k).getY() +</span>
-<span class="fc" id="L314">              &quot;, &quot; + neighborStarList.get(k).getZ());</span>
+<span class="nc bnc" id="L324" title="All 2 branches missed.">    for (int k = 0; k &lt; neighborList.size(); k++) {</span>
+<span class="nc" id="L325">      double iD = neighborList.get(k).get(0);</span>
+<span class="nc" id="L326">      int toPrint = (int) iD;</span>
+      //formatting string for front end
+<span class="nc" id="L328">      System.out.println(String.valueOf(toPrint));</span>
+<span class="nc" id="L329">      neighborData.add(&quot;ID: &quot; + neighborStarList.get(k).getID() + &quot; | Name: &quot;</span>
+<span class="nc" id="L330">              + neighborStarList.get(k).getName() + &quot; | &quot; + &quot;Coordinates: &quot;</span>
+<span class="nc" id="L331">              + neighborStarList.get(k).getX()</span>
+<span class="nc" id="L332">              + &quot;, &quot; + neighborStarList.get(k).getY()</span>
+<span class="nc" id="L333">              + &quot;, &quot; + neighborStarList.get(k).getZ());</span>
     }
-<span class="fc" id="L316">    return neighborData;</span>
+<span class="nc" id="L335">    return neighborData;</span>
   }
 
   /**
    * Naive radius method.
-   *
    * @param line, an array of strings parsed by the REPL
+   * @return List representing star data for front end
    */
   private List&lt;String&gt; naiveRadius(String[] line) {
-<span class="fc" id="L325">    List&lt;String&gt; radiusData = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L344">    List&lt;String&gt; radiusData = new ArrayList&lt;&gt;();</span>
     //see helper method- checks if whole command is valid
-<span class="fc" id="L327">    String returnString = this.checkCommandRadius(line);</span>
-<span class="fc bfc" id="L328" title="All 2 branches covered.">    if (!returnString.equals(&quot;&quot;)){</span>
-<span class="fc" id="L329">      radiusData.add(returnString);</span>
-<span class="fc" id="L330">      return radiusData;</span>
+<span class="fc" id="L346">    String returnString = this.checkCommandRadius(line);</span>
+<span class="fc bfc" id="L347" title="All 2 branches covered.">    if (!returnString.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L348">      radiusData.add(returnString);</span>
+<span class="fc" id="L349">      return radiusData;</span>
     }
-<span class="fc" id="L332">    String name = &quot;&quot;;</span>
+<span class="fc" id="L351">    String name = &quot;&quot;;</span>
     //boolean to let me know if a name has been queried
-<span class="fc" id="L334">    boolean searchByName = false;</span>
-<span class="fc" id="L335">    double radius = Double.parseDouble(line[1]);</span>
-<span class="fc" id="L336">    double x = 0;</span>
-<span class="fc" id="L337">    double y = 0;</span>
-<span class="fc" id="L338">    double z = 0;</span>
-<span class="fc bfc" id="L339" title="All 2 branches covered.">    if (line.length == 3){</span>
-<span class="fc" id="L340">      searchByName = true;</span>
-<span class="fc" id="L341">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
-<span class="fc bfc" id="L342" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
-<span class="fc bfc" id="L343" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L344">          x = stars.get(i).getX();</span>
-<span class="fc" id="L345">          y = stars.get(i).getY();</span>
-<span class="fc" id="L346">          z = stars.get(i).getZ();</span>
+<span class="fc" id="L353">    boolean searchByName = false;</span>
+<span class="fc" id="L354">    double radius = Double.parseDouble(line[1]);</span>
+<span class="fc" id="L355">    double x = 0;</span>
+<span class="fc" id="L356">    double y = 0;</span>
+<span class="fc" id="L357">    double z = 0;</span>
+    //finding star by name
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">    if (line.length == 3) {</span>
+<span class="fc" id="L360">      searchByName = true;</span>
+<span class="fc" id="L361">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="fc bfc" id="L363" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
+<span class="fc" id="L364">          x = stars.get(i).getX();</span>
+<span class="fc" id="L365">          y = stars.get(i).getY();</span>
+<span class="fc" id="L366">          z = stars.get(i).getZ();</span>
         }
       }
-    }
-    else {
-<span class="fc" id="L351">      x = Double.parseDouble(line[2]);</span>
-<span class="fc" id="L352">      y = Double.parseDouble(line[3]);</span>
-<span class="fc" id="L353">      z = Double.parseDouble(line[4]);</span>
+    } else {
+<span class="nc" id="L370">      x = Double.parseDouble(line[2]);</span>
+<span class="nc" id="L371">      y = Double.parseDouble(line[3]);</span>
+<span class="nc" id="L372">      z = Double.parseDouble(line[4]);</span>
     }
     //checking to see if radius &gt; 0
-<span class="fc bfc" id="L356" title="All 2 branches covered.">    if (radius &lt; 0) {</span>
-<span class="fc" id="L357">      System.err.println(&quot;ERROR: Radius cannot be negative&quot;);</span>
-<span class="fc" id="L358">      radiusData.add(&quot;ERROR: Radius cannot be negative&quot;);</span>
-<span class="fc" id="L359">      return radiusData;</span>
+<span class="pc bpc" id="L375" title="1 of 2 branches missed.">    if (radius &lt; 0) {</span>
+<span class="fc" id="L376">      System.err.println(&quot;ERROR: Radius cannot be negative&quot;);</span>
+<span class="fc" id="L377">      radiusData.add(&quot;ERROR: Radius cannot be negative&quot;);</span>
+<span class="fc" id="L378">      return radiusData;</span>
     }
-<span class="fc" id="L361">    List&lt;List&lt;Double&gt;&gt; radiusList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L380">    List&lt;List&lt;Double&gt;&gt; radiusList = new ArrayList&lt;&gt;();</span>
     //list for storing star data
-<span class="fc" id="L363">    List&lt;Star&gt; radiusStarList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L382">    List&lt;Star&gt; radiusStarList = new ArrayList&lt;&gt;();</span>
     /**
      * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
      * and stars that are tied in distance are always placed in front in the order, each competing
      * star has a equal random chance to be included in the final list
      */
-<span class="fc" id="L369">    Collections.shuffle(stars);</span>
-<span class="fc bfc" id="L370" title="All 2 branches covered.">    for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="nc" id="L388">    Collections.shuffle(stars);</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">    for (int i = 0; i &lt; stars.size(); i++) {</span>
       //don't want to include star in list if queried by name
-<span class="fc bfc" id="L372" title="All 4 branches covered.">      if (searchByName &amp;&amp; stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L373">        continue;</span>
+<span class="nc bnc" id="L391" title="All 4 branches missed.">      if (searchByName &amp;&amp; stars.get(i).getName().equals(name)) {</span>
+<span class="nc" id="L392">        continue;</span>
       }
-<span class="fc" id="L375">      double iD = stars.get(i).getID();</span>
-<span class="fc" id="L376">      double currentX = stars.get(i).getX();</span>
-<span class="fc" id="L377">      double currentY = stars.get(i).getY();</span>
-<span class="fc" id="L378">      double currentZ = stars.get(i).getZ();</span>
+<span class="nc" id="L394">      double iD = stars.get(i).getID();</span>
+<span class="nc" id="L395">      double currentX = stars.get(i).getX();</span>
+<span class="nc" id="L396">      double currentY = stars.get(i).getY();</span>
+<span class="nc" id="L397">      double currentZ = stars.get(i).getZ();</span>
       //see helper method
-<span class="fc" id="L380">      double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);</span>
-<span class="fc" id="L381">      List&lt;Double&gt; currentStar = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L382">      currentStar.add(iD);</span>
-<span class="fc" id="L383">      currentStar.add(currentDistance);</span>
-<span class="fc bfc" id="L384" title="All 2 branches covered.">      if (currentDistance &lt;= radius) {</span>
-<span class="fc" id="L385">        boolean added = false;</span>
+<span class="nc" id="L399">      double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);</span>
+<span class="nc" id="L400">      List&lt;Double&gt; currentStar = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L401">      currentStar.add(iD);</span>
+<span class="nc" id="L402">      currentStar.add(currentDistance);</span>
+<span class="nc bnc" id="L403" title="All 2 branches missed.">      if (currentDistance &lt;= radius) {</span>
+<span class="nc" id="L404">        boolean added = false;</span>
         //index to know where to add later
-<span class="fc bfc" id="L387" title="All 2 branches covered.">        for (int j = 0; j &lt; radiusList.size(); j++) {</span>
-<span class="fc bfc" id="L388" title="All 2 branches covered.">          if (radiusList.get(j).get(1) &gt; currentDistance) {</span>
-<span class="fc" id="L389">            radiusList.add(j, currentStar);</span>
-<span class="fc" id="L390">            radiusStarList.add(j, stars.get(i));</span>
-<span class="fc" id="L391">            added = true;</span>
-<span class="fc" id="L392">            break;</span>
+<span class="nc bnc" id="L406" title="All 2 branches missed.">        for (int j = 0; j &lt; radiusList.size(); j++) {</span>
+<span class="nc bnc" id="L407" title="All 2 branches missed.">          if (radiusList.get(j).get(1) &gt; currentDistance) {</span>
+<span class="nc" id="L408">            radiusList.add(j, currentStar);</span>
+<span class="nc" id="L409">            radiusStarList.add(j, stars.get(i));</span>
+<span class="nc" id="L410">            added = true;</span>
+<span class="nc" id="L411">            break;</span>
           }
         }
         //add at end of list if furthest away from cordinates given
-<span class="fc bfc" id="L396" title="All 2 branches covered.">        if (!added) {</span>
-<span class="fc" id="L397">          radiusList.add(currentStar);</span>
-<span class="fc" id="L398">          radiusStarList.add(stars.get(i));</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">        if (!added) {</span>
+<span class="nc" id="L416">          radiusList.add(currentStar);</span>
+<span class="nc" id="L417">          radiusStarList.add(stars.get(i));</span>
         }
       }
     }
     //printing out stars to console
-<span class="fc bfc" id="L403" title="All 2 branches covered.">    for (int k = 0; k &lt; radiusList.size(); k++) {</span>
-<span class="fc" id="L404">      double iD = radiusList.get(k).get(0);</span>
-<span class="fc" id="L405">      int toPrint = (int) iD;</span>
-<span class="fc" id="L406">      System.out.println(String.valueOf(toPrint));</span>
-<span class="fc" id="L407">      radiusData.add(&quot;ID: &quot; + radiusStarList.get(k).getID() + &quot; | Name: &quot; + radiusStarList.get(k).getName()</span>
-<span class="fc" id="L408">              + &quot; | &quot; + &quot;Coordinates: &quot; + radiusStarList.get(k).getX() + &quot;, &quot; + radiusStarList.get(k).getY() +</span>
-<span class="fc" id="L409">              &quot;, &quot; + radiusStarList.get(k).getZ());</span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">    for (int k = 0; k &lt; radiusList.size(); k++) {</span>
+<span class="nc" id="L423">      double iD = radiusList.get(k).get(0);</span>
+<span class="nc" id="L424">      int toPrint = (int) iD;</span>
+<span class="nc" id="L425">      System.out.println(String.valueOf(toPrint));</span>
+      //formatting string to print on front end
+<span class="nc" id="L427">      radiusData.add(&quot;ID: &quot; + radiusStarList.get(k).getID() + &quot; | Name: &quot;</span>
+<span class="nc" id="L428">              + radiusStarList.get(k).getName() + &quot; | &quot; + &quot;Coordinates: &quot;</span>
+<span class="nc" id="L429">              + radiusStarList.get(k).getX() + &quot;, &quot;</span>
+<span class="nc" id="L430">              + radiusStarList.get(k).getY()</span>
+<span class="nc" id="L431">              + &quot;, &quot; + radiusStarList.get(k).getZ());</span>
     }
-<span class="fc" id="L411">    return radiusData;</span>
-  }
-
-  private List&lt;String&gt; neighbors(String[] line){
-<span class="fc" id="L415">    List&lt;String&gt; neighborData = new ArrayList&lt;&gt;();</span>
-    //see helper method- checks if whole command is valid
-<span class="fc" id="L417">    String returnString = this.checkCommandNeighbors(line);</span>
-<span class="pc bpc" id="L418" title="1 of 2 branches missed.">    if (!returnString.equals(&quot;&quot;)){</span>
-<span class="nc" id="L419">      neighborData.add(returnString);</span>
-<span class="nc" id="L420">      return neighborData;</span>
-    }
-<span class="fc" id="L422">    String name = &quot;&quot;;</span>
-    //boolean to let me know if a name has been queried
-<span class="fc" id="L424">    boolean searchByName = false;</span>
-<span class="fc" id="L425">    int neighbors = Integer.parseInt(line[1]);</span>
-<span class="fc" id="L426">    double x = 0;</span>
-<span class="fc" id="L427">    double y = 0;</span>
-<span class="fc" id="L428">    double z = 0;</span>
-<span class="fc bfc" id="L429" title="All 2 branches covered.">    if (line.length == 3){</span>
-<span class="fc" id="L430">      searchByName = true;</span>
-<span class="fc" id="L431">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
-<span class="fc bfc" id="L432" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
-<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L434">          x = stars.get(i).getX();</span>
-<span class="fc" id="L435">          y = stars.get(i).getY();</span>
-<span class="fc" id="L436">          z = stars.get(i).getZ();</span>
-        }
-      }
-    }
-    else {
-<span class="fc" id="L441">      x = Double.parseDouble(line[2]);</span>
-<span class="fc" id="L442">      y = Double.parseDouble(line[3]);</span>
-<span class="fc" id="L443">      z = Double.parseDouble(line[4]);</span>
-    }
-    //return nothing if neighbors is 0
-<span class="pc bpc" id="L446" title="1 of 2 branches missed.">    if (neighbors == 0) {</span>
-<span class="nc" id="L447">      return neighborData;</span>
-    }
-    //checking to see if number of neighbors &gt; 0
-<span class="fc bfc" id="L450" title="All 2 branches covered.">    if (neighbors &lt; 0) {</span>
-<span class="fc" id="L451">      System.err.println(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
-<span class="fc" id="L452">      neighborData.add(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
-<span class="fc" id="L453">      return neighborData;</span>
-    }
-<span class="fc" id="L455">    PriorityQueue&lt;CordComparable&gt; neighborQueue = new PriorityQueue&lt;&gt;(new PriorityComparator(x,y,z));</span>
-<span class="fc" id="L456">    Node rootNode = kdTree.getRoot();</span>
-    //our target star, or point in space, where we are trying to compare with
-<span class="fc" id="L458">    CordComparable target = new Star(-1,&quot;&quot;,x,y,z);</span>
-<span class="fc" id="L459">    this.neighborsHelper(searchByName,name,neighbors,target,0,neighborQueue,rootNode);</span>
-<span class="fc" id="L460">    List&lt;CordComparable&gt; print = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L461" title="All 2 branches covered.">    while (!neighborQueue.isEmpty()){</span>
-<span class="fc" id="L462">      print.add(neighborQueue.poll());</span>
-    }
-<span class="fc bfc" id="L464" title="All 2 branches covered.">    for (int i = print.size() - 1; i &gt;= 0; i--){</span>
-<span class="fc" id="L465">      System.out.println(print.get(i).getInfo().get(0));</span>
-<span class="fc" id="L466">      neighborData.add(&quot;ID: &quot; + print.get(i).getInfo().get(0) + &quot; | Name: &quot; + print.get(i).getInfo().get(1) + &quot; | &quot; +</span>
-<span class="fc" id="L467">              &quot;Coordinates: &quot; + print.get(i).getCoordinate(0) + &quot;, &quot; + print.get(i).getCoordinate(1) +</span>
-<span class="fc" id="L468">              &quot;, &quot; + print.get(i).getCoordinate(2));</span>
-    }
-<span class="fc" id="L470">    return neighborData;</span>
+<span class="nc" id="L433">    return radiusData;</span>
   }
 
   /**
-   *
-   * @param searchByName
-   * @param neighbors
-   * @param target
-   * @param depth
-   * @param neighborQueue
-   * @param currentNode
+   * KDTree neighbors method.
+   * @param line, an array of strings parsed by the REPL
+   * @return List representing star data for front end
    */
+  private List&lt;String&gt; neighbors(String[] line) {
+<span class="fc" id="L442">    List&lt;String&gt; neighborData = new ArrayList&lt;&gt;();</span>
+    //see helper method- checks if whole command is valid
+<span class="fc" id="L444">    String returnString = this.checkCommandNeighbors(line);</span>
+<span class="pc bpc" id="L445" title="1 of 2 branches missed.">    if (!returnString.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L446">      neighborData.add(returnString);</span>
+<span class="nc" id="L447">      return neighborData;</span>
+    }
+<span class="fc" id="L449">    String name = &quot;&quot;;</span>
+    //boolean to let me know if a name has been queried
+<span class="fc" id="L451">    boolean searchByName = false;</span>
+<span class="fc" id="L452">    int neighbors = Integer.parseInt(line[1]);</span>
+<span class="fc" id="L453">    double x = 0;</span>
+<span class="fc" id="L454">    double y = 0;</span>
+<span class="fc" id="L455">    double z = 0;</span>
+    //finding star by name
+<span class="pc bpc" id="L457" title="1 of 2 branches missed.">    if (line.length == 3) {</span>
+<span class="fc" id="L458">      searchByName = true;</span>
+<span class="fc" id="L459">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L460" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="fc bfc" id="L461" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
+<span class="fc" id="L462">          x = stars.get(i).getX();</span>
+<span class="fc" id="L463">          y = stars.get(i).getY();</span>
+<span class="fc" id="L464">          z = stars.get(i).getZ();</span>
+        }
+      }
+    } else {
+<span class="nc" id="L468">      x = Double.parseDouble(line[2]);</span>
+<span class="nc" id="L469">      y = Double.parseDouble(line[3]);</span>
+<span class="nc" id="L470">      z = Double.parseDouble(line[4]);</span>
+    }
+    //return nothing if neighbors is 0
+<span class="pc bpc" id="L473" title="1 of 2 branches missed.">    if (neighbors == 0) {</span>
+<span class="nc" id="L474">      return neighborData;</span>
+    }
+    //checking to see if number of neighbors &gt; 0
+<span class="pc bpc" id="L477" title="1 of 2 branches missed.">    if (neighbors &lt; 0) {</span>
+<span class="fc" id="L478">      System.err.println(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
+<span class="fc" id="L479">      neighborData.add(&quot;ERROR: Number of neighbors cannot be negative&quot;);</span>
+<span class="fc" id="L480">      return neighborData;</span>
+    }
+<span class="nc" id="L482">    PriorityQueue&lt;CordComparable&gt; neighborQueue = new</span>
+            PriorityQueue&lt;&gt;(new PriorityComparator(x, y, z));
+<span class="nc" id="L484">    Node rootNode = kdTree.getRoot();</span>
+    //our target star, or point in space, where we are trying to compare with
+<span class="nc" id="L486">    CordComparable target = new Star(-1, &quot;&quot;, x, y, z);</span>
+<span class="nc" id="L487">    this.neighborsHelper(searchByName, name, neighbors, target,</span>
+            0, neighborQueue, rootNode);
+<span class="nc" id="L489">    List&lt;CordComparable&gt; print = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">    while (!neighborQueue.isEmpty()) {</span>
+<span class="nc" id="L491">      print.add(neighborQueue.poll());</span>
+    }
+<span class="nc bnc" id="L493" title="All 2 branches missed.">    for (int i = print.size() - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L494">      System.out.println(print.get(i).getInfo().get(0));</span>
+<span class="nc" id="L495">      neighborData.add(&quot;ID: &quot; + print.get(i).getInfo().get(0) + &quot; | Name: &quot;</span>
+<span class="nc" id="L496">              + print.get(i).getInfo().get(1) + &quot; | &quot;</span>
+<span class="nc" id="L497">              + &quot;Coordinates: &quot; + print.get(i).getCoordinate(0)</span>
+<span class="nc" id="L498">              + &quot;, &quot; + print.get(i).getCoordinate(1)</span>
+<span class="nc" id="L499">              + &quot;, &quot; + print.get(i).getCoordinate(2));</span>
+    }
+<span class="nc" id="L501">    return neighborData;</span>
+  }
 
+  /**
+   * This recursive helper method searches for neighbors in the KDTree.
+   * @param searchByName boolean representing whether we are searching by name
+   * @param name string representing the name of star being queried- &quot;&quot; if not
+   *             queried by name
+   * @param neighbors int number of neighbors we are searching for
+   * @param target CordComparable representing the target star input by user
+   * @param depth int representing current depth of node being checked
+   * @param neighborQueue priority queue holding neighbors
+   * @param currentNode Node representing current node being checked
+   */
   private void neighborsHelper(boolean searchByName, String name, int neighbors,
                                 CordComparable target, int depth,
-                                PriorityQueue&lt;CordComparable&gt; neighborQueue, Node currentNode){
-<span class="fc" id="L486">    double currX = currentNode.getCompObject().getCoordinate(0);</span>
-<span class="fc" id="L487">    double currY = currentNode.getCompObject().getCoordinate(1);</span>
-<span class="fc" id="L488">    double currZ = currentNode.getCompObject().getCoordinate(2);</span>
-<span class="fc" id="L489">    double targetX = target.getCoordinate(0);</span>
-<span class="fc" id="L490">    double targetY = target.getCoordinate(1);</span>
-<span class="fc" id="L491">    double targetZ = target.getCoordinate(2);</span>
-<span class="fc" id="L492">    double currentDistance = this.calculateDistance(currX,currY,currZ,targetX,targetY,targetZ);</span>
-<span class="fc" id="L493">    double furthestDistance = Double.MAX_VALUE;</span>
+                                PriorityQueue&lt;CordComparable&gt; neighborQueue, Node currentNode) {
+    //getting coordinates
+<span class="nc" id="L519">    double currX = currentNode.getCompObject().getCoordinate(0);</span>
+<span class="nc" id="L520">    double currY = currentNode.getCompObject().getCoordinate(1);</span>
+<span class="nc" id="L521">    double currZ = currentNode.getCompObject().getCoordinate(2);</span>
+<span class="nc" id="L522">    double targetX = target.getCoordinate(0);</span>
+<span class="nc" id="L523">    double targetY = target.getCoordinate(1);</span>
+<span class="nc" id="L524">    double targetZ = target.getCoordinate(2);</span>
+<span class="nc" id="L525">    double currentDistance = this.calculateDistance(currX, currY, currZ,</span>
+            targetX, targetY, targetZ);
+<span class="nc" id="L527">    double furthestDistance = Double.MAX_VALUE;</span>
     //want to add neighbors to queue if size is less than neighbors we are looking for
-<span class="fc bfc" id="L495" title="All 2 branches covered.">    if (neighborQueue.size() &lt; neighbors){</span>
+<span class="nc bnc" id="L529" title="All 2 branches missed.">    if (neighborQueue.size() &lt; neighbors) {</span>
       //ensure we don't add name of node if querying by name
-<span class="pc bpc" id="L497" title="1 of 4 branches missed.">      if (!(searchByName &amp;&amp; currentNode.getCompObject().getInfo().get(1).equals(name))){</span>
-<span class="fc" id="L498">        neighborQueue.add(currentNode.getCompObject());</span>
+<span class="nc bnc" id="L531" title="All 4 branches missed.">      if (!(searchByName &amp;&amp; currentNode.getCompObject().getInfo().get(1).equals(name))) {</span>
+<span class="nc" id="L532">        neighborQueue.add(currentNode.getCompObject());</span>
       } //check if we have found a closer node
     } else {
-<span class="fc" id="L501">      CordComparable furthest = neighborQueue.peek();</span>
-<span class="fc" id="L502">      double furthestX = furthest.getCoordinate(0);</span>
-<span class="fc" id="L503">      double furthestY = furthest.getCoordinate(1);</span>
-<span class="fc" id="L504">      double furthestZ = furthest.getCoordinate(2);</span>
-<span class="fc" id="L505">      furthestDistance = this.calculateDistance(furthestX, furthestY, furthestZ,</span>
+<span class="nc" id="L535">      CordComparable furthest = neighborQueue.peek();</span>
+<span class="nc" id="L536">      double furthestX = furthest.getCoordinate(0);</span>
+<span class="nc" id="L537">      double furthestY = furthest.getCoordinate(1);</span>
+<span class="nc" id="L538">      double furthestZ = furthest.getCoordinate(2);</span>
+<span class="nc" id="L539">      furthestDistance = this.calculateDistance(furthestX, furthestY, furthestZ,</span>
               targetX, targetY, targetZ);
-<span class="fc bfc" id="L507" title="All 2 branches covered.">      if (currentDistance &lt;= furthestDistance) {</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">      if (currentDistance &lt;= furthestDistance) {</span>
         //don't want to add star if queried by name
-<span class="fc bfc" id="L509" title="All 4 branches covered.">        if (!(searchByName &amp;&amp; currentNode.getCompObject().getInfo().get(1).equals(name))) {</span>
+<span class="nc bnc" id="L543" title="All 4 branches missed.">        if (!(searchByName &amp;&amp; currentNode.getCompObject().getInfo().get(1).equals(name))) {</span>
           //check if we want to randomize tied star
-<span class="fc bfc" id="L511" title="All 2 branches covered.">          if (currentDistance == furthestDistance){</span>
+<span class="nc bnc" id="L545" title="All 2 branches missed.">          if (currentDistance == furthestDistance) {</span>
             //this ensures that tied stars are randomly picked
-<span class="pc bpc" id="L513" title="1 of 2 branches missed.">            if (Math.random() &lt; 0.5){</span>
+<span class="nc bnc" id="L547" title="All 2 branches missed.">            if (Math.random() &lt; RANDOM_BOUND) {</span>
               //remove furthest neighbor
-<span class="nc" id="L515">              neighborQueue.poll();</span>
-<span class="nc" id="L516">              neighborQueue.add(currentNode.getCompObject());</span>
-            }
+<span class="nc" id="L549">              neighborQueue.poll();</span>
+<span class="nc" id="L550">              neighborQueue.add(currentNode.getCompObject());</span>
+            } //don't want to randomize in this case
           } else {
             //remove furthest neighbor
-<span class="fc" id="L520">            neighborQueue.poll();</span>
-<span class="fc" id="L521">            neighborQueue.add(currentNode.getCompObject());</span>
+<span class="nc" id="L554">            neighborQueue.poll();</span>
+<span class="nc" id="L555">            neighborQueue.add(currentNode.getCompObject());</span>
           }
         }
       }
     }
-<span class="pc bpc" id="L526" title="1 of 2 branches missed.">    if (neighborQueue.size() != 0){</span>
+<span class="nc bnc" id="L560" title="All 2 branches missed.">    if (neighborQueue.size() != 0) {</span>
       //update new furthest distance after potentially updating list
-<span class="fc" id="L528">      CordComparable furthest = neighborQueue.peek();</span>
-<span class="fc" id="L529">      double furthestX = furthest.getCoordinate(0);</span>
-<span class="fc" id="L530">      double furthestY = furthest.getCoordinate(1);</span>
-<span class="fc" id="L531">      double furthestZ = furthest.getCoordinate(2);</span>
-<span class="fc" id="L532">      furthestDistance = this.calculateDistance(targetX, targetY, targetZ, furthestX, furthestY,</span>
+<span class="nc" id="L562">      CordComparable furthest = neighborQueue.peek();</span>
+<span class="nc" id="L563">      double furthestX = furthest.getCoordinate(0);</span>
+<span class="nc" id="L564">      double furthestY = furthest.getCoordinate(1);</span>
+<span class="nc" id="L565">      double furthestZ = furthest.getCoordinate(2);</span>
+<span class="nc" id="L566">      furthestDistance = this.calculateDistance(targetX, targetY, targetZ, furthestX, furthestY,</span>
               furthestZ);
     }
     //check if we need to recur on both children or just one
-<span class="fc bfc" id="L536" title="All 4 branches covered.">    if (neighborQueue.size() &lt; neighbors || furthestDistance &gt; Math.abs(currentNode.getCompObject().getCoordinate(depth) -</span>
-<span class="fc" id="L537">            target.getCoordinate(depth))){</span>
-<span class="fc bfc" id="L538" title="All 2 branches covered.">      if (currentNode.hasLeft()){</span>
-<span class="fc" id="L539">        this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,</span>
-<span class="fc" id="L540">                currentNode.getLeft());</span>
+<span class="nc bnc" id="L570" title="All 2 branches missed.">    if (neighborQueue.size() &lt; neighbors || furthestDistance</span>
+<span class="nc bnc" id="L571" title="All 2 branches missed.">            &gt; Math.abs(currentNode.getCompObject().getCoordinate(depth)</span>
+<span class="nc" id="L572">            - target.getCoordinate(depth))) {</span>
+<span class="nc bnc" id="L573" title="All 2 branches missed.">      if (currentNode.hasLeft()) {</span>
+<span class="nc" id="L574">        this.neighborsHelper(searchByName, name, neighbors,</span>
+<span class="nc" id="L575">                target, depth + 1, neighborQueue, currentNode.getLeft());</span>
       }
-<span class="fc bfc" id="L542" title="All 2 branches covered.">      if (currentNode.hasRight()){</span>
-<span class="fc" id="L543">        this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,</span>
-<span class="fc" id="L544">                currentNode.getRight());</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">      if (currentNode.hasRight()) {</span>
+<span class="nc" id="L578">        this.neighborsHelper(searchByName, name, neighbors, target,</span>
+<span class="nc" id="L579">                depth + 1, neighborQueue, currentNode.getRight());</span>
       }
-    } else{
-<span class="fc bfc" id="L547" title="All 2 branches covered.">      if(currentNode.getCompObject().getCoordinate(depth) &lt;= target.getCoordinate(depth)){</span>
-<span class="fc bfc" id="L548" title="All 2 branches covered.">        if (currentNode.hasRight()){</span>
-<span class="fc" id="L549">          this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,</span>
-<span class="fc" id="L550">                  currentNode.getRight());</span>
+    } else {
+<span class="nc bnc" id="L582" title="All 2 branches missed.">      if (currentNode.getCompObject().getCoordinate(depth) &lt;= target.getCoordinate(depth)) {</span>
+<span class="nc bnc" id="L583" title="All 2 branches missed.">        if (currentNode.hasRight()) {</span>
+<span class="nc" id="L584">          this.neighborsHelper(searchByName, name, neighbors, target,</span>
+<span class="nc" id="L585">                  depth + 1, neighborQueue, currentNode.getRight());</span>
         }
-      } else{
-<span class="fc bfc" id="L553" title="All 2 branches covered.">        if (currentNode.hasLeft()){</span>
-<span class="fc" id="L554">          this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,</span>
-<span class="fc" id="L555">                  currentNode.getLeft());</span>
+      } else {
+<span class="nc bnc" id="L588" title="All 2 branches missed.">        if (currentNode.hasLeft()) {</span>
+<span class="nc" id="L589">          this.neighborsHelper(searchByName, name, neighbors, target,</span>
+<span class="nc" id="L590">                  depth + 1, neighborQueue, currentNode.getLeft());</span>
         }
       }
     }
-<span class="fc" id="L559">  }</span>
+<span class="nc" id="L594">  }</span>
 
   /**
-   * This is the KDTree radius method.
-   * @param line representing the command input by user.
-   * @return List representing star data.
+   * KDTree radius method.
+   * @param line an array of strings parsed by the REPL
+   * @return List representing star data for front end
    */
-  public List&lt;String&gt; radius(String[] line){
-<span class="fc" id="L567">    List&lt;String&gt; radiusData = new ArrayList&lt;&gt;();</span>
+  public List&lt;String&gt; radius(String[] line) {
+<span class="fc" id="L602">    List&lt;String&gt; radiusData = new ArrayList&lt;&gt;();</span>
     //see helper method- checks if whole command is valid
-<span class="fc" id="L569">    String returnString = this.checkCommandRadius(line);</span>
-<span class="pc bpc" id="L570" title="1 of 2 branches missed.">    if (!returnString.equals(&quot;&quot;)){</span>
-<span class="nc" id="L571">      radiusData.add(returnString);</span>
-<span class="nc" id="L572">      return radiusData;</span>
+<span class="fc" id="L604">    String returnString = this.checkCommandRadius(line);</span>
+<span class="pc bpc" id="L605" title="1 of 2 branches missed.">    if (!returnString.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L606">      radiusData.add(returnString);</span>
+<span class="nc" id="L607">      return radiusData;</span>
     }
-<span class="fc" id="L574">    String name = &quot;&quot;;</span>
+<span class="fc" id="L609">    String name = &quot;&quot;;</span>
     //boolean to let me know if a name has been queried
-<span class="fc" id="L576">    boolean searchByName = false;</span>
-<span class="fc" id="L577">    double radius = Double.parseDouble(line[1]);</span>
-<span class="fc" id="L578">    double x = 0;</span>
-<span class="fc" id="L579">    double y = 0;</span>
-<span class="fc" id="L580">    double z = 0;</span>
-<span class="fc bfc" id="L581" title="All 2 branches covered.">    if (line.length == 3){</span>
-<span class="fc" id="L582">      searchByName = true;</span>
-<span class="fc" id="L583">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
-<span class="fc bfc" id="L584" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
-<span class="fc bfc" id="L585" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
-<span class="fc" id="L586">          x = stars.get(i).getX();</span>
-<span class="fc" id="L587">          y = stars.get(i).getY();</span>
-<span class="fc" id="L588">          z = stars.get(i).getZ();</span>
+<span class="fc" id="L611">    boolean searchByName = false;</span>
+<span class="fc" id="L612">    double radius = Double.parseDouble(line[1]);</span>
+<span class="fc" id="L613">    double x = 0;</span>
+<span class="fc" id="L614">    double y = 0;</span>
+<span class="fc" id="L615">    double z = 0;</span>
+    //finding star by name
+<span class="pc bpc" id="L617" title="1 of 2 branches missed.">    if (line.length == 3) {</span>
+<span class="fc" id="L618">      searchByName = true;</span>
+<span class="fc" id="L619">      name = line[2].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L620" title="All 2 branches covered.">      for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="fc bfc" id="L621" title="All 2 branches covered.">        if (stars.get(i).getName().equals(name)) {</span>
+<span class="fc" id="L622">          x = stars.get(i).getX();</span>
+<span class="fc" id="L623">          y = stars.get(i).getY();</span>
+<span class="fc" id="L624">          z = stars.get(i).getZ();</span>
         }
       }
-    }
-    else {
-<span class="fc" id="L593">      x = Double.parseDouble(line[2]);</span>
-<span class="fc" id="L594">      y = Double.parseDouble(line[3]);</span>
-<span class="fc" id="L595">      z = Double.parseDouble(line[4]);</span>
+    } else {
+<span class="nc" id="L628">      x = Double.parseDouble(line[2]);</span>
+<span class="nc" id="L629">      y = Double.parseDouble(line[3]);</span>
+<span class="nc" id="L630">      z = Double.parseDouble(line[4]);</span>
     }
     //checking to see if number of neighbors &gt; 0
-<span class="fc bfc" id="L598" title="All 2 branches covered.">    if (radius &lt; 0) {</span>
-<span class="fc" id="L599">      System.err.println(&quot;ERROR: Radius cannot be negative&quot;);</span>
-<span class="fc" id="L600">      radiusData.add(&quot;ERROR: Radius cannot be negative&quot;);</span>
-<span class="fc" id="L601">      return radiusData;</span>
+<span class="pc bpc" id="L633" title="1 of 2 branches missed.">    if (radius &lt; 0) {</span>
+<span class="fc" id="L634">      System.err.println(&quot;ERROR: Radius cannot be negative&quot;);</span>
+<span class="fc" id="L635">      radiusData.add(&quot;ERROR: Radius cannot be negative&quot;);</span>
+<span class="fc" id="L636">      return radiusData;</span>
     }
-<span class="fc" id="L603">    PriorityQueue&lt;CordComparable&gt; radiusQueue = new PriorityQueue&lt;&gt;(new PriorityComparator(x,y,z));</span>
-<span class="fc" id="L604">    Node rootNode = kdTree.getRoot();</span>
+<span class="nc" id="L638">    PriorityQueue&lt;CordComparable&gt; radiusQueue =</span>
+            new PriorityQueue&lt;&gt;(new PriorityComparator(x, y, z));
+<span class="nc" id="L640">    Node rootNode = kdTree.getRoot();</span>
     //our target star, or point in space, where we are trying to compare with
-<span class="fc" id="L606">    CordComparable target = new Star(-1,&quot;&quot;,x,y,z);</span>
-<span class="fc" id="L607">    this.radiusHelper(searchByName,name,radius,target,0,radiusQueue,rootNode);</span>
-<span class="fc" id="L608">    List&lt;CordComparable&gt; print = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L609" title="All 2 branches covered.">    while (!radiusQueue.isEmpty()){</span>
-<span class="fc" id="L610">      print.add(radiusQueue.poll());</span>
+<span class="nc" id="L642">    CordComparable target = new Star(-1, &quot;&quot;, x, y, z);</span>
+<span class="nc" id="L643">    this.radiusHelper(searchByName, name, radius, target,</span>
+            0, radiusQueue, rootNode);
+<span class="nc" id="L645">    List&lt;CordComparable&gt; print = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L646" title="All 2 branches missed.">    while (!radiusQueue.isEmpty()) {</span>
+<span class="nc" id="L647">      print.add(radiusQueue.poll());</span>
     }
-<span class="fc bfc" id="L612" title="All 2 branches covered.">    for (int i = print.size() - 1; i &gt;= 0; i--){</span>
-<span class="fc" id="L613">      System.out.println(print.get(i).getInfo().get(0));</span>
-<span class="fc" id="L614">      radiusData.add(&quot;ID: &quot; + print.get(i).getInfo().get(0) + &quot; | Name: &quot; + print.get(i).getInfo().get(1) + &quot; | &quot; +</span>
-<span class="fc" id="L615">              &quot;Coordinates: &quot; + print.get(i).getCoordinate(0) + &quot;, &quot; + print.get(i).getCoordinate(1) +</span>
-<span class="fc" id="L616">              &quot;, &quot; + print.get(i).getCoordinate(2));</span>
+<span class="nc bnc" id="L649" title="All 2 branches missed.">    for (int i = print.size() - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L650">      System.out.println(print.get(i).getInfo().get(0));</span>
+<span class="nc" id="L651">      radiusData.add(&quot;ID: &quot; + print.get(i).getInfo().get(0) + &quot; | Name: &quot;</span>
+<span class="nc" id="L652">              + print.get(i).getInfo().get(1) + &quot; | &quot; + &quot;Coordinates: &quot;</span>
+<span class="nc" id="L653">              + print.get(i).getCoordinate(0) + &quot;, &quot;</span>
+<span class="nc" id="L654">              + print.get(i).getCoordinate(1)</span>
+<span class="nc" id="L655">              + &quot;, &quot; + print.get(i).getCoordinate(2));</span>
     }
-<span class="fc" id="L618">    return radiusData;</span>
+<span class="nc" id="L657">    return radiusData;</span>
   }
 
 
   /**
-   *
-   * @param searchByName
-   * @param name
-   * @param radius
-   * @param target
-   * @param depth
-   * @param radiusQueue
-   * @param currentNode
+   * This recursive helper method searches for stars within raduis in the KDTree.
+   * @param searchByName boolean representing whether we are searching by name
+   * @param name string representing the name of star being queried- &quot;&quot; if not
+   *             queried by name
+   * @param radius double representing radius we are searching by
+   * @param target CordComparable representing the target star input by user
+   * @param depth int representing current depth of node being checked
+   * @param radiusQueue priority queue holding stars
+   * @param currentNode Node representing current node being checked
    */
   private void radiusHelper(boolean searchByName, String name, double radius,
                             CordComparable target, int depth,
-                            PriorityQueue&lt;CordComparable&gt; radiusQueue, Node currentNode){
-<span class="fc" id="L635">    double currX = currentNode.getCompObject().getCoordinate(0);</span>
-<span class="fc" id="L636">    double currY = currentNode.getCompObject().getCoordinate(1);</span>
-<span class="fc" id="L637">    double currZ = currentNode.getCompObject().getCoordinate(2);</span>
-<span class="fc" id="L638">    double targetX = target.getCoordinate(0);</span>
-<span class="fc" id="L639">    double targetY = target.getCoordinate(1);</span>
-<span class="fc" id="L640">    double targetZ = target.getCoordinate(2);</span>
-<span class="fc" id="L641">    double currentDistance = this.calculateDistance(currX, currY, currZ, targetX, targetY, targetZ);</span>
+                            PriorityQueue&lt;CordComparable&gt; radiusQueue, Node currentNode) {
+<span class="nc" id="L675">    double currX = currentNode.getCompObject().getCoordinate(0);</span>
+<span class="nc" id="L676">    double currY = currentNode.getCompObject().getCoordinate(1);</span>
+<span class="nc" id="L677">    double currZ = currentNode.getCompObject().getCoordinate(2);</span>
+<span class="nc" id="L678">    double targetX = target.getCoordinate(0);</span>
+<span class="nc" id="L679">    double targetY = target.getCoordinate(1);</span>
+<span class="nc" id="L680">    double targetZ = target.getCoordinate(2);</span>
+<span class="nc" id="L681">    double currentDistance = this.calculateDistance(currX, currY, currZ, targetX, targetY, targetZ);</span>
     //add node to queue if within radius
-<span class="fc bfc" id="L643" title="All 2 branches covered.">    if (currentDistance &lt;= radius) {</span>
-<span class="pc bpc" id="L644" title="1 of 4 branches missed.">      if (!(searchByName &amp;&amp; currentNode.getCompObject().getInfo().get(1).equals(name))) {</span>
-<span class="fc" id="L645">        radiusQueue.add(currentNode.getCompObject());</span>
+<span class="nc bnc" id="L683" title="All 2 branches missed.">    if (currentDistance &lt;= radius) {</span>
+<span class="nc bnc" id="L684" title="All 4 branches missed.">      if (!(searchByName &amp;&amp; currentNode.getCompObject().getInfo().get(1).equals(name))) {</span>
+<span class="nc" id="L685">        radiusQueue.add(currentNode.getCompObject());</span>
       }
     }
     //check if we need to recur on both children or just one
-<span class="fc bfc" id="L649" title="All 2 branches covered.">    if (radius &gt; Math.abs(currentNode.getCompObject().getCoordinate(depth) -</span>
-<span class="fc" id="L650">            target.getCoordinate(depth))){</span>
-<span class="fc bfc" id="L651" title="All 2 branches covered.">      if (currentNode.hasLeft()){</span>
-<span class="fc" id="L652">        this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,</span>
-<span class="fc" id="L653">                currentNode.getLeft());</span>
+<span class="nc bnc" id="L689" title="All 2 branches missed.">    if (radius &gt; Math.abs(currentNode.getCompObject().getCoordinate(depth)</span>
+<span class="nc" id="L690">            - target.getCoordinate(depth))) {</span>
+<span class="nc bnc" id="L691" title="All 2 branches missed.">      if (currentNode.hasLeft()) {</span>
+<span class="nc" id="L692">        this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,</span>
+<span class="nc" id="L693">                currentNode.getLeft());</span>
       }
-<span class="fc bfc" id="L655" title="All 2 branches covered.">      if (currentNode.hasRight()){</span>
-<span class="fc" id="L656">        this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,</span>
-<span class="fc" id="L657">                currentNode.getRight());</span>
+<span class="nc bnc" id="L695" title="All 2 branches missed.">      if (currentNode.hasRight()) {</span>
+<span class="nc" id="L696">        this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,</span>
+<span class="nc" id="L697">                currentNode.getRight());</span>
       }
-    } else{
-<span class="fc bfc" id="L660" title="All 2 branches covered.">      if(currentNode.getCompObject().getCoordinate(depth) &lt;= target.getCoordinate(depth)){</span>
-<span class="fc bfc" id="L661" title="All 2 branches covered.">        if (currentNode.hasRight()){</span>
-<span class="fc" id="L662">          this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,</span>
-<span class="fc" id="L663">                  currentNode.getRight());</span>
+    } else {
+<span class="nc bnc" id="L700" title="All 2 branches missed.">      if (currentNode.getCompObject().getCoordinate(depth) &lt;= target.getCoordinate(depth)) {</span>
+<span class="nc bnc" id="L701" title="All 2 branches missed.">        if (currentNode.hasRight()) {</span>
+<span class="nc" id="L702">          this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,</span>
+<span class="nc" id="L703">                  currentNode.getRight());</span>
         }
-      } else{
-<span class="fc bfc" id="L666" title="All 2 branches covered.">        if (currentNode.hasLeft()){</span>
-<span class="fc" id="L667">          this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,</span>
-<span class="fc" id="L668">                  currentNode.getLeft());</span>
+      } else {
+<span class="nc bnc" id="L706" title="All 2 branches missed.">        if (currentNode.hasLeft()) {</span>
+<span class="nc" id="L707">          this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,</span>
+<span class="nc" id="L708">                  currentNode.getLeft());</span>
         }
       }
     }
-<span class="fc" id="L672">  }</span>
+<span class="nc" id="L712">  }</span>
 
   /**
    * This method checks if the starData is valid or not.
-   *
    * @param data an array of strings representing the CSV star data
    * @return boolean indicating true if data is valid and false if not
    */
   public static boolean checkData(String[] data) {
-<span class="pc bpc" id="L681" title="1 of 2 branches missed.">    if (data.length != 5) {</span>
-<span class="nc" id="L682">      System.err.println(&quot;ERROR: Incorrect number of data fields for line in file&quot;);</span>
-<span class="nc" id="L683">      return false;</span>
+<span class="pc bpc" id="L720" title="1 of 2 branches missed.">    if (data.length != 5) {</span>
+<span class="nc" id="L721">      System.err.println(&quot;ERROR: Incorrect number of data fields for line in file&quot;);</span>
+<span class="nc" id="L722">      return false;</span>
     }
-<span class="fc bfc" id="L685" title="All 2 branches covered.">    for (int i = 0; i &lt; data.length; i++) {</span>
+<span class="fc bfc" id="L724" title="All 2 branches covered.">    for (int i = 0; i &lt; data.length; i++) {</span>
       //data type checking
-<span class="fc bfc" id="L687" title="All 2 branches covered.">      if (i == 0) {</span>
+<span class="fc bfc" id="L726" title="All 2 branches covered.">      if (i == 0) {</span>
         try {
-<span class="fc" id="L689">          Integer.parseInt(data[i]);</span>
-<span class="nc" id="L690">        } catch (NumberFormatException e) {</span>
-<span class="nc" id="L691">          System.err.println(&quot;ERROR: Star ID must be an int &quot;);</span>
-<span class="nc" id="L692">          return false;</span>
-<span class="fc" id="L693">        }</span>
-<span class="fc bfc" id="L694" title="All 2 branches covered.">      } else if (i == 1) {</span>
-<span class="pc bpc" id="L695" title="1 of 2 branches missed.">        if (!(data[i] instanceof String)) {</span>
-<span class="nc" id="L696">          System.err.println(&quot;ERROR: Starnames must be a string&quot;);</span>
-<span class="nc" id="L697">          return false;</span>
+<span class="fc" id="L728">          Integer.parseInt(data[i]);</span>
+<span class="nc" id="L729">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L730">          System.err.println(&quot;ERROR: Star ID must be an int &quot;);</span>
+<span class="nc" id="L731">          return false;</span>
+<span class="fc" id="L732">        }</span>
+<span class="fc bfc" id="L733" title="All 2 branches covered.">      } else if (i == 1) {</span>
+<span class="pc bpc" id="L734" title="1 of 2 branches missed.">        if (!(data[i] instanceof String)) {</span>
+<span class="nc" id="L735">          System.err.println(&quot;ERROR: Starnames must be a string&quot;);</span>
+<span class="nc" id="L736">          return false;</span>
         }
       } else {
         try {
-<span class="fc" id="L701">          Double.parseDouble(data[i]);</span>
-<span class="nc" id="L702">        } catch (NumberFormatException e) {</span>
-<span class="nc" id="L703">          System.err.println(&quot;ERROR: Coordinates must be a double&quot;);</span>
-<span class="nc" id="L704">          return false;</span>
-<span class="fc" id="L705">        }</span>
+<span class="fc" id="L740">          Double.parseDouble(data[i]);</span>
+<span class="nc" id="L741">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L742">          System.err.println(&quot;ERROR: Coordinates must be a double&quot;);</span>
+<span class="nc" id="L743">          return false;</span>
+<span class="fc" id="L744">        }</span>
       }
     }
-<span class="fc" id="L708">    return true;</span>
+<span class="fc" id="L747">    return true;</span>
   }
 
   /**
-   * Helper method that builds KD tree
+   * Helper method that builds KD tree.
    */
-  private void buildTree(){
-<span class="pc bpc" id="L715" title="2 of 4 branches missed.">    if (stars.size() == 0 || stars == null) {</span>
-<span class="nc" id="L716">      System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
-<span class="nc" id="L717">      return;</span>
+  private void buildTree() {
+<span class="pc bpc" id="L754" title="2 of 4 branches missed.">    if (stars.size() == 0 || stars == null) {</span>
+<span class="nc" id="L755">      System.err.println(&quot;ERROR: Please load star data and try again&quot;);</span>
+<span class="nc" id="L756">      return;</span>
     }
-<span class="fc" id="L719">    List&lt;Node&gt; nodes = new ArrayList&lt;&gt;();</span>
-    //creating nodes for every
-<span class="fc bfc" id="L721" title="All 2 branches covered.">    for (int i = 0; i &lt; stars.size(); i++){</span>
-<span class="fc" id="L722">      nodes.add(new Node(stars.get(i)));</span>
+<span class="fc" id="L758">    List&lt;Node&gt; nodes = new ArrayList&lt;&gt;();</span>
+    //creating nodes for every star
+<span class="fc bfc" id="L760" title="All 2 branches covered.">    for (int i = 0; i &lt; stars.size(); i++) {</span>
+<span class="fc" id="L761">      nodes.add(new Node(stars.get(i)));</span>
     }
-<span class="fc" id="L724">    kdTree = new Kdtree(nodes);</span>
-<span class="fc" id="L725">  }</span>
+<span class="fc" id="L763">    kdTree = new Kdtree(nodes);</span>
+<span class="fc" id="L764">  }</span>
 
   /**
    * Getter method to get stardata in test classes.
    * @return List representing the star data instance variable.
    */
-  public List&lt;Star&gt; getStars(){
-<span class="fc" id="L732">    return stars;</span>
+  public List&lt;Star&gt; getStars() {
+<span class="nc" id="L771">    return stars;</span>
   }
 
 }

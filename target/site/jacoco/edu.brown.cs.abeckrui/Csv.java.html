@@ -2,7 +2,6 @@
 
 import edu.brown.cs.abeckrui.mockaroo.MockPersonLogic;
 import edu.brown.cs.abeckrui.stars.StarsLogic;
-
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
@@ -22,14 +21,14 @@ public class Csv {
    * This instantiates the CSV object by passing in a filereader into our bufferedReader.
    * @param file representing the file to parse
    */
-<span class="fc" id="L25">  public Csv(File file) {</span>
+<span class="fc" id="L24">  public Csv(File file) {</span>
     try {
-<span class="fc" id="L27">      bufferedReader = new BufferedReader(new FileReader(file));</span>
+<span class="fc" id="L26">      bufferedReader = new BufferedReader(new FileReader(file));</span>
      //catch exception from initializing filereader
-<span class="nc" id="L29">    } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L30">      System.err.println(&quot;ERROR: File not found&quot;);</span>
-<span class="fc" id="L31">    }</span>
-<span class="fc" id="L32">  }</span>
+<span class="nc" id="L28">    } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L29">      System.err.println(&quot;ERROR: File not found&quot;);</span>
+<span class="fc" id="L30">    }</span>
+<span class="fc" id="L31">  }</span>
 
   /**
    * This method parses the CSV file.
@@ -37,81 +36,88 @@ public class Csv {
    */
   public List&lt;List&lt;String&gt;&gt; parse() {
     //checks if bufferedReader was able to be initialized or not (if file is invalid, it is not)
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">    if (bufferedReader == null) {</span>
-<span class="nc" id="L41">      return null;</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">    if (bufferedReader == null) {</span>
+<span class="nc" id="L40">      return null;</span>
     }
     //boolean representing if we are reading the mock data or not
-<span class="fc" id="L44">    boolean mock = false;</span>
-<span class="fc" id="L45">    List&lt;List&lt;String&gt;&gt; data = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L43">    boolean mock = false;</span>
+<span class="fc" id="L44">    List&lt;List&lt;String&gt;&gt; data = new ArrayList&lt;&gt;();</span>
     //have to read first line to make sure it matches StarID,ProperName,X,Y,Z format
     try {
-<span class="fc" id="L48">      String firstLine = bufferedReader.readLine();</span>
-<span class="fc" id="L49">      String[] first = firstLine.split(&quot;,&quot;);</span>
-<span class="pc bpc" id="L50" title="3 of 4 branches missed.">      if (first.length == 5 || first.length == 6) {</span>
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (first.length == 5) {</span>
-<span class="pc bpc" id="L52" title="2 of 4 branches missed.">          if (!first[0].equals(&quot;StarID&quot;) || !first[1].equals(&quot;ProperName&quot;)</span>
-<span class="pc bpc" id="L53" title="2 of 4 branches missed.">                  || !first[2].equals(&quot;X&quot;) || !first[3].equals(&quot;Y&quot;)</span>
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">                  || !first[4].equals(&quot;Z&quot;)) {</span>
-<span class="nc" id="L55">            System.err.println(&quot;ERROR: First line of data does not match 'StarID,ProperName,&quot;</span>
+<span class="fc" id="L47">      String firstLine = bufferedReader.readLine();</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">      if (firstLine == null) {</span>
+<span class="nc" id="L49">        System.out.println(&quot;ERROR: File is empty&quot;);</span>
+<span class="nc" id="L50">        return null;</span>
+      }
+<span class="fc" id="L52">      String[] first = firstLine.split(&quot;,&quot;);</span>
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">      if (first.length == 5 || first.length == 6) {</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (first.length == 5) {</span>
+          //checking first line of file
+<span class="pc bpc" id="L56" title="2 of 4 branches missed.">          if (!first[0].equals(&quot;StarID&quot;) || !first[1].equals(&quot;ProperName&quot;)</span>
+<span class="pc bpc" id="L57" title="2 of 4 branches missed.">                  || !first[2].equals(&quot;X&quot;) || !first[3].equals(&quot;Y&quot;)</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">                  || !first[4].equals(&quot;Z&quot;)) {</span>
+<span class="nc" id="L59">            System.err.println(&quot;ERROR: First line of data does not match 'StarID,ProperName,&quot;</span>
                     + &quot;X,Y,Z'&quot;);
-<span class="nc" id="L57">            return null;</span>
+<span class="nc" id="L61">            return null;</span>
           }
         } else {
-<span class="nc" id="L60">          mock = true;</span>
-<span class="nc bnc" id="L61" title="All 4 branches missed.">          if (!first[0].equals(&quot;First Name&quot;) || !first[1].equals(&quot;Last Name&quot;)</span>
-<span class="nc bnc" id="L62" title="All 4 branches missed.">                  || !first[2].equals(&quot;Datetime&quot;) || !first[3].equals(&quot;Email Address&quot;)</span>
-<span class="nc bnc" id="L63" title="All 4 branches missed.">                  || !first[4].equals(&quot;Gender&quot;) || !first[5].equals(&quot;Street Address&quot;)) {</span>
-<span class="nc" id="L64">            System.err.println(&quot;ERROR: First line of data does not match 'First Name&quot;</span>
+<span class="nc" id="L64">          mock = true;</span>
+          //checking first line of file
+<span class="nc bnc" id="L66" title="All 4 branches missed.">          if (!first[0].equals(&quot;First Name&quot;) || !first[1].equals(&quot;Last Name&quot;)</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">                  || !first[2].equals(&quot;Datetime&quot;) || !first[3].equals(&quot;Email Address&quot;)</span>
+<span class="nc bnc" id="L68" title="All 4 branches missed.">                  || !first[4].equals(&quot;Gender&quot;) || !first[5].equals(&quot;Street Address&quot;)) {</span>
+<span class="nc" id="L69">            System.err.println(&quot;ERROR: First line of data does not match 'First Name&quot;</span>
                     + &quot;,Last Name,Datetime,Email Address,Gender,Street Address'&quot;);
-<span class="nc" id="L66">            return null;</span>
+<span class="nc" id="L71">            return null;</span>
           }
         }
       } else {
-<span class="nc" id="L70">        System.err.println(&quot;ERROR: First line of data is invalid&quot;);</span>
+<span class="nc" id="L75">        System.err.println(&quot;ERROR: First line of data is invalid&quot;);</span>
+<span class="nc" id="L76">        return null;</span>
       }
-<span class="nc" id="L72">    } catch (IOException e) {</span>
-<span class="nc" id="L73">      System.err.println(&quot;ERROR: IOException in CSV&quot;);</span>
-<span class="nc" id="L74">      return null;</span>
-<span class="fc" id="L75">    }</span>
+<span class="nc" id="L78">    } catch (IOException e) {</span>
+<span class="nc" id="L79">      System.err.println(&quot;ERROR: IOException in CSV&quot;);</span>
+<span class="nc" id="L80">      return null;</span>
+<span class="fc" id="L81">    }</span>
     while (true) {
       try {
-<span class="fc" id="L78">        String currLine = bufferedReader.readLine();</span>
+<span class="fc" id="L84">        String currLine = bufferedReader.readLine();</span>
         //check to see if there are lines left to read
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (currLine != null) {</span>
-<span class="fc" id="L81">          String[] currData = currLine.split(&quot;,&quot;);</span>
-<span class="fc" id="L82">          List&lt;String&gt; currDataList = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (currLine != null) {</span>
+<span class="fc" id="L87">          String[] currData = currLine.split(&quot;,&quot;);</span>
+<span class="fc" id="L88">          List&lt;String&gt; currDataList = new ArrayList&lt;String&gt;();</span>
           //see stars class for specific
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">          if (mock) {</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (MockPersonLogic.checkData(currData)) {</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">          if (mock) {</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            if (MockPersonLogic.checkData(currData)) {</span>
               //converting array to list
-<span class="nc bnc" id="L87" title="All 2 branches missed.">              for (int i = 0; i &lt; currData.length; i++) {</span>
-<span class="nc" id="L88">                currDataList.add(currData[i]);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">              for (int i = 0; i &lt; currData.length; i++) {</span>
+<span class="nc" id="L94">                currDataList.add(currData[i]);</span>
               }
-<span class="nc" id="L90">              data.add(currDataList);</span>
+<span class="nc" id="L96">              data.add(currDataList);</span>
             } else {
-<span class="nc" id="L92">              return null;</span>
+<span class="nc" id="L98">              return null;</span>
             }
           } else {
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            if (StarsLogic.checkData(currData)) {</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">            if (StarsLogic.checkData(currData)) {</span>
               //converting array to list
-<span class="fc bfc" id="L97" title="All 2 branches covered.">              for (int i = 0; i &lt; currData.length; i++) {</span>
-<span class="fc" id="L98">                currDataList.add(currData[i]);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">              for (int i = 0; i &lt; currData.length; i++) {</span>
+<span class="fc" id="L104">                currDataList.add(currData[i]);</span>
               }
-<span class="fc" id="L100">              data.add(currDataList);</span>
+<span class="fc" id="L106">              data.add(currDataList);</span>
             } else {
-<span class="nc" id="L102">              return null;</span>
+<span class="nc" id="L108">              return null;</span>
             }
           } //this happens when we reach end of file, break
-<span class="fc" id="L105">        } else {</span>
-<span class="fc" id="L106">          break;</span>
+<span class="fc" id="L111">        } else {</span>
+<span class="fc" id="L112">          break;</span>
         }
        //handle ERROR for readLine method
-<span class="nc" id="L109">      } catch (IOException e) {</span>
-<span class="nc" id="L110">        System.err.println(&quot;ERROR: IOException in CSV&quot; + e);</span>
-<span class="nc" id="L111">        return null;</span>
-<span class="fc" id="L112">      }</span>
+<span class="nc" id="L115">      } catch (IOException e) {</span>
+<span class="nc" id="L116">        System.err.println(&quot;ERROR: IOException in CSV&quot; + e);</span>
+<span class="nc" id="L117">        return null;</span>
+<span class="fc" id="L118">      }</span>
     }
-<span class="fc" id="L114">    return data;</span>
+<span class="fc" id="L120">    return data;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

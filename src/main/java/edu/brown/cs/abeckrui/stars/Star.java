@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class models a star object. It extends CordComparable so that its coordinates can be compared.
+ * This class models a star object. It extends CordComparable so that its
+ * coordinates can be compared.
  */
 public class Star implements CordComparable {
 
@@ -25,7 +26,7 @@ public class Star implements CordComparable {
    * @param ycord representing y coord
    * @param zcord representing z coord
    */
-  public Star(int iD, String starName, double xcord, double ycord, double zcord){
+  public Star(int iD, String starName, double xcord, double ycord, double zcord) {
     id = iD;
     name = starName;
     x = xcord;
@@ -39,20 +40,18 @@ public class Star implements CordComparable {
    * @return coordinate
    */
   @Override
-  public double getCoordinate(int k){
-    if (k % DIMENSION == 0){
+  public double getCoordinate(int k) {
+    if (k % DIMENSION == 0) {
       return x;
-    }
-    else if (k % DIMENSION == 1){
+    } else if (k % DIMENSION == 1) {
       return y;
-    }
-    else{
+    } else {
       return z;
     }
   }
 
   @Override
-  public List<String> getInfo(){
+  public List<String> getInfo() {
     List<String> info = new ArrayList<>();
     info.add(Integer.toString(id));
     info.add(name);
@@ -64,7 +63,7 @@ public class Star implements CordComparable {
    * Gets star ID.
    * @return int, representing id.
    */
-  public int getID(){
+  public int getID() {
     return id;
   }
 
@@ -72,7 +71,7 @@ public class Star implements CordComparable {
    * Gets star name.
    * @return string, representing name.
    */
-  public String getName(){
+  public String getName() {
     return name;
   }
 
@@ -80,7 +79,7 @@ public class Star implements CordComparable {
    * Gets x cord.
    * @return double, representing x cord.
    */
-  public double getX(){
+  public double getX() {
     return x;
   }
 
@@ -88,7 +87,7 @@ public class Star implements CordComparable {
    * Gets y cord.
    * @return double, representing y cord.
    */
-  public double getY(){
+  public double getY() {
     return y;
   }
 
@@ -96,7 +95,7 @@ public class Star implements CordComparable {
    * Gets z cord.
    * @return double, representing z cord.
    */
-  public double getZ(){
+  public double getZ() {
     return z;
   }
 

@@ -2,24 +2,32 @@
 
 import java.util.Comparator;
 
-public class CoordinateComparator implements Comparator&lt;Node&gt;{
+/**
+ * This class is a custom comparator for objects that implement the CordComparable
+ * interface.
+ */
+public class CoordinateComparator implements Comparator&lt;Node&gt; {
 
-  private int dimension;
+  private int level;
 
-<span class="fc" id="L9">  public CoordinateComparator(int dimensionVal){</span>
-<span class="fc" id="L10">    dimension = dimensionVal;</span>
-<span class="fc" id="L11">  }</span>
+  /**
+   * In the constructor, I initialize my level instance variable.
+   * @param levelVal representing current level being searched in KD tree.
+   */
+<span class="fc" id="L17">  public CoordinateComparator(int levelVal) {</span>
+<span class="fc" id="L18">    level = levelVal;</span>
+<span class="fc" id="L19">  }</span>
 
   @Override
-  public int compare(Node node1,Node node2){
-<span class="fc" id="L15">    CordComparable comparable1 = node1.getCompObject();</span>
-<span class="fc" id="L16">    CordComparable comparable2 = node2.getCompObject();</span>
-<span class="fc bfc" id="L17" title="All 2 branches covered.">    if (comparable1.getCoordinate(dimension) &gt; comparable2.getCoordinate(dimension)){</span>
-<span class="fc" id="L18">      return 1;</span>
-<span class="fc bfc" id="L19" title="All 2 branches covered.">    } else if (comparable1.getCoordinate(dimension) &lt; comparable2.getCoordinate(dimension)){</span>
-<span class="fc" id="L20">      return -1;</span>
+  public int compare(Node node1, Node node2) {
+<span class="fc" id="L23">    CordComparable comparable1 = node1.getCompObject();</span>
+<span class="fc" id="L24">    CordComparable comparable2 = node2.getCompObject();</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">    if (comparable1.getCoordinate(level) &gt; comparable2.getCoordinate(level)) {</span>
+<span class="fc" id="L26">      return 1;</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">    } else if (comparable1.getCoordinate(level) &lt; comparable2.getCoordinate(level)) {</span>
+<span class="fc" id="L28">      return -1;</span>
     }
-<span class="fc" id="L22">    return 0;</span>
+<span class="fc" id="L30">    return 0;</span>
   }
 
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
    <duplication lines="41" tokens="250">
-      <file line="219"
+      <file line="235"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="414"
+      <file line="441"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
       <codefragment><![CDATA[  private List<String> naiveNeighbors(String[] line) {
     List<String> neighborData = new ArrayList<>();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandNeighbors(line);
-    if (!returnString.equals("")){
+    if (!returnString.equals("")) {
       neighborData.add(returnString);
       return neighborData;
     }
@@ -20,7 +20,8 @@
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
@@ -30,8 +31,7 @@
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -48,15 +48,15 @@
     }]]></codefragment>
    </duplication>
    <duplication lines="37" tokens="240">
-      <file line="324"
+      <file line="343"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="566"
+      <file line="601"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
       <codefragment><![CDATA[  private List<String> naiveRadius(String[] line) {
     List<String> radiusData = new ArrayList<>();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandRadius(line);
-    if (!returnString.equals("")){
+    if (!returnString.equals("")) {
       radiusData.add(returnString);
       return radiusData;
     }
@@ -67,7 +67,8 @@
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
@@ -77,8 +78,7 @@
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -90,10 +90,10 @@
       return radiusData;
     }]]></codefragment>
    </duplication>
-   <duplication lines="40" tokens="208">
-      <file line="115"
+   <duplication lines="42" tokens="208">
+      <file line="127"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="172"
+      <file line="186"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
       <codefragment><![CDATA[      }
       //checking if star data is null or empty
@@ -101,6 +101,7 @@
         System.err.println("ERROR: Please load star data and try again");
         return "ERROR: Please load star data and try again";
       }
+      //checking whether named was queried
       if (line.length == 3) {
         //checking that third argument is a nonempty string
         if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
@@ -131,25 +132,27 @@
           }
         }
       }
+      //represents command is valid
       return "";
     } else {
       System.err.println("ERROR: Incorrect number or args provided. 3 or 5 expected for "
               + "neighbors methods");]]></codefragment>
    </duplication>
    <duplication lines="22" tokens="156">
-      <file line="230"
+      <file line="246"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="335"
+      <file line="354"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="425"
+      <file line="452"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="577"
+      <file line="612"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
       <codefragment><![CDATA[    int neighbors = Integer.parseInt(line[1]);
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
@@ -159,8 +162,7 @@
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -169,9 +171,9 @@
     if (neighbors == 0) {]]></codefragment>
    </duplication>
    <duplication lines="21" tokens="148">
-      <file line="262"
+      <file line="278"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="363"
+      <file line="382"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
       <codefragment><![CDATA[    List<Star> neighborStarList = new ArrayList<>();
     /**

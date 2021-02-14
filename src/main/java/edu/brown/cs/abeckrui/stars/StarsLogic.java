@@ -1,7 +1,11 @@
 package edu.brown.cs.abeckrui.stars;
 
-import edu.brown.cs.abeckrui.*;
 
+import edu.brown.cs.abeckrui.CordComparable;
+import edu.brown.cs.abeckrui.Csv;
+import edu.brown.cs.abeckrui.Kdtree;
+import edu.brown.cs.abeckrui.Method;
+import edu.brown.cs.abeckrui.Node;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -9,12 +13,14 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 /**
- * This class handles all the search methods, data checking, and star logic...
+ * This class handles all the search methods, data checking, and star logic. It also builds my
+ * KD tree and stores all the stardata.
  */
 public class StarsLogic implements Method {
 
   private List<Star> stars;
   private Kdtree kdTree;
+  private static final double RANDOM_BOUND = 0.5;
 
   /**
    * This constructor initializes starData, which holds all the star data.
@@ -26,6 +32,7 @@ public class StarsLogic implements Method {
 
   @Override
   public List<String> run(String[] line) {
+    //toPrint is what is printed on the front end, representing the search results
     List<String> toPrint = new ArrayList<>();
     switch (line[0]) {
       case "stars":
@@ -52,6 +59,11 @@ public class StarsLogic implements Method {
     return toPrint;
   }
 
+  /**
+   * This helper method instantiates an instance of the CSV class to parse a CSV file
+   * and stores the data in the stars instance variable.
+   * @param line representing command parsed from REPL
+   */
   public void parseCSV(String[] line) {
     if (line.length != 2) {
       System.err.println("ERROR: Incorrect number of args for command. 2 are expected");
@@ -63,11 +75,11 @@ public class StarsLogic implements Method {
         List<List<String>> starData = new ArrayList<>();
         starData = parser.parse();
         //clear old star data
-        if (!stars.isEmpty()){
+        if (!stars.isEmpty()) {
           stars.clear();
         }
         //loop through starData, create list of star objects
-        for (int i = 0; i < starData.size(); i++){
+        for (int i = 0; i < starData.size(); i++) {
           int id = Integer.parseInt(starData.get(i).get(0));
           String name = starData.get(i).get(1);
           double x = Double.parseDouble(starData.get(i).get(2));
@@ -100,12 +112,12 @@ public class StarsLogic implements Method {
   }
 
   /**
-   * This helper method checks that for valid commands for both neighbor methods
+   * This helper method checks for valid commands for both neighbor methods.
    * @param line a String array representing the user input line parsed by the REPL
    * @return a string representing if command is valid ("" if valid, error message if not)
    */
   private String checkCommandNeighbors(String[] line) {
-    //boolean to let me know if a name has been queried
+    //checking for correct command length
     if (line.length == 3 || line.length == 5) {
       try {
         Integer.parseInt(line[1]);
@@ -118,6 +130,7 @@ public class StarsLogic implements Method {
         System.err.println("ERROR: Please load star data and try again");
         return "ERROR: Please load star data and try again";
       }
+      //checking whether named was queried
       if (line.length == 3) {
         //checking that third argument is a nonempty string
         if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
@@ -148,6 +161,7 @@ public class StarsLogic implements Method {
           }
         }
       }
+      //represents command is valid
       return "";
     } else {
       System.err.println("ERROR: Incorrect number or args provided. 3 or 5 expected for "
@@ -157,12 +171,12 @@ public class StarsLogic implements Method {
   }
 
   /**
-   * This helper method checks that for valid commands for both radius methods
+   * This helper method checks for valid commands for both radius methods.
    * @param line a String array representing the user input line parsed by the REPL
    * @return a boolean representing if command is valid (true if valid)
    */
   private String checkCommandRadius(String[] line) {
-    //boolean to let me know if a name has been queried
+    //checking for correct command length
     if (line.length == 3 || line.length == 5) {
       try {
         Double.parseDouble(line[1]);
@@ -175,6 +189,7 @@ public class StarsLogic implements Method {
         System.err.println("ERROR: Please load star data and try again");
         return "ERROR: Please load star data and try again";
       }
+      //checking for if name is queried
       if (line.length == 3) {
         //checking that third argument is a nonempty string
         if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
@@ -215,12 +230,13 @@ public class StarsLogic implements Method {
   /**
    * Naive neighbors method.
    * @param line, an array of Strings parsed by the REPL
+   * @return List representing star data for front end
    */
   private List<String> naiveNeighbors(String[] line) {
     List<String> neighborData = new ArrayList<>();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandNeighbors(line);
-    if (!returnString.equals("")){
+    if (!returnString.equals("")) {
       neighborData.add(returnString);
       return neighborData;
     }
@@ -231,7 +247,8 @@ public class StarsLogic implements Method {
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
@@ -241,8 +258,7 @@ public class StarsLogic implements Method {
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -308,24 +324,27 @@ public class StarsLogic implements Method {
     for (int k = 0; k < neighborList.size(); k++) {
       double iD = neighborList.get(k).get(0);
       int toPrint = (int) iD;
+      //formatting string for front end
       System.out.println(String.valueOf(toPrint));
-      neighborData.add("ID: " + neighborStarList.get(k).getID() + " | Name: " + neighborStarList.get(k).getName()
-              + " | " + "Coordinates: " + neighborStarList.get(k).getX() + ", " + neighborStarList.get(k).getY() +
-              ", " + neighborStarList.get(k).getZ());
+      neighborData.add("ID: " + neighborStarList.get(k).getID() + " | Name: "
+              + neighborStarList.get(k).getName() + " | " + "Coordinates: "
+              + neighborStarList.get(k).getX()
+              + ", " + neighborStarList.get(k).getY()
+              + ", " + neighborStarList.get(k).getZ());
     }
     return neighborData;
   }
 
   /**
    * Naive radius method.
-   *
    * @param line, an array of strings parsed by the REPL
+   * @return List representing star data for front end
    */
   private List<String> naiveRadius(String[] line) {
     List<String> radiusData = new ArrayList<>();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandRadius(line);
-    if (!returnString.equals("")){
+    if (!returnString.equals("")) {
       radiusData.add(returnString);
       return radiusData;
     }
@@ -336,7 +355,8 @@ public class StarsLogic implements Method {
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
@@ -346,8 +366,7 @@ public class StarsLogic implements Method {
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -404,18 +423,26 @@ public class StarsLogic implements Method {
       double iD = radiusList.get(k).get(0);
       int toPrint = (int) iD;
       System.out.println(String.valueOf(toPrint));
-      radiusData.add("ID: " + radiusStarList.get(k).getID() + " | Name: " + radiusStarList.get(k).getName()
-              + " | " + "Coordinates: " + radiusStarList.get(k).getX() + ", " + radiusStarList.get(k).getY() +
-              ", " + radiusStarList.get(k).getZ());
+      //formatting string to print on front end
+      radiusData.add("ID: " + radiusStarList.get(k).getID() + " | Name: "
+              + radiusStarList.get(k).getName() + " | " + "Coordinates: "
+              + radiusStarList.get(k).getX() + ", "
+              + radiusStarList.get(k).getY()
+              + ", " + radiusStarList.get(k).getZ());
     }
     return radiusData;
   }
 
-  private List<String> neighbors(String[] line){
+  /**
+   * KDTree neighbors method.
+   * @param line, an array of strings parsed by the REPL
+   * @return List representing star data for front end
+   */
+  private List<String> neighbors(String[] line) {
     List<String> neighborData = new ArrayList<>();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandNeighbors(line);
-    if (!returnString.equals("")){
+    if (!returnString.equals("")) {
       neighborData.add(returnString);
       return neighborData;
     }
@@ -426,7 +453,8 @@ public class StarsLogic implements Method {
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
@@ -436,8 +464,7 @@ public class StarsLogic implements Method {
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -452,49 +479,56 @@ public class StarsLogic implements Method {
       neighborData.add("ERROR: Number of neighbors cannot be negative");
       return neighborData;
     }
-    PriorityQueue<CordComparable> neighborQueue = new PriorityQueue<>(new PriorityComparator(x,y,z));
+    PriorityQueue<CordComparable> neighborQueue = new
+            PriorityQueue<>(new PriorityComparator(x, y, z));
     Node rootNode = kdTree.getRoot();
     //our target star, or point in space, where we are trying to compare with
-    CordComparable target = new Star(-1,"",x,y,z);
-    this.neighborsHelper(searchByName,name,neighbors,target,0,neighborQueue,rootNode);
+    CordComparable target = new Star(-1, "", x, y, z);
+    this.neighborsHelper(searchByName, name, neighbors, target,
+            0, neighborQueue, rootNode);
     List<CordComparable> print = new ArrayList<>();
-    while (!neighborQueue.isEmpty()){
+    while (!neighborQueue.isEmpty()) {
       print.add(neighborQueue.poll());
     }
-    for (int i = print.size() - 1; i >= 0; i--){
+    for (int i = print.size() - 1; i >= 0; i--) {
       System.out.println(print.get(i).getInfo().get(0));
-      neighborData.add("ID: " + print.get(i).getInfo().get(0) + " | Name: " + print.get(i).getInfo().get(1) + " | " +
-              "Coordinates: " + print.get(i).getCoordinate(0) + ", " + print.get(i).getCoordinate(1) +
-              ", " + print.get(i).getCoordinate(2));
+      neighborData.add("ID: " + print.get(i).getInfo().get(0) + " | Name: "
+              + print.get(i).getInfo().get(1) + " | "
+              + "Coordinates: " + print.get(i).getCoordinate(0)
+              + ", " + print.get(i).getCoordinate(1)
+              + ", " + print.get(i).getCoordinate(2));
     }
     return neighborData;
   }
 
   /**
-   *
-   * @param searchByName
-   * @param neighbors
-   * @param target
-   * @param depth
-   * @param neighborQueue
-   * @param currentNode
+   * This recursive helper method searches for neighbors in the KDTree.
+   * @param searchByName boolean representing whether we are searching by name
+   * @param name string representing the name of star being queried- "" if not
+   *             queried by name
+   * @param neighbors int number of neighbors we are searching for
+   * @param target CordComparable representing the target star input by user
+   * @param depth int representing current depth of node being checked
+   * @param neighborQueue priority queue holding neighbors
+   * @param currentNode Node representing current node being checked
    */
-
   private void neighborsHelper(boolean searchByName, String name, int neighbors,
                                 CordComparable target, int depth,
-                                PriorityQueue<CordComparable> neighborQueue, Node currentNode){
+                                PriorityQueue<CordComparable> neighborQueue, Node currentNode) {
+    //getting coordinates
     double currX = currentNode.getCompObject().getCoordinate(0);
     double currY = currentNode.getCompObject().getCoordinate(1);
     double currZ = currentNode.getCompObject().getCoordinate(2);
     double targetX = target.getCoordinate(0);
     double targetY = target.getCoordinate(1);
     double targetZ = target.getCoordinate(2);
-    double currentDistance = this.calculateDistance(currX,currY,currZ,targetX,targetY,targetZ);
+    double currentDistance = this.calculateDistance(currX, currY, currZ,
+            targetX, targetY, targetZ);
     double furthestDistance = Double.MAX_VALUE;
     //want to add neighbors to queue if size is less than neighbors we are looking for
-    if (neighborQueue.size() < neighbors){
+    if (neighborQueue.size() < neighbors) {
       //ensure we don't add name of node if querying by name
-      if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))){
+      if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))) {
         neighborQueue.add(currentNode.getCompObject());
       } //check if we have found a closer node
     } else {
@@ -508,13 +542,13 @@ public class StarsLogic implements Method {
         //don't want to add star if queried by name
         if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))) {
           //check if we want to randomize tied star
-          if (currentDistance == furthestDistance){
+          if (currentDistance == furthestDistance) {
             //this ensures that tied stars are randomly picked
-            if (Math.random() < 0.5){
+            if (Math.random() < RANDOM_BOUND) {
               //remove furthest neighbor
               neighborQueue.poll();
               neighborQueue.add(currentNode.getCompObject());
-            }
+            } //don't want to randomize in this case
           } else {
             //remove furthest neighbor
             neighborQueue.poll();
@@ -523,7 +557,7 @@ public class StarsLogic implements Method {
         }
       }
     }
-    if (neighborQueue.size() != 0){
+    if (neighborQueue.size() != 0) {
       //update new furthest distance after potentially updating list
       CordComparable furthest = neighborQueue.peek();
       double furthestX = furthest.getCoordinate(0);
@@ -533,41 +567,42 @@ public class StarsLogic implements Method {
               furthestZ);
     }
     //check if we need to recur on both children or just one
-    if (neighborQueue.size() < neighbors || furthestDistance > Math.abs(currentNode.getCompObject().getCoordinate(depth) -
-            target.getCoordinate(depth))){
-      if (currentNode.hasLeft()){
-        this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
-                currentNode.getLeft());
+    if (neighborQueue.size() < neighbors || furthestDistance
+            > Math.abs(currentNode.getCompObject().getCoordinate(depth)
+            - target.getCoordinate(depth))) {
+      if (currentNode.hasLeft()) {
+        this.neighborsHelper(searchByName, name, neighbors,
+                target, depth + 1, neighborQueue, currentNode.getLeft());
       }
-      if (currentNode.hasRight()){
-        this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
-                currentNode.getRight());
+      if (currentNode.hasRight()) {
+        this.neighborsHelper(searchByName, name, neighbors, target,
+                depth + 1, neighborQueue, currentNode.getRight());
       }
-    } else{
-      if(currentNode.getCompObject().getCoordinate(depth) <= target.getCoordinate(depth)){
-        if (currentNode.hasRight()){
-          this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
-                  currentNode.getRight());
+    } else {
+      if (currentNode.getCompObject().getCoordinate(depth) <= target.getCoordinate(depth)) {
+        if (currentNode.hasRight()) {
+          this.neighborsHelper(searchByName, name, neighbors, target,
+                  depth + 1, neighborQueue, currentNode.getRight());
         }
-      } else{
-        if (currentNode.hasLeft()){
-          this.neighborsHelper(searchByName,name,neighbors,target,depth+1,neighborQueue,
-                  currentNode.getLeft());
+      } else {
+        if (currentNode.hasLeft()) {
+          this.neighborsHelper(searchByName, name, neighbors, target,
+                  depth + 1, neighborQueue, currentNode.getLeft());
         }
       }
     }
   }
 
   /**
-   * This is the KDTree radius method.
-   * @param line representing the command input by user.
-   * @return List representing star data.
+   * KDTree radius method.
+   * @param line an array of strings parsed by the REPL
+   * @return List representing star data for front end
    */
-  public List<String> radius(String[] line){
+  public List<String> radius(String[] line) {
     List<String> radiusData = new ArrayList<>();
     //see helper method- checks if whole command is valid
     String returnString = this.checkCommandRadius(line);
-    if (!returnString.equals("")){
+    if (!returnString.equals("")) {
       radiusData.add(returnString);
       return radiusData;
     }
@@ -578,7 +613,8 @@ public class StarsLogic implements Method {
     double x = 0;
     double y = 0;
     double z = 0;
-    if (line.length == 3){
+    //finding star by name
+    if (line.length == 3) {
       searchByName = true;
       name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
@@ -588,8 +624,7 @@ public class StarsLogic implements Method {
           z = stars.get(i).getZ();
         }
       }
-    }
-    else {
+    } else {
       x = Double.parseDouble(line[2]);
       y = Double.parseDouble(line[3]);
       z = Double.parseDouble(line[4]);
@@ -600,38 +635,43 @@ public class StarsLogic implements Method {
       radiusData.add("ERROR: Radius cannot be negative");
       return radiusData;
     }
-    PriorityQueue<CordComparable> radiusQueue = new PriorityQueue<>(new PriorityComparator(x,y,z));
+    PriorityQueue<CordComparable> radiusQueue =
+            new PriorityQueue<>(new PriorityComparator(x, y, z));
     Node rootNode = kdTree.getRoot();
     //our target star, or point in space, where we are trying to compare with
-    CordComparable target = new Star(-1,"",x,y,z);
-    this.radiusHelper(searchByName,name,radius,target,0,radiusQueue,rootNode);
+    CordComparable target = new Star(-1, "", x, y, z);
+    this.radiusHelper(searchByName, name, radius, target,
+            0, radiusQueue, rootNode);
     List<CordComparable> print = new ArrayList<>();
-    while (!radiusQueue.isEmpty()){
+    while (!radiusQueue.isEmpty()) {
       print.add(radiusQueue.poll());
     }
-    for (int i = print.size() - 1; i >= 0; i--){
+    for (int i = print.size() - 1; i >= 0; i--) {
       System.out.println(print.get(i).getInfo().get(0));
-      radiusData.add("ID: " + print.get(i).getInfo().get(0) + " | Name: " + print.get(i).getInfo().get(1) + " | " +
-              "Coordinates: " + print.get(i).getCoordinate(0) + ", " + print.get(i).getCoordinate(1) +
-              ", " + print.get(i).getCoordinate(2));
+      radiusData.add("ID: " + print.get(i).getInfo().get(0) + " | Name: "
+              + print.get(i).getInfo().get(1) + " | " + "Coordinates: "
+              + print.get(i).getCoordinate(0) + ", "
+              + print.get(i).getCoordinate(1)
+              + ", " + print.get(i).getCoordinate(2));
     }
     return radiusData;
   }
 
 
   /**
-   *
-   * @param searchByName
-   * @param name
-   * @param radius
-   * @param target
-   * @param depth
-   * @param radiusQueue
-   * @param currentNode
+   * This recursive helper method searches for stars within raduis in the KDTree.
+   * @param searchByName boolean representing whether we are searching by name
+   * @param name string representing the name of star being queried- "" if not
+   *             queried by name
+   * @param radius double representing radius we are searching by
+   * @param target CordComparable representing the target star input by user
+   * @param depth int representing current depth of node being checked
+   * @param radiusQueue priority queue holding stars
+   * @param currentNode Node representing current node being checked
    */
   private void radiusHelper(boolean searchByName, String name, double radius,
                             CordComparable target, int depth,
-                            PriorityQueue<CordComparable> radiusQueue, Node currentNode){
+                            PriorityQueue<CordComparable> radiusQueue, Node currentNode) {
     double currX = currentNode.getCompObject().getCoordinate(0);
     double currY = currentNode.getCompObject().getCoordinate(1);
     double currZ = currentNode.getCompObject().getCoordinate(2);
@@ -646,25 +686,25 @@ public class StarsLogic implements Method {
       }
     }
     //check if we need to recur on both children or just one
-    if (radius > Math.abs(currentNode.getCompObject().getCoordinate(depth) -
-            target.getCoordinate(depth))){
-      if (currentNode.hasLeft()){
-        this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
+    if (radius > Math.abs(currentNode.getCompObject().getCoordinate(depth)
+            - target.getCoordinate(depth))) {
+      if (currentNode.hasLeft()) {
+        this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,
                 currentNode.getLeft());
       }
-      if (currentNode.hasRight()){
-        this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
+      if (currentNode.hasRight()) {
+        this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,
                 currentNode.getRight());
       }
-    } else{
-      if(currentNode.getCompObject().getCoordinate(depth) <= target.getCoordinate(depth)){
-        if (currentNode.hasRight()){
-          this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
+    } else {
+      if (currentNode.getCompObject().getCoordinate(depth) <= target.getCoordinate(depth)) {
+        if (currentNode.hasRight()) {
+          this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,
                   currentNode.getRight());
         }
-      } else{
-        if (currentNode.hasLeft()){
-          this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
+      } else {
+        if (currentNode.hasLeft()) {
+          this.radiusHelper(searchByName, name, radius, target, depth + 1, radiusQueue,
                   currentNode.getLeft());
         }
       }
@@ -673,7 +713,6 @@ public class StarsLogic implements Method {
 
   /**
    * This method checks if the starData is valid or not.
-   *
    * @param data an array of strings representing the CSV star data
    * @return boolean indicating true if data is valid and false if not
    */
@@ -711,14 +750,14 @@ public class StarsLogic implements Method {
   /**
    * Helper method that builds KD tree.
    */
-  private void buildTree(){
+  private void buildTree() {
     if (stars.size() == 0 || stars == null) {
       System.err.println("ERROR: Please load star data and try again");
       return;
     }
     List<Node> nodes = new ArrayList<>();
-    //creating nodes for every
-    for (int i = 0; i < stars.size(); i++){
+    //creating nodes for every star
+    for (int i = 0; i < stars.size(); i++) {
       nodes.add(new Node(stars.get(i)));
     }
     kdTree = new Kdtree(nodes);
@@ -728,7 +767,7 @@ public class StarsLogic implements Method {
    * Getter method to get stardata in test classes.
    * @return List representing the star data instance variable.
    */
-  public List<Star> getStars(){
+  public List<Star> getStars() {
     return stars;
   }
 

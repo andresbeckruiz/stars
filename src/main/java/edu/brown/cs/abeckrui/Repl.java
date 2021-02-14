@@ -61,11 +61,12 @@ public class Repl {
   }
 
   /**
-   * Helper method for splitting string. This method is static so it can be used by frontend handlers.
+   * Helper method for splitting string. This method is static so it can be used by
+   * frontend handlers.
    * @param currLine representing String you want to parse
-   * @return String[] representing parsed String
+   * @return String array representing parsed String
    */
-  public static String[] splitString(String currLine){
+  public static String[] splitString(String currLine) {
     List<String> matchList = new ArrayList<String>();
     /**
      * regex for splitting string at spaces excluding quotes

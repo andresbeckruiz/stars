@@ -5,17 +5,23 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import edu.brown.cs.abeckrui.Method;
 import edu.brown.cs.abeckrui.Repl;
 import edu.brown.cs.abeckrui.mockaroo.MockPersonLogic;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import spark.*;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
+import spark.Spark;
+import spark.TemplateViewRoute;
+import spark.QueryParamsMap;
+import spark.ExceptionHandler;
 import spark.template.freemarker.FreeMarkerEngine;
-
 import com.google.common.collect.ImmutableMap;
-
 import freemarker.template.Configuration;
 
 /**
@@ -60,8 +66,8 @@ public final class Main {
     actions.put("stars", starLogic);
     actions.put("naive_neighbors", starLogic);
     actions.put("naive_radius", starLogic);
-    actions.put("neighbors",starLogic);
-    actions.put("radius",starLogic);
+    actions.put("neighbors", starLogic);
+    actions.put("radius", starLogic);
     actions.put("mock", mockPersonLogic);
     Repl repl = new Repl(actions);
     repl.read();
@@ -89,8 +95,8 @@ public final class Main {
 
     // Setup Spark Routes
     Spark.get("/stars", new FrontHandler(), freeMarker);
-    Spark.post("/neighbors", new NeighborsSubmitHandler(), freeMarker);
-    Spark.post("/radius", new RadiusSubmitHandler(), freeMarker);
+    Spark.post("/stars", new NeighborsSubmitHandler(), freeMarker);
+    Spark.post("/stars", new RadiusSubmitHandler(), freeMarker);
   }
 
   /**
@@ -106,28 +112,31 @@ public final class Main {
   }
 
   /**
-   * Handles neighbors query submissions.
+   * This class handles neighbors query submissions.
    */
   private static class NeighborsSubmitHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String textFromTextField = qm.value("text");
+      //check if checkbox is checked for naive method
       String checked = qm.value("method");
       String stringToParse = "";
-      if (checked == null){
+      //checking which method to run
+      if (checked == null) {
         stringToParse = "neighbors " + textFromTextField;
-      }
-      else {
+        System.out.println("Yes");
+      } else {
         stringToParse = "naive_neighbors " + textFromTextField;
       }
       String[] command = Repl.splitString(stringToParse);
       List<String> neighborData = starLogic.run(command);
       String toPrint = "";
-      for (int i = 0; i < neighborData.size(); i++){
+      //formating star data when getting print to front end
+      for (int i = 0; i < neighborData.size(); i++) {
         toPrint = toPrint + "<br />" + "<br />" + neighborData.get(i);
       }
-      if (neighborData.isEmpty()){
+      if (neighborData.isEmpty()) {
         toPrint = "No stars found";
       }
       Map<String, String> variables = ImmutableMap.of("title",
@@ -137,28 +146,31 @@ public final class Main {
   }
 
   /**
-   * Handles radius query submissions.
+   * This class handles radius query submissions.
    */
   private static class RadiusSubmitHandler implements TemplateViewRoute {
     @Override
-    public ModelAndView handle(Request req, Response res){
+    public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String textFromTextField = qm.value("text");
+      //check if checkbox is checked for naive method
       String checked = qm.value("method");
       String stringToParse = "";
-      if (checked == null){
+      //checking which method to run
+      if (checked == null) {
         stringToParse = "radius " + textFromTextField;
-      }
-      else {
+        System.out.println("Yes");
+      } else {
         stringToParse = "naive_radius " + textFromTextField;
       }
       String[] command = Repl.splitString(stringToParse);
       List<String> radiusData = starLogic.run(command);
       String toPrint = "";
-      for (int i = 0; i < radiusData.size(); i++){
-        toPrint = toPrint + "<br />" + radiusData.get(i);
+      //formating star data when getting print to front end
+      for (int i = 0; i < radiusData.size(); i++) {
+        toPrint = toPrint + "<br />" + "<br />" + radiusData.get(i);
       }
-      if (radiusData.isEmpty()){
+      if (radiusData.isEmpty()) {
         toPrint = "No stars found";
       }
       Map<String, String> variables = ImmutableMap.of("title",

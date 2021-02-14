@@ -20,6 +20,9 @@ body {
 }
 
 #header1 {
-    font-size: 4em;
-    color: midnightblue;
+    font-size: 3em;
+}
+
+.search_headers {
+    font-size: 1.25em;
 }

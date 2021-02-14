@@ -69,28 +69,29 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>    }
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">   * Helper method for splitting string. This method is static so it can be used by frontend handlers.</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">   * @param currLine representing String you want to parse</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">   * @return String[] representing parsed String</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String[] splitString(String currLine){
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      List&lt;String&gt; matchList = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * regex for splitting string at spaces excluding quotes</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * see this link: <a href="https://stackoverflow.com/questions/366202/regex-for-splitting-a" target="alexandria_uri">https://stackoverflow.com/questions/366202/regex-for-splitting-a</a></em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     * -string-using-space-when-not-surrounded-by-single-or-double/366532</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      Pattern regex = Pattern.compile(<span class="jxr_string">"[^&#92;&#92;s\&quot;']+|\&quot;[^\&quot;]*\&quot;|'[^']*'"</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      Matcher regexMatcher = regex.matcher(currLine);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">while</strong> (regexMatcher.find()) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>        matchList.add(regexMatcher.group());
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <strong class="jxr_keyword">int</strong> size = matchList.size();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>      String[] command = <strong class="jxr_keyword">new</strong> String[size];
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">return</strong> matchList.toArray(command);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>    }
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">   * Helper method for splitting string. This method is static so it can be used by</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">   * frontend handlers.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">   * @param currLine representing String you want to parse</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">   * @return String array representing parsed String</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String[] splitString(String currLine) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      List&lt;String&gt; matchList = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * regex for splitting string at spaces excluding quotes</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     * see this link: <a href="https://stackoverflow.com/questions/366202/regex-for-splitting-a" target="alexandria_uri">https://stackoverflow.com/questions/366202/regex-for-splitting-a</a></em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * -string-using-space-when-not-surrounded-by-single-or-double/366532</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      Pattern regex = Pattern.compile(<span class="jxr_string">"[^&#92;&#92;s\&quot;']+|\&quot;[^\&quot;]*\&quot;|'[^']*'"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>      Matcher regexMatcher = regex.matcher(currLine);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">while</strong> (regexMatcher.find()) {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>        matchList.add(regexMatcher.group());
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">int</strong> size = matchList.size();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      String[] command = <strong class="jxr_keyword">new</strong> String[size];
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">return</strong> matchList.toArray(command);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>    }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2021. All rights reserved.</div>

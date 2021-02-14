@@ -22,10 +22,10 @@ public class Repl {
    * This constructor initializes our acitions HashMap and bufferedReader.
    * @param acts HashMap that maps commands to their respective method
    */
-<span class="fc" id="L25">  public Repl(HashMap&lt;String, Method&gt; acts) {</span>
-<span class="fc" id="L26">    actions = acts;</span>
-<span class="fc" id="L27">    bufferedReader = new BufferedReader(new InputStreamReader(System.in));</span>
-<span class="fc" id="L28">  }</span>
+<span class="nc" id="L25">  public Repl(HashMap&lt;String, Method&gt; acts) {</span>
+<span class="nc" id="L26">    actions = acts;</span>
+<span class="nc" id="L27">    bufferedReader = new BufferedReader(new InputStreamReader(System.in));</span>
+<span class="nc" id="L28">  }</span>
 
 
   /**
@@ -61,25 +61,26 @@ public class Repl {
 <span class="nc" id="L61">  }</span>
 
   /**
-   * Helper method for splitting string. This method is static so it can be used by frontend handlers.
+   * Helper method for splitting string. This method is static so it can be used by
+   * frontend handlers.
    * @param currLine representing String you want to parse
-   * @return String[] representing parsed String
+   * @return String array representing parsed String
    */
-  public static String[] splitString(String currLine){
-<span class="nc" id="L69">    List&lt;String&gt; matchList = new ArrayList&lt;String&gt;();</span>
+  public static String[] splitString(String currLine) {
+<span class="nc" id="L70">    List&lt;String&gt; matchList = new ArrayList&lt;String&gt;();</span>
     /**
      * regex for splitting string at spaces excluding quotes
      * see this link: https://stackoverflow.com/questions/366202/regex-for-splitting-a
      * -string-using-space-when-not-surrounded-by-single-or-double/366532
      */
-<span class="nc" id="L75">    Pattern regex = Pattern.compile(&quot;[^\\s\&quot;']+|\&quot;[^\&quot;]*\&quot;|'[^']*'&quot;);</span>
-<span class="nc" id="L76">    Matcher regexMatcher = regex.matcher(currLine);</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">    while (regexMatcher.find()) {</span>
-<span class="nc" id="L78">      matchList.add(regexMatcher.group());</span>
+<span class="nc" id="L76">    Pattern regex = Pattern.compile(&quot;[^\\s\&quot;']+|\&quot;[^\&quot;]*\&quot;|'[^']*'&quot;);</span>
+<span class="nc" id="L77">    Matcher regexMatcher = regex.matcher(currLine);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">    while (regexMatcher.find()) {</span>
+<span class="nc" id="L79">      matchList.add(regexMatcher.group());</span>
     }
-<span class="nc" id="L80">    int size = matchList.size();</span>
-<span class="nc" id="L81">    String[] command = new String[size];</span>
-<span class="nc" id="L82">    return matchList.toArray(command);</span>
+<span class="nc" id="L81">    int size = matchList.size();</span>
+<span class="nc" id="L82">    String[] command = new String[size];</span>
+<span class="nc" id="L83">    return matchList.toArray(command);</span>
   }
 
 }

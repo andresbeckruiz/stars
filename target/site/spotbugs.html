@@ -119,10 +119,10 @@
 <td>2</td></tr>
 <tr class="a">
 <td><a href="#edu.brown.cs.abeckrui.Csv">edu.brown.cs.abeckrui.Csv</a></td>
-<td>2</td></tr>
+<td>1</td></tr>
 <tr class="b">
 <td><a href="#edu.brown.cs.abeckrui.Kdtree">edu.brown.cs.abeckrui.Kdtree</a></td>
-<td>1</td></tr>
+<td>2</td></tr>
 <tr class="a">
 <td><a href="#edu.brown.cs.abeckrui.Repl">edu.brown.cs.abeckrui.Repl</a></td>
 <td>1</td></tr>
@@ -151,13 +151,13 @@
 <td>edu.brown.cs.abeckrui.CoordinateComparator.compare(Node, Node) incorrectly handles double value</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CO_COMPARETO_INCORRECT_FLOATING">CO_COMPARETO_INCORRECT_FLOATING</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/CoordinateComparator.html#L19">19</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/CoordinateComparator.html#L27">27</a></td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>edu.brown.cs.abeckrui.CoordinateComparator implements Comparator but not Serializable</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#SE_COMPARATOR_SHOULD_BE_SERIALIZABLE">SE_COMPARATOR_SHOULD_BE_SERIALIZABLE</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/CoordinateComparator.html#L5">5-22</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/CoordinateComparator.html#L9">9-30</a></td>
 <td>Medium</td></tr></table></div><a name="edu.brown.cs.abeckrui.Csv"></a>
 <div class="section">
 <h3>edu.brown.cs.abeckrui.Csv<a name="edu.brown.cs.abeckrui.Csv"></a></h3>
@@ -172,29 +172,29 @@
 <td>Found reliance on default encoding in new edu.brown.cs.abeckrui.Csv(File): new java.io.FileReader(File)</td>
 <td>I18N</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/Csv.html#L27">27</a></td>
-<td>High</td></tr>
-<tr class="a">
-<td>Dereference of the result of readLine() without nullcheck in edu.brown.cs.abeckrui.Csv.parse()</td>
-<td>STYLE</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#NP_DEREFERENCE_OF_READLINE_VALUE">NP_DEREFERENCE_OF_READLINE_VALUE</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/Csv.html#L49">49</a></td>
-<td>Medium</td></tr></table></div><a name="edu.brown.cs.abeckrui.Kdtree"></a>
+<td><a href="./xref/edu/brown/cs/abeckrui/Csv.html#L26">26</a></td>
+<td>High</td></tr></table></div><a name="edu.brown.cs.abeckrui.Kdtree"></a>
 <div class="section">
 <h3>edu.brown.cs.abeckrui.Kdtree<a name="edu.brown.cs.abeckrui.Kdtree"></a></h3>
 <table border="0" class="bodyTable">
-<tr class="b">
+<tr class="a">
 <th>Bug</th>
 <th>Category</th>
 <th>Details</th>
 <th>Line</th>
 <th>Priority</th></tr>
-<tr class="a">
+<tr class="b">
 <td>Test for floating point equality in edu.brown.cs.abeckrui.Kdtree.buildTree(List, int)</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#FE_FLOATING_POINT_EQUALITY">FE_FLOATING_POINT_EQUALITY</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/Kdtree.html#L35">35</a></td>
-<td>Low</td></tr></table></div><a name="edu.brown.cs.abeckrui.Repl"></a>
+<td><a href="./xref/edu/brown/cs/abeckrui/Kdtree.html#L46">46</a></td>
+<td>Low</td></tr>
+<tr class="a">
+<td>Unread field: edu.brown.cs.abeckrui.Kdtree.nodesList</td>
+<td>PERFORMANCE</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#URF_UNREAD_FIELD">URF_UNREAD_FIELD</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/Kdtree.html#L23">23</a></td>
+<td>Medium</td></tr></table></div><a name="edu.brown.cs.abeckrui.Repl"></a>
 <div class="section">
 <h3>edu.brown.cs.abeckrui.Repl<a name="edu.brown.cs.abeckrui.Repl"></a></h3>
 <table border="0" class="bodyTable">
@@ -238,13 +238,13 @@
 <td>edu.brown.cs.abeckrui.stars.Main.createEngine() invokes System.exit(...), which shuts down the entire virtual machine</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DM_EXIT">DM_EXIT</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/Main.html#L78">78</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/Main.html#L84">84</a></td>
 <td>Low</td></tr>
 <tr class="b">
 <td>Write to static field edu.brown.cs.abeckrui.stars.Main.starLogic from instance method edu.brown.cs.abeckrui.stars.Main.run()</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD">ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/Main.html#L57">57</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/Main.html#L63">63</a></td>
 <td>Low</td></tr></table></div><a name="edu.brown.cs.abeckrui.stars.PriorityComparator"></a>
 <div class="section">
 <h3>edu.brown.cs.abeckrui.stars.PriorityComparator<a name="edu.brown.cs.abeckrui.stars.PriorityComparator"></a></h3>
@@ -259,7 +259,7 @@
 <td>edu.brown.cs.abeckrui.stars.PriorityComparator implements Comparator but not Serializable</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#SE_COMPARATOR_SHOULD_BE_SERIALIZABLE">SE_COMPARATOR_SHOULD_BE_SERIALIZABLE</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/PriorityComparator.html#L6">6-38</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/PriorityComparator.html#L9">9-46</a></td>
 <td>Medium</td></tr></table></div><a name="edu.brown.cs.abeckrui.stars.StarsLogic"></a>
 <div class="section">
 <h3>edu.brown.cs.abeckrui.stars.StarsLogic<a name="edu.brown.cs.abeckrui.stars.StarsLogic"></a></h3>
@@ -274,43 +274,43 @@
 <td>instanceof will always return true for all non-null values in edu.brown.cs.abeckrui.stars.StarsLogic.checkCommandNeighbors(String[]), since all String are instances of String</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#BC_VACUOUS_INSTANCEOF">BC_VACUOUS_INSTANCEOF</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L123">123</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L136">136</a></td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>instanceof will always return true for all non-null values in edu.brown.cs.abeckrui.stars.StarsLogic.checkCommandRadius(String[]), since all String are instances of String</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#BC_VACUOUS_INSTANCEOF">BC_VACUOUS_INSTANCEOF</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L180">180</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L195">195</a></td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>instanceof will always return true for all non-null values in edu.brown.cs.abeckrui.stars.StarsLogic.checkData(String[]), since all String are instances of String</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#BC_VACUOUS_INSTANCEOF">BC_VACUOUS_INSTANCEOF</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L695">695</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L734">734</a></td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>Dead store to starData in edu.brown.cs.abeckrui.stars.StarsLogic.parseCSV(String[])</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#DLS_DEAD_LOCAL_STORE">DLS_DEAD_LOCAL_STORE</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L63">63</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L75">75</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>Nullcheck of StarsLogic.stars at line 715 of value previously dereferenced in edu.brown.cs.abeckrui.stars.StarsLogic.buildTree()</td>
+<td>Nullcheck of StarsLogic.stars at line 754 of value previously dereferenced in edu.brown.cs.abeckrui.stars.StarsLogic.buildTree()</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE">RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L715">715</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L754">754</a></td>
 <td>Medium</td></tr>
 <tr class="a">
-<td>Nullcheck of StarsLogic.stars at line 117 of value previously dereferenced in edu.brown.cs.abeckrui.stars.StarsLogic.checkCommandNeighbors(String[])</td>
+<td>Nullcheck of StarsLogic.stars at line 129 of value previously dereferenced in edu.brown.cs.abeckrui.stars.StarsLogic.checkCommandNeighbors(String[])</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE">RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L117">117</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L129">129</a></td>
 <td>Medium</td></tr>
 <tr class="b">
-<td>Nullcheck of StarsLogic.stars at line 174 of value previously dereferenced in edu.brown.cs.abeckrui.stars.StarsLogic.checkCommandRadius(String[])</td>
+<td>Nullcheck of StarsLogic.stars at line 188 of value previously dereferenced in edu.brown.cs.abeckrui.stars.StarsLogic.checkCommandRadius(String[])</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE">RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE</a></td>
-<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L174">174</a></td>
+<td><a href="./xref/edu/brown/cs/abeckrui/stars/StarsLogic.html#L188">188</a></td>
 <td>Medium</td></tr></table></div>
       </div>
     </div>

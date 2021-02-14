@@ -2,40 +2,37 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.13.0" timestamp="2021-02-14T03:06:34.041">
-<file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/CordComparable.java">
-<violation beginline="7" endline="7" begincolumn="10" endcolumn="41" rule="UnnecessaryModifier" ruleset="Code Style" package="edu.brown.cs.abeckrui" class="CordComparable" method="getCoordinate" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#unnecessarymodifier" priority="3">
-Unnecessary modifier 'public' on method 'getCoordinate': the method is declared in an interface type
-</violation>
-<violation beginline="9" endline="9" begincolumn="10" endcolumn="32" rule="UnnecessaryModifier" ruleset="Code Style" package="edu.brown.cs.abeckrui" class="CordComparable" method="getInfo" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#unnecessarymodifier" priority="3">
-Unnecessary modifier 'public' on method 'getInfo': the method is declared in an interface type
+    version="6.13.0" timestamp="2021-02-14T14:37:18.359">
+<file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/Kdtree.java">
+<violation beginline="13" endline="13" begincolumn="22" endcolumn="30" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.brown.cs.abeckrui" class="Kdtree" variable="nodesList" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'nodesList'.
 </violation>
 </file>
 <file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/PriorityComparator.java">
-<violation beginline="38" endline="38" begincolumn="15" endcolumn="47" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="PriorityComparator" method="compare" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="46" endline="46" begincolumn="15" endcolumn="47" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="PriorityComparator" method="compare" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
 </file>
 <file name="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java">
-<violation beginline="99" endline="99" begincolumn="32" endcolumn="38" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="111" endline="111" begincolumn="32" endcolumn="38" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="99" endline="99" begincolumn="57" endcolumn="63" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="111" endline="111" begincolumn="57" endcolumn="63" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="99" endline="99" begincolumn="82" endcolumn="88" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="111" endline="111" begincolumn="82" endcolumn="88" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="calculateDistance" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="123" endline="123" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="checkCommandNeighbors" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="136" endline="136" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="checkCommandNeighbors" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="180" endline="180" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="checkCommandRadius" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+<violation beginline="195" endline="195" begincolumn="46" endcolumn="67" rule="UselessParentheses" ruleset="Code Style" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="checkCommandRadius" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
 Useless parentheses.
 </violation>
-<violation beginline="509" endline="523" begincolumn="9" endcolumn="9" rule="CollapsibleIfStatements" ruleset="Design" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="neighborsHelper" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_design.html#collapsibleifstatements" priority="3">
+<violation beginline="543" endline="557" begincolumn="9" endcolumn="9" rule="CollapsibleIfStatements" ruleset="Design" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="neighborsHelper" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_design.html#collapsibleifstatements" priority="3">
 These nested if statements could be combined
 </violation>
-<violation beginline="644" endline="646" begincolumn="7" endcolumn="7" rule="CollapsibleIfStatements" ruleset="Design" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="radiusHelper" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_design.html#collapsibleifstatements" priority="3">
+<violation beginline="684" endline="686" begincolumn="7" endcolumn="7" rule="CollapsibleIfStatements" ruleset="Design" package="edu.brown.cs.abeckrui.stars" class="StarsLogic" method="radiusHelper" externalInfoUrl="https://pmd.github.io/pmd-6.13.0/pmd_rules_java_design.html#collapsibleifstatements" priority="3">
 These nested if statements could be combined
 </violation>
 </file>

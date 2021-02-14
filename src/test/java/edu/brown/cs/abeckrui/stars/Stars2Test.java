@@ -147,7 +147,7 @@ public class Stars2Test {
   /**
    * This is the PBT for the neighbor methods.
    */
-
+  @Test
   public void neighborPBT(){
     StarsLogic stars = new StarsLogic();
     String[] file = new String[2];
@@ -205,8 +205,8 @@ public class Stars2Test {
         Double x = Double.parseDouble(currCords[0]);
         Double y = Double.parseDouble(currCords[1]);
         Double z = Double.parseDouble(currCords[2]);
-        //checking distance from origin
         String naiveCurrNeighbor = naiveStarData.get(j);
+        //getting coordinates from string
         int naiveIndex = naiveCurrNeighbor.indexOf("Coordinates:");
         String naiveCurr = naiveCurrNeighbor.substring(naiveIndex + 13);
         String[] naiveCurrCords = naiveCurr.split(",");
@@ -223,7 +223,7 @@ public class Stars2Test {
   /**
    * This is the PBT testing for the radius methods.
    */
-
+  @Test
   public void radiusPBT(){
     StarsLogic stars = new StarsLogic();
     String[] file = new String[2];
@@ -281,8 +281,8 @@ public class Stars2Test {
         Double x = Double.parseDouble(currCords[0]);
         Double y = Double.parseDouble(currCords[1]);
         Double z = Double.parseDouble(currCords[2]);
-        //checking distance from origin
         String naiveCurrRadius = naiveStarData.get(j);
+        //getting coordinates from string
         int naiveIndex = naiveCurrRadius.indexOf("Coordinates:");
         String naiveCurr = naiveCurrRadius.substring(naiveIndex + 13);
         String[] naiveCurrCords = naiveCurr.split(",");

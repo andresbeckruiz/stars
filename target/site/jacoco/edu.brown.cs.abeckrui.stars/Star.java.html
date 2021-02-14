@@ -5,6 +5,10 @@ import edu.brown.cs.abeckrui.CordComparable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class models a star object. It extends CordComparable so that its
+ * coordinates can be compared.
+ */
 public class Star implements CordComparable {
 
   private int id;
@@ -14,13 +18,21 @@ public class Star implements CordComparable {
   private double z;
   private static final int DIMENSION = 3;
 
-<span class="fc" id="L17">  public Star(int iD, String starName, double xcord, double ycord, double zcord){</span>
-<span class="fc" id="L18">    id = iD;</span>
-<span class="fc" id="L19">    name = starName;</span>
-<span class="fc" id="L20">    x = xcord;</span>
-<span class="fc" id="L21">    y = ycord;</span>
-<span class="fc" id="L22">    z = zcord;</span>
-<span class="fc" id="L23">  }</span>
+  /**
+   * In the constructor, the star stores all its data as instance variables.
+   * @param iD representing star ID
+   * @param starName representing starName
+   * @param xcord representing x coord
+   * @param ycord representing y coord
+   * @param zcord representing z coord
+   */
+<span class="fc" id="L29">  public Star(int iD, String starName, double xcord, double ycord, double zcord) {</span>
+<span class="fc" id="L30">    id = iD;</span>
+<span class="fc" id="L31">    name = starName;</span>
+<span class="fc" id="L32">    x = xcord;</span>
+<span class="fc" id="L33">    y = ycord;</span>
+<span class="fc" id="L34">    z = zcord;</span>
+<span class="fc" id="L35">  }</span>
 
   /**
    * Returns coordinates of stars (method from Comparable interface).
@@ -28,24 +40,22 @@ public class Star implements CordComparable {
    * @return coordinate
    */
   @Override
-  public double getCoordinate(int k){
-<span class="fc bfc" id="L32" title="All 2 branches covered.">    if (k % DIMENSION == 0){</span>
-<span class="fc" id="L33">      return x;</span>
-    }
-<span class="fc bfc" id="L35" title="All 2 branches covered.">    else if (k % DIMENSION == 1){</span>
-<span class="fc" id="L36">      return y;</span>
-    }
-    else{
-<span class="fc" id="L39">      return z;</span>
+  public double getCoordinate(int k) {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">    if (k % DIMENSION == 0) {</span>
+<span class="fc" id="L45">      return x;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">    } else if (k % DIMENSION == 1) {</span>
+<span class="fc" id="L47">      return y;</span>
+    } else {
+<span class="fc" id="L49">      return z;</span>
     }
   }
 
   @Override
-  public List&lt;String&gt; getInfo(){
-<span class="fc" id="L45">    List&lt;String&gt; info = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L46">    info.add(Integer.toString(id));</span>
-<span class="fc" id="L47">    info.add(name);</span>
-<span class="fc" id="L48">    return info;</span>
+  public List&lt;String&gt; getInfo() {
+<span class="nc" id="L55">    List&lt;String&gt; info = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L56">    info.add(Integer.toString(id));</span>
+<span class="nc" id="L57">    info.add(name);</span>
+<span class="nc" id="L58">    return info;</span>
   }
 
 
@@ -53,40 +63,40 @@ public class Star implements CordComparable {
    * Gets star ID.
    * @return int, representing id.
    */
-  public int getID(){
-<span class="fc" id="L57">    return id;</span>
+  public int getID() {
+<span class="nc" id="L67">    return id;</span>
   }
 
   /**
    * Gets star name.
    * @return string, representing name.
    */
-  public String getName(){
-<span class="fc" id="L65">    return name;</span>
+  public String getName() {
+<span class="fc" id="L75">    return name;</span>
   }
 
   /**
    * Gets x cord.
    * @return double, representing x cord.
    */
-  public double getX(){
-<span class="fc" id="L73">    return x;</span>
+  public double getX() {
+<span class="fc" id="L83">    return x;</span>
   }
 
   /**
    * Gets y cord.
    * @return double, representing y cord.
    */
-  public double getY(){
-<span class="fc" id="L81">    return y;</span>
+  public double getY() {
+<span class="fc" id="L91">    return y;</span>
   }
 
   /**
    * Gets z cord.
    * @return double, representing z cord.
    */
-  public double getZ(){
-<span class="fc" id="L89">    return z;</span>
+  public double getZ() {
+<span class="fc" id="L99">    return z;</span>
   }
 
 }

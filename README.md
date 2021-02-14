@@ -58,3 +58,8 @@ take a little over a minute to run).
 
 
 Mention how I didn't do MBT in stars 2 so I just went straight to PBT !!!!
+
+
+Mention localhost:4667 to run, any other things about running
+
+Mention how you need to load star data in terminal 

@@ -45,13 +45,14 @@ public class Csv {
     //have to read first line to make sure it matches StarID,ProperName,X,Y,Z format
     try {
       String firstLine = bufferedReader.readLine();
-      if (firstLine == null){
+      if (firstLine == null) {
         System.out.println("ERROR: File is empty");
         return null;
       }
       String[] first = firstLine.split(",");
       if (first.length == 5 || first.length == 6) {
         if (first.length == 5) {
+          //checking first line of file
           if (!first[0].equals("StarID") || !first[1].equals("ProperName")
                   || !first[2].equals("X") || !first[3].equals("Y")
                   || !first[4].equals("Z")) {
@@ -61,6 +62,7 @@ public class Csv {
           }
         } else {
           mock = true;
+          //checking first line of file
           if (!first[0].equals("First Name") || !first[1].equals("Last Name")
                   || !first[2].equals("Datetime") || !first[3].equals("Email Address")
                   || !first[4].equals("Gender") || !first[5].equals("Street Address")) {

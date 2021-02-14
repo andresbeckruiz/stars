@@ -3,39 +3,47 @@
 import edu.brown.cs.abeckrui.CordComparable;
 import java.util.Comparator;
 
+/**
+ * This class is a custom comparator for my priority queue used in the StarsLogic class.
+ */
 public class PriorityComparator implements Comparator&lt;CordComparable&gt; {
 
   private double x;
   private double y;
   private double z;
+  private static final double RANDOM_BOUND = 0.5;
 
-<span class="fc" id="L12">  public PriorityComparator(double xVal, double yVal, double zVal){</span>
-<span class="fc" id="L13">    x = xVal;</span>
-<span class="fc" id="L14">    y = yVal;</span>
-<span class="fc" id="L15">    z = zVal;</span>
-<span class="fc" id="L16">  }</span>
+  /**
+   * This constructor stores the target coordinates to compare to as instance variables.
+   * @param xVal representing the target x value
+   * @param yVal representing the target y value
+   * @param zVal representing the target z value
+   */
+<span class="fc" id="L22">  public PriorityComparator(double xVal, double yVal, double zVal) {</span>
+<span class="fc" id="L23">    x = xVal;</span>
+<span class="fc" id="L24">    y = yVal;</span>
+<span class="fc" id="L25">    z = zVal;</span>
+<span class="fc" id="L26">  }</span>
 
   @Override
-  public int compare(CordComparable a, CordComparable b){
-<span class="fc" id="L20">    double ax = a.getCoordinate(0);</span>
-<span class="fc" id="L21">    double ay = a.getCoordinate(1);</span>
-<span class="fc" id="L22">    double az = a.getCoordinate(2);</span>
-<span class="fc" id="L23">    double aDist = StarsLogic.calculateDistance(ax,ay,az,x,y,z);</span>
-<span class="fc" id="L24">    double bx = b.getCoordinate(0);</span>
-<span class="fc" id="L25">    double by = b.getCoordinate(1);</span>
-<span class="fc" id="L26">    double bz = b.getCoordinate(2);</span>
-<span class="fc" id="L27">    double bDist = StarsLogic.calculateDistance(bx,by,bz,x,y,z);</span>
+  public int compare(CordComparable a, CordComparable b) {
+<span class="fc" id="L30">    double ax = a.getCoordinate(0);</span>
+<span class="fc" id="L31">    double ay = a.getCoordinate(1);</span>
+<span class="fc" id="L32">    double az = a.getCoordinate(2);</span>
+<span class="fc" id="L33">    double aDist = StarsLogic.calculateDistance(ax, ay, az, x, y, z);</span>
+<span class="fc" id="L34">    double bx = b.getCoordinate(0);</span>
+<span class="fc" id="L35">    double by = b.getCoordinate(1);</span>
+<span class="fc" id="L36">    double bz = b.getCoordinate(2);</span>
+<span class="fc" id="L37">    double bDist = StarsLogic.calculateDistance(bx, by, bz, x, y, z);</span>
     //checking if we want to randomize ties or not
-<span class="fc bfc" id="L29" title="All 2 branches covered.">    if (Double.compare(aDist,bDist) == 0){</span>
-<span class="fc bfc" id="L30" title="All 2 branches covered.">      if (Math.random() &lt; 0.5){</span>
-<span class="fc" id="L31">        return 1;</span>
-      }
-      else{
-<span class="fc" id="L34">        return -1;</span>
-      }
-    }
-    else {
-<span class="fc" id="L38">      return (-1 * Double.compare(aDist, bDist));</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">    if (Double.compare(aDist, bDist) == 0) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">      if (Math.random() &lt; RANDOM_BOUND) {</span>
+<span class="nc" id="L41">        return 1;</span>
+      } else {
+<span class="nc" id="L43">        return -1;</span>
+      } //multiplied by -1 to get furthest objects in the front of queue
+    } else {
+<span class="fc" id="L46">      return (-1 * Double.compare(aDist, bDist));</span>
     }
   }
 
