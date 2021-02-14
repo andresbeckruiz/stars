@@ -147,7 +147,7 @@ public class Stars2Test {
   /**
    * This is the PBT for the neighbor methods.
    */
-  @Test
+
   public void neighborPBT(){
     StarsLogic stars = new StarsLogic();
     String[] file = new String[2];
@@ -223,7 +223,7 @@ public class Stars2Test {
   /**
    * This is the PBT testing for the radius methods.
    */
-  @Test
+
   public void radiusPBT(){
     StarsLogic stars = new StarsLogic();
     String[] file = new String[2];

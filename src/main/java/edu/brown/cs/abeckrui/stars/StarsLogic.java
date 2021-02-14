@@ -709,7 +709,7 @@ public class StarsLogic implements Method {
   }
 
   /**
-   * Helper method that builds KD tree
+   * Helper method that builds KD tree.
    */
   private void buildTree(){
     if (stars.size() == 0 || stars == null) {

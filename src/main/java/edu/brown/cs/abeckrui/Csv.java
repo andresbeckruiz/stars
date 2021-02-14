@@ -45,6 +45,10 @@ public class Csv {
     //have to read first line to make sure it matches StarID,ProperName,X,Y,Z format
     try {
       String firstLine = bufferedReader.readLine();
+      if (firstLine == null){
+        System.out.println("ERROR: File is empty");
+        return null;
+      }
       String[] first = firstLine.split(",");
       if (first.length == 5 || first.length == 6) {
         if (first.length == 5) {
@@ -67,6 +71,7 @@ public class Csv {
         }
       } else {
         System.err.println("ERROR: First line of data is invalid");
+        return null;
       }
     } catch (IOException e) {
       System.err.println("ERROR: IOException in CSV");

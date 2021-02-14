@@ -125,7 +125,7 @@ public final class Main {
       List<String> neighborData = starLogic.run(command);
       String toPrint = "";
       for (int i = 0; i < neighborData.size(); i++){
-        toPrint = toPrint + "<br />" + neighborData.get(i);
+        toPrint = toPrint + "<br />" + "<br />" + neighborData.get(i);
       }
       if (neighborData.isEmpty()){
         toPrint = "No stars found";

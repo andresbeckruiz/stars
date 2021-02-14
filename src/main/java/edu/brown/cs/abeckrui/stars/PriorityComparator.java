@@ -3,12 +3,21 @@ package edu.brown.cs.abeckrui.stars;
 import edu.brown.cs.abeckrui.CordComparable;
 import java.util.Comparator;
 
+/**
+ * This class is a custom comparator for my priority queue used in the StarsLogic class.
+ */
 public class PriorityComparator implements Comparator<CordComparable> {
 
   private double x;
   private double y;
   private double z;
 
+  /**
+   * This constructor
+   * @param xVal representing the target x value
+   * @param yVal representing the target y value
+   * @param zVal representing the target z value
+   */
   public PriorityComparator(double xVal, double yVal, double zVal){
     x = xVal;
     y = yVal;

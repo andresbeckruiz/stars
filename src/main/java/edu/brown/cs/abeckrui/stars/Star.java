@@ -5,6 +5,9 @@ import edu.brown.cs.abeckrui.CordComparable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class models a star object. It extends CordComparable so that its coordinates can be compared.
+ */
 public class Star implements CordComparable {
 
   private int id;
@@ -14,6 +17,14 @@ public class Star implements CordComparable {
   private double z;
   private static final int DIMENSION = 3;
 
+  /**
+   * In the constructor, the star stores all its data as instance variables.
+   * @param iD representing star ID
+   * @param starName representing starName
+   * @param xcord representing x coord
+   * @param ycord representing y coord
+   * @param zcord representing z coord
+   */
   public Star(int iD, String starName, double xcord, double ycord, double zcord){
     id = iD;
     name = starName;

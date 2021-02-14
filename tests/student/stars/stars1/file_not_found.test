@@ -1,5 +1,5 @@
 INPUT
 stars data/stars/notafile.csv
 OUTPUT
-ERROR: File not found
+ERROR: File is empty
 END
