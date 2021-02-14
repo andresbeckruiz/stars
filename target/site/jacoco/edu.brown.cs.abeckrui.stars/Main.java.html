@@ -95,8 +95,8 @@ public final class Main {
 
     // Setup Spark Routes
 <span class="nc" id="L97">    Spark.get(&quot;/stars&quot;, new FrontHandler(), freeMarker);</span>
-<span class="nc" id="L98">    Spark.post(&quot;/stars&quot;, new NeighborsSubmitHandler(), freeMarker);</span>
-<span class="nc" id="L99">    Spark.post(&quot;/stars&quot;, new RadiusSubmitHandler(), freeMarker);</span>
+<span class="nc" id="L98">    Spark.post(&quot;/neighbors&quot;, new NeighborsSubmitHandler(), freeMarker);</span>
+<span class="nc" id="L99">    Spark.post(&quot;/radius&quot;, new RadiusSubmitHandler(), freeMarker);</span>
 <span class="nc" id="L100">  }</span>
 
   /**
@@ -125,23 +125,22 @@ public final class Main {
       //checking which method to run
 <span class="nc bnc" id="L126" title="All 2 branches missed.">      if (checked == null) {</span>
 <span class="nc" id="L127">        stringToParse = &quot;neighbors &quot; + textFromTextField;</span>
-<span class="nc" id="L128">        System.out.println(&quot;Yes&quot;);</span>
       } else {
-<span class="nc" id="L130">        stringToParse = &quot;naive_neighbors &quot; + textFromTextField;</span>
+<span class="nc" id="L129">        stringToParse = &quot;naive_neighbors &quot; + textFromTextField;</span>
       }
-<span class="nc" id="L132">      String[] command = Repl.splitString(stringToParse);</span>
-<span class="nc" id="L133">      List&lt;String&gt; neighborData = starLogic.run(command);</span>
-<span class="nc" id="L134">      String toPrint = &quot;&quot;;</span>
+<span class="nc" id="L131">      String[] command = Repl.splitString(stringToParse);</span>
+<span class="nc" id="L132">      List&lt;String&gt; neighborData = starLogic.run(command);</span>
+<span class="nc" id="L133">      String toPrint = &quot;&quot;;</span>
       //formating star data when getting print to front end
-<span class="nc bnc" id="L136" title="All 2 branches missed.">      for (int i = 0; i &lt; neighborData.size(); i++) {</span>
-<span class="nc" id="L137">        toPrint = toPrint + &quot;&lt;br /&gt;&quot; + &quot;&lt;br /&gt;&quot; + neighborData.get(i);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">      for (int i = 0; i &lt; neighborData.size(); i++) {</span>
+<span class="nc" id="L136">        toPrint = toPrint + &quot;&lt;br /&gt;&quot; + &quot;&lt;br /&gt;&quot; + neighborData.get(i);</span>
       }
-<span class="nc bnc" id="L139" title="All 2 branches missed.">      if (neighborData.isEmpty()) {</span>
-<span class="nc" id="L140">        toPrint = &quot;No stars found&quot;;</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">      if (neighborData.isEmpty()) {</span>
+<span class="nc" id="L139">        toPrint = &quot;&lt;br /&gt;&quot; + &quot;&lt;br /&gt;&quot; + &quot;No stars found&quot;;</span>
       }
-<span class="nc" id="L142">      Map&lt;String, String&gt; variables = ImmutableMap.of(&quot;title&quot;,</span>
+<span class="nc" id="L141">      Map&lt;String, String&gt; variables = ImmutableMap.of(&quot;title&quot;,</span>
               &quot;Stars: Query the database&quot;, &quot;results&quot;, toPrint);
-<span class="nc" id="L144">      return new ModelAndView(variables, &quot;query.ftl&quot;);</span>
+<span class="nc" id="L143">      return new ModelAndView(variables, &quot;query.ftl&quot;);</span>
     }
   }
 
@@ -151,31 +150,30 @@ public final class Main {
   private static class RadiusSubmitHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-<span class="nc" id="L154">      QueryParamsMap qm = req.queryMap();</span>
-<span class="nc" id="L155">      String textFromTextField = qm.value(&quot;text&quot;);</span>
+<span class="nc" id="L153">      QueryParamsMap qm = req.queryMap();</span>
+<span class="nc" id="L154">      String textFromTextField = qm.value(&quot;text&quot;);</span>
       //check if checkbox is checked for naive method
-<span class="nc" id="L157">      String checked = qm.value(&quot;method&quot;);</span>
-<span class="nc" id="L158">      String stringToParse = &quot;&quot;;</span>
+<span class="nc" id="L156">      String checked = qm.value(&quot;method&quot;);</span>
+<span class="nc" id="L157">      String stringToParse = &quot;&quot;;</span>
       //checking which method to run
-<span class="nc bnc" id="L160" title="All 2 branches missed.">      if (checked == null) {</span>
-<span class="nc" id="L161">        stringToParse = &quot;radius &quot; + textFromTextField;</span>
-<span class="nc" id="L162">        System.out.println(&quot;Yes&quot;);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">      if (checked == null) {</span>
+<span class="nc" id="L160">        stringToParse = &quot;radius &quot; + textFromTextField;</span>
       } else {
-<span class="nc" id="L164">        stringToParse = &quot;naive_radius &quot; + textFromTextField;</span>
+<span class="nc" id="L162">        stringToParse = &quot;naive_radius &quot; + textFromTextField;</span>
       }
-<span class="nc" id="L166">      String[] command = Repl.splitString(stringToParse);</span>
-<span class="nc" id="L167">      List&lt;String&gt; radiusData = starLogic.run(command);</span>
-<span class="nc" id="L168">      String toPrint = &quot;&quot;;</span>
+<span class="nc" id="L164">      String[] command = Repl.splitString(stringToParse);</span>
+<span class="nc" id="L165">      List&lt;String&gt; radiusData = starLogic.run(command);</span>
+<span class="nc" id="L166">      String toPrint = &quot;&quot;;</span>
       //formating star data when getting print to front end
-<span class="nc bnc" id="L170" title="All 2 branches missed.">      for (int i = 0; i &lt; radiusData.size(); i++) {</span>
-<span class="nc" id="L171">        toPrint = toPrint + &quot;&lt;br /&gt;&quot; + &quot;&lt;br /&gt;&quot; + radiusData.get(i);</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">      for (int i = 0; i &lt; radiusData.size(); i++) {</span>
+<span class="nc" id="L169">        toPrint = toPrint + &quot;&lt;br /&gt;&quot; + &quot;&lt;br /&gt;&quot; + radiusData.get(i);</span>
       }
-<span class="nc bnc" id="L173" title="All 2 branches missed.">      if (radiusData.isEmpty()) {</span>
-<span class="nc" id="L174">        toPrint = &quot;No stars found&quot;;</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">      if (radiusData.isEmpty()) {</span>
+<span class="nc" id="L172">        toPrint = &quot;No stars found&quot;;</span>
       }
-<span class="nc" id="L176">      Map&lt;String, String&gt; variables = ImmutableMap.of(&quot;title&quot;,</span>
+<span class="nc" id="L174">      Map&lt;String, String&gt; variables = ImmutableMap.of(&quot;title&quot;,</span>
               &quot;Stars: Query the database&quot;, &quot;results&quot;, toPrint);
-<span class="nc" id="L178">      return new ModelAndView(variables, &quot;query.ftl&quot;);</span>
+<span class="nc" id="L176">      return new ModelAndView(variables, &quot;query.ftl&quot;);</span>
     }
   }
 
@@ -186,15 +184,15 @@ public final class Main {
   private static class ExceptionPrinter implements ExceptionHandler {
     @Override
     public void handle(Exception e, Request req, Response res) {
-<span class="nc" id="L189">      res.status(500);</span>
-<span class="nc" id="L190">      StringWriter stacktrace = new StringWriter();</span>
-<span class="nc" id="L191">      try (PrintWriter pw = new PrintWriter(stacktrace)) {</span>
-<span class="nc" id="L192">        pw.println(&quot;&lt;pre&gt;&quot;);</span>
-<span class="nc" id="L193">        e.printStackTrace(pw);</span>
-<span class="nc" id="L194">        pw.println(&quot;&lt;/pre&gt;&quot;);</span>
+<span class="nc" id="L187">      res.status(500);</span>
+<span class="nc" id="L188">      StringWriter stacktrace = new StringWriter();</span>
+<span class="nc" id="L189">      try (PrintWriter pw = new PrintWriter(stacktrace)) {</span>
+<span class="nc" id="L190">        pw.println(&quot;&lt;pre&gt;&quot;);</span>
+<span class="nc" id="L191">        e.printStackTrace(pw);</span>
+<span class="nc" id="L192">        pw.println(&quot;&lt;/pre&gt;&quot;);</span>
       }
-<span class="nc" id="L196">      res.body(stacktrace.toString());</span>
-<span class="nc" id="L197">    }</span>
+<span class="nc" id="L194">      res.body(stacktrace.toString());</span>
+<span class="nc" id="L195">    }</span>
   }
 
 }

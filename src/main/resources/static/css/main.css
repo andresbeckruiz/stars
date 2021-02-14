@@ -26,3 +26,9 @@ body {
 .search_headers {
     font-size: 1.25em;
 }
+
+.search_forms {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}

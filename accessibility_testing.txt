@@ -1,5 +1,36 @@
-1)
+1) A non-impaired user might benefit from increased web accessibility if the computer they are using
+doesn't provide support for graphics, or if they are using a text-based browser. If a developer chooses to
+provide text alternatives to visual content, they will be able to understand and enjoy the graphics even
+without seeing them. Another way a non-impaired user might benefit from increased web accessibility is
+if the computer they are using doesn't have access to sound output. If their is a caption for the audio
+content, the user can enjoy and understand the audio content without having to hear it. Finally, a
+non-impaired user might benefit from increased web accessibility if the font colors are high contrast
+and the font size is big. Although the user might not be blind, they still wont have to strain their eyes
+as much to read text, which will lead to the user benefiting from this increased accessibility.
 
-2)
+2) One design choice that User Inyerface made that harmed my user experience was underlining certain
+words to make it look like the words had links. To fix this, I would remove these link tags or underlines
+from words that were not supposed to take the user to a new page. In addition, I would make sure that each
+word or label that is meant to serve as a link is underlined to alert the user that they can click on the
+label or word. Another design choice that harmed my user experience was that the contrast between some of
+the text and the background page color was very low. Specifically, the light green text did not contrast well
+with the blue background, which made it slightly harder to read the text. To fix this and improve visual
+accessibility, I would choose a color for the text that has a higher contrast with the background color, such
+as black. Finally, another design choice that harmed my user experience was that the forms for signing up
+had actual text that you had to delete. For example, the "Choose Password" form looked like the text was
+just a placeholder, but you actually had to delete the words "Choose Password" and then type in your
+password. I would fix this by making "Choose Password" only a placeholder instead of the initial value
+for the form, and I would do this for all the other forms as well.
 
-3)
+3) One change to my site that I made to increase my Lighthouse score was giving all my active, focusable
+elements a unique ID. Initially, two of my textarea tags had the same ID, so I changed this so they would be
+unique. This improves accessibility for my site because it allows each unique element to be visible to
+assistive technologies, such as screen readers. Another change to my site that I made to improve my score
+was giving all my form elements associated labels. My inputs and textareas did not have these labels initially,
+so I changed this by adding a label tag for each element. This change improves accessibility because it
+allows form controls to be announced properly by assistive technologies. Finally, another change I made to my
+site to increase my score was increasing the contrast between the text and the background color. Initially,
+my main "Stars" header was in red, which led to a low contrast between the red and the pink background. To,
+fix this, I made the font color for this header black so that I could increase the contrast. This improved
+accessibility because it allows all users, even those who are non-impaired, to be able to read the text better
+and not have to strain their eyes as much.

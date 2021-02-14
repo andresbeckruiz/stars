@@ -95,8 +95,8 @@ public final class Main {
 
     // Setup Spark Routes
     Spark.get("/stars", new FrontHandler(), freeMarker);
-    Spark.post("/stars", new NeighborsSubmitHandler(), freeMarker);
-    Spark.post("/stars", new RadiusSubmitHandler(), freeMarker);
+    Spark.post("/neighbors", new NeighborsSubmitHandler(), freeMarker);
+    Spark.post("/radius", new RadiusSubmitHandler(), freeMarker);
   }
 
   /**
@@ -125,7 +125,6 @@ public final class Main {
       //checking which method to run
       if (checked == null) {
         stringToParse = "neighbors " + textFromTextField;
-        System.out.println("Yes");
       } else {
         stringToParse = "naive_neighbors " + textFromTextField;
       }
@@ -137,7 +136,7 @@ public final class Main {
         toPrint = toPrint + "<br />" + "<br />" + neighborData.get(i);
       }
       if (neighborData.isEmpty()) {
-        toPrint = "No stars found";
+        toPrint = "<br />" + "<br />" + "No stars found";
       }
       Map<String, String> variables = ImmutableMap.of("title",
               "Stars: Query the database", "results", toPrint);
@@ -159,7 +158,6 @@ public final class Main {
       //checking which method to run
       if (checked == null) {
         stringToParse = "radius " + textFromTextField;
-        System.out.println("Yes");
       } else {
         stringToParse = "naive_radius " + textFromTextField;
       }
