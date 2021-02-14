@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Repl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stars</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.abeckrui</a> &gt; <span class="el_source">Repl.java</span></div><h1>Repl.java</h1><pre class="source lang-java linenums">package edu.brown.cs.abeckrui;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * This class contains all the logic for the REPL.
+ */
+public class Repl {
+
+  private HashMap&lt;String, Method&gt; actions;
+  private BufferedReader bufferedReader;
+
+
+  /**
+   * This constructor initializes our acitions HashMap and bufferedReader.
+   * @param acts HashMap that maps commands to their respective method
+   */
+<span class="fc" id="L25">  public Repl(HashMap&lt;String, Method&gt; acts) {</span>
+<span class="fc" id="L26">    actions = acts;</span>
+<span class="fc" id="L27">    bufferedReader = new BufferedReader(new InputStreamReader(System.in));</span>
+<span class="fc" id="L28">  }</span>
+
+
+  /**
+   * This method contains the REPL loop.
+   */
+  public void read() {
+    //allows loop to run infinitely
+    while (true) {
+      try {
+<span class="nc" id="L38">        String currLine = bufferedReader.readLine();</span>
+        //check to see that theres a valid command
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (currLine != null) {</span>
+          //we don't want to do anything if line is empty, move to next line
+<span class="nc bnc" id="L42" title="All 2 branches missed.">          if (currLine.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L43">            continue;</span>
+          }
+<span class="nc" id="L45">          String[] command = this.splitString(currLine);</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">          if (actions.containsKey(command[0])) {</span>
+<span class="nc" id="L47">            actions.get(command[0]).run(command);</span>
+            //command doesn't exist, throw ERROR
+          } else {
+<span class="nc" id="L50">            System.err.println(&quot;ERROR: Command does not exist.&quot;);</span>
+          }
+          //this happens when we reach EOD, terminate loop
+<span class="nc" id="L53">        } else {</span>
+<span class="nc" id="L54">          break;</span>
+        }
+      //handle ERROR for readLine method
+<span class="nc" id="L57">      } catch (IOException e) {</span>
+<span class="nc" id="L58">        System.err.println(&quot;ERROR: IOException in REPL&quot;);</span>
+<span class="nc" id="L59">      }</span>
+    }
+<span class="nc" id="L61">  }</span>
+
+  /**
+   * Helper method for splitting string. This method is static so it can be used by frontend handlers.
+   * @param currLine representing String you want to parse
+   * @return String[] representing parsed String
+   */
+  public static String[] splitString(String currLine){
+<span class="nc" id="L69">    List&lt;String&gt; matchList = new ArrayList&lt;String&gt;();</span>
+    /**
+     * regex for splitting string at spaces excluding quotes
+     * see this link: https://stackoverflow.com/questions/366202/regex-for-splitting-a
+     * -string-using-space-when-not-surrounded-by-single-or-double/366532
+     */
+<span class="nc" id="L75">    Pattern regex = Pattern.compile(&quot;[^\\s\&quot;']+|\&quot;[^\&quot;]*\&quot;|'[^']*'&quot;);</span>
+<span class="nc" id="L76">    Matcher regexMatcher = regex.matcher(currLine);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    while (regexMatcher.find()) {</span>
+<span class="nc" id="L78">      matchList.add(regexMatcher.group());</span>
+    }
+<span class="nc" id="L80">    int size = matchList.size();</span>
+<span class="nc" id="L81">    String[] command = new String[size];</span>
+<span class="nc" id="L82">    return matchList.toArray(command);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

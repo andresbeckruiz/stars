@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2021</copyright>
     <item>
-      <title>File: 1,
-             Errors: 0,
+      <title>File: 9,
+             Errors: 238,
              Warnings: 0,
              Infos: 0
       </title>
@@ -46,7 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.stars.Stars.java">edu/brown/cs/abeckrui/stars/Stars.java</a>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.Kdtree.java">edu/brown/cs/abeckrui/Kdtree.java</a>
                 </td>
                 <td>
                   0
@@ -55,7 +55,119 @@ under the License.
                   0
                 </td>
                 <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.Node.java">edu/brown/cs/abeckrui/Node.java</a>
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.CoordinateComparator.java">edu/brown/cs/abeckrui/CoordinateComparator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.stars.Star.java">edu/brown/cs/abeckrui/stars/Star.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.stars.StarsLogic.java">edu/brown/cs/abeckrui/stars/StarsLogic.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  141
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.Repl.java">edu/brown/cs/abeckrui/Repl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.stars.PriorityComparator.java">edu/brown/cs/abeckrui/stars/PriorityComparator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.CordComparable.java">edu/brown/cs/abeckrui/CordComparable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#edu.brown.cs.abeckrui.stars.Main.java">edu/brown/cs/abeckrui/stars/Main.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
                 </td>
               </tr>
                       </tbody>

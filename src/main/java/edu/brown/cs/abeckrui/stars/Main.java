@@ -5,20 +5,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 import edu.brown.cs.abeckrui.Method;
 import edu.brown.cs.abeckrui.Repl;
 import edu.brown.cs.abeckrui.mockaroo.MockPersonLogic;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import spark.ExceptionHandler;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Spark;
-import spark.TemplateViewRoute;
+import spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import com.google.common.collect.ImmutableMap;
@@ -31,6 +24,7 @@ import freemarker.template.Configuration;
 public final class Main {
 
   private static final int DEFAULT_PORT = 4567;
+  private static Method starLogic;
 
   /**
    * The initial method called when execution begins.
@@ -60,7 +54,7 @@ public final class Main {
     }
 
     //populating my method hashmap
-    Method starLogic = new StarsLogic();
+    starLogic = new StarsLogic();
     Method mockPersonLogic = new MockPersonLogic();
     HashMap<String, Method> actions = new HashMap<>();
     actions.put("stars", starLogic);
@@ -95,6 +89,8 @@ public final class Main {
 
     // Setup Spark Routes
     Spark.get("/stars", new FrontHandler(), freeMarker);
+    Spark.post("/neighbors", new NeighborsSubmitHandler(), freeMarker);
+    Spark.post("/radius", new RadiusSubmitHandler(), freeMarker);
   }
 
   /**
@@ -104,10 +100,73 @@ public final class Main {
     @Override
     public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = ImmutableMap.of("title",
-              "Stars: Query the database");
+              "Stars: Query the database", "results", "");
       return new ModelAndView(variables, "query.ftl");
     }
   }
+
+  /**
+   * Handles neighbors query submissions.
+   */
+  private static class NeighborsSubmitHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String textFromTextField = qm.value("text");
+      String checked = qm.value("method");
+      String stringToParse = "";
+      if (checked == null){
+        stringToParse = "neighbors " + textFromTextField;
+      }
+      else {
+        stringToParse = "naive_neighbors " + textFromTextField;
+      }
+      String[] command = Repl.splitString(stringToParse);
+      List<String> neighborData = starLogic.run(command);
+      String toPrint = "";
+      for (int i = 0; i < neighborData.size(); i++){
+        toPrint = toPrint + "<br />" + neighborData.get(i);
+      }
+      if (neighborData.isEmpty()){
+        toPrint = "No stars found";
+      }
+      Map<String, String> variables = ImmutableMap.of("title",
+              "Stars: Query the database", "results", toPrint);
+      return new ModelAndView(variables, "query.ftl");
+    }
+  }
+
+  /**
+   * Handles radius query submissions.
+   */
+  private static class RadiusSubmitHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res){
+      QueryParamsMap qm = req.queryMap();
+      String textFromTextField = qm.value("text");
+      String checked = qm.value("method");
+      String stringToParse = "";
+      if (checked == null){
+        stringToParse = "radius " + textFromTextField;
+      }
+      else {
+        stringToParse = "naive_radius " + textFromTextField;
+      }
+      String[] command = Repl.splitString(stringToParse);
+      List<String> radiusData = starLogic.run(command);
+      String toPrint = "";
+      for (int i = 0; i < radiusData.size(); i++){
+        toPrint = toPrint + "<br />" + radiusData.get(i);
+      }
+      if (radiusData.isEmpty()){
+        toPrint = "No stars found";
+      }
+      Map<String, String> variables = ImmutableMap.of("title",
+              "Stars: Query the database", "results", toPrint);
+      return new ModelAndView(variables, "query.ftl");
+    }
+  }
+
 
   /**
    * Display an error page when an exception occurs in the server.

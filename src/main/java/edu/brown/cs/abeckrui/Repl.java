@@ -1,6 +1,5 @@
 package edu.brown.cs.abeckrui;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,25 +42,12 @@ public class Repl {
           if (currLine.equals("")) {
             continue;
           }
-          /**
-           * regex for splitting string at spaces excluding quotes
-           * see this link: https://stackoverflow.com/questions/366202/regex-for-splitting-a
-           * -string-using-space-when-not-surrounded-by-single-or-double/366532
-           */
-          List<String> matchList = new ArrayList<String>();
-          Pattern regex = Pattern.compile("[^\\s\"']+|\"[^\"]*\"|'[^']*'");
-          Matcher regexMatcher = regex.matcher(currLine);
-          while (regexMatcher.find()) {
-            matchList.add(regexMatcher.group());
-          }
-          int size = matchList.size();
-          String[] command = new String[size];
-          matchList.toArray(command);
+          String[] command = this.splitString(currLine);
           if (actions.containsKey(command[0])) {
             actions.get(command[0]).run(command);
             //command doesn't exist, throw ERROR
           } else {
-            System.err.println("ERROR: Command does not exist");
+            System.err.println("ERROR: Command does not exist.");
           }
           //this happens when we reach EOD, terminate loop
         } else {
@@ -69,9 +55,31 @@ public class Repl {
         }
       //handle ERROR for readLine method
       } catch (IOException e) {
-        System.err.println("ERROR: IOException in REPL" + e);
+        System.err.println("ERROR: IOException in REPL");
       }
     }
+  }
+
+  /**
+   * Helper method for splitting string. This method is static so it can be used by frontend handlers.
+   * @param currLine representing String you want to parse
+   * @return String[] representing parsed String
+   */
+  public static String[] splitString(String currLine){
+    List<String> matchList = new ArrayList<String>();
+    /**
+     * regex for splitting string at spaces excluding quotes
+     * see this link: https://stackoverflow.com/questions/366202/regex-for-splitting-a
+     * -string-using-space-when-not-surrounded-by-single-or-double/366532
+     */
+    Pattern regex = Pattern.compile("[^\\s\"']+|\"[^\"]*\"|'[^']*'");
+    Matcher regexMatcher = regex.matcher(currLine);
+    while (regexMatcher.find()) {
+      matchList.add(regexMatcher.group());
+    }
+    int size = matchList.size();
+    String[] command = new String[size];
+    return matchList.toArray(command);
   }
 
 }

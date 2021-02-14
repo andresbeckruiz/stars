@@ -1,0 +1,5 @@
+INPUT
+not_a_command 3 2 3
+OUTPUT
+ERROR: Command does not exist.
+END

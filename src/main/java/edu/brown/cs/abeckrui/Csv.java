@@ -2,7 +2,6 @@ package edu.brown.cs.abeckrui;
 
 import edu.brown.cs.abeckrui.mockaroo.MockPersonLogic;
 import edu.brown.cs.abeckrui.stars.StarsLogic;
-
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;

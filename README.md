@@ -3,6 +3,9 @@
 ## Stars
 **TODO: Fill out this section!**
 
+
+Stars 1:
+
 NOTE: My MOCK_DATA.csv, MockPerson class, and MockPersonRunner class are located in "src/main/java/edu/brown/cs
 /abeckrui/mockaroo". My data_modeling.txt file is in the same directory/level as my README.
 
@@ -41,3 +44,17 @@ I allowed my REPL to take in some type of regex pattern to split on, I could mak
 
 7) My project has no CheckStyle errors. 
    
+
+Stars 2:
+
+ANSWER DESIGN QUESTIONS AND MAKE NEW FILE
+
+Stars 3:
+
+Known bugs: This is not a bug, but my naive methods are really slow for inputs greater than 1000. 
+To account for this, I made 1000 my limit for neighbor number and made __ my limit for my radius 
+for the model based testing so that I could run my tests within a reasonable time limit (my tests 
+take a little over a minute to run).
+
+
+Mention how I didn't do MBT in stars 2 so I just went straight to PBT !!!!

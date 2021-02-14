@@ -1,56 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-   <duplication lines="21" tokens="148">
-      <file line="169"
+   <duplication lines="41" tokens="250">
+      <file line="219"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="299"
+      <file line="414"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <codefragment><![CDATA[      List<List<Double>> neighborList = new ArrayList<>();
-      /**
-       * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
-       * and stars that are tied in distance are always placed in front in the order, each competing
-       * star has a equal random chance to be included in the final list
-       */
-      Collections.shuffle(stars);
+      <codefragment><![CDATA[  private List<String> naiveNeighbors(String[] line) {
+    List<String> neighborData = new ArrayList<>();
+    //see helper method- checks if whole command is valid
+    String returnString = this.checkCommandNeighbors(line);
+    if (!returnString.equals("")){
+      neighborData.add(returnString);
+      return neighborData;
+    }
+    String name = "";
+    //boolean to let me know if a name has been queried
+    boolean searchByName = false;
+    int neighbors = Integer.parseInt(line[1]);
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    if (line.length == 3){
+      searchByName = true;
+      name = line[2].replace("\"", "");
       for (int i = 0; i < stars.size(); i++) {
-        //don't want to include star in list if queried by name
-        if (searchByName && stars.get(i).getName().equals(name)) {
-          continue;
+        if (stars.get(i).getName().equals(name)) {
+          x = stars.get(i).getX();
+          y = stars.get(i).getY();
+          z = stars.get(i).getZ();
         }
-        double iD = stars.get(i).getID();
-        double currentX = stars.get(i).getX();
-        double currentY = stars.get(i).getY();
-        double currentZ = stars.get(i).getZ();
-        //see helper method
-        double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);
-        List<Double> currentStar = new ArrayList<>();
-        currentStar.add(iD);
-        currentStar.add(currentDistance);]]></codefragment>
+      }
+    }
+    else {
+      x = Double.parseDouble(line[2]);
+      y = Double.parseDouble(line[3]);
+      z = Double.parseDouble(line[4]);
+    }
+    //return nothing if neighbors is 0
+    if (neighbors == 0) {
+      return neighborData;
+    }
+    //checking to see if number of neighbors > 0
+    if (neighbors < 0) {
+      System.err.println("ERROR: Number of neighbors cannot be negative");
+      neighborData.add("ERROR: Number of neighbors cannot be negative");
+      return neighborData;
+    }]]></codefragment>
    </duplication>
-   <duplication lines="20" tokens="111">
-      <file line="123"
+   <duplication lines="37" tokens="240">
+      <file line="324"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <file line="257"
+      <file line="566"
             path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
-      <codefragment><![CDATA[        neighbors = Integer.parseInt(line[1]);
+      <codefragment><![CDATA[  private List<String> naiveRadius(String[] line) {
+    List<String> radiusData = new ArrayList<>();
+    //see helper method- checks if whole command is valid
+    String returnString = this.checkCommandRadius(line);
+    if (!returnString.equals("")){
+      radiusData.add(returnString);
+      return radiusData;
+    }
+    String name = "";
+    //boolean to let me know if a name has been queried
+    boolean searchByName = false;
+    double radius = Double.parseDouble(line[1]);
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    if (line.length == 3){
+      searchByName = true;
+      name = line[2].replace("\"", "");
+      for (int i = 0; i < stars.size(); i++) {
+        if (stars.get(i).getName().equals(name)) {
+          x = stars.get(i).getX();
+          y = stars.get(i).getY();
+          z = stars.get(i).getZ();
+        }
+      }
+    }
+    else {
+      x = Double.parseDouble(line[2]);
+      y = Double.parseDouble(line[3]);
+      z = Double.parseDouble(line[4]);
+    }
+    //checking to see if radius > 0
+    if (radius < 0) {
+      System.err.println("ERROR: Radius cannot be negative");
+      radiusData.add("ERROR: Radius cannot be negative");
+      return radiusData;
+    }]]></codefragment>
+   </duplication>
+   <duplication lines="40" tokens="208">
+      <file line="115"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <file line="172"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <codefragment><![CDATA[      }
+      //checking if star data is null or empty
+      if (stars.size() == 0 || stars == null) {
+        System.err.println("ERROR: Please load star data and try again");
+        return "ERROR: Please load star data and try again";
+      }
+      if (line.length == 3) {
+        //checking that third argument is a nonempty string
+        if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
+          System.err.println("ERROR: Name must be a nonempty string");
+          return "ERROR: Name must be a nonempty string";
+        }
+        String name = line[2].replace("\"", "");
         boolean starFound = false;
         //searching for star with matching name
         for (int i = 0; i < stars.size(); i++) {
           if (stars.get(i).getName().equals(name)) {
             starFound = true;
-            x = stars.get(i).getX();
-            y = stars.get(i).getY();
-            z = stars.get(i).getZ();
           }
         }
         //print ERROR and exit method if no star found with name provided
         if (!starFound) {
           System.err.println("ERROR: Star not found. Please check name entered");
-          return;
+          return "ERROR: Star not found. Please check name entered";
         }
       } else {
-        //checking that rest of arguments are integers
-        try {
-          double test = Integer.parseInt(line[1]);]]></codefragment>
+        //checking that rest of arguments are doubles
+        for (int i = 2; i < 5; i++) {
+          try {
+            Double.parseDouble(line[i]);
+          } catch (NumberFormatException e) {
+            System.err.println("ERROR: Coordinates must be int or double");
+            return "ERROR: Coordinates must be int or double";
+          }
+        }
+      }
+      return "";
+    } else {
+      System.err.println("ERROR: Incorrect number or args provided. 3 or 5 expected for "
+              + "neighbors methods");]]></codefragment>
+   </duplication>
+   <duplication lines="22" tokens="156">
+      <file line="230"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <file line="335"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <file line="425"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <file line="577"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <codefragment><![CDATA[    int neighbors = Integer.parseInt(line[1]);
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    if (line.length == 3){
+      searchByName = true;
+      name = line[2].replace("\"", "");
+      for (int i = 0; i < stars.size(); i++) {
+        if (stars.get(i).getName().equals(name)) {
+          x = stars.get(i).getX();
+          y = stars.get(i).getY();
+          z = stars.get(i).getZ();
+        }
+      }
+    }
+    else {
+      x = Double.parseDouble(line[2]);
+      y = Double.parseDouble(line[3]);
+      z = Double.parseDouble(line[4]);
+    }
+    //return nothing if neighbors is 0
+    if (neighbors == 0) {]]></codefragment>
+   </duplication>
+   <duplication lines="21" tokens="148">
+      <file line="262"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <file line="363"
+            path="/Users/andresbeckruiz/cs0320/stars-backup/stars-andresbeckruiz/src/main/java/edu/brown/cs/abeckrui/stars/StarsLogic.java"/>
+      <codefragment><![CDATA[    List<Star> neighborStarList = new ArrayList<>();
+    /**
+     * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
+     * and stars that are tied in distance are always placed in front in the order, each competing
+     * star has a equal random chance to be included in the final list
+     */
+    Collections.shuffle(stars);
+    for (int i = 0; i < stars.size(); i++) {
+      //don't want to include star in list if queried by name
+      if (searchByName && stars.get(i).getName().equals(name)) {
+        continue;
+      }
+      double iD = stars.get(i).getID();
+      double currentX = stars.get(i).getX();
+      double currentY = stars.get(i).getY();
+      double currentZ = stars.get(i).getZ();
+      //see helper method
+      double currentDistance = this.calculateDistance(x, y, z, currentX, currentY, currentZ);
+      List<Double> currentStar = new ArrayList<>();
+      currentStar.add(iD);
+      currentStar.add(currentDistance);]]></codefragment>
    </duplication>
 </pmd-cpd>

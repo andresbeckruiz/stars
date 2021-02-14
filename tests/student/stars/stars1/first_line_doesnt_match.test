@@ -1,0 +1,5 @@
+INPUT
+stars data/stars/test.csv
+OUTPUT
+ERROR: First line of data does not match 'StarID,ProperName,X,Y,Z'
+END

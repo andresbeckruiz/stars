@@ -1,6 +1,8 @@
 edu/brown/cs/abeckrui/stars/Main.class
+edu/brown/cs/abeckrui/stars/Main$NeighborsSubmitHandler.class
 edu/brown/cs/abeckrui/stars/Star.class
 edu/brown/cs/abeckrui/stars/Main$ExceptionPrinter.class
+edu/brown/cs/abeckrui/stars/Main$RadiusSubmitHandler.class
 edu/brown/cs/abeckrui/CordComparable.class
 edu/brown/cs/abeckrui/CoordinateComparator.class
 edu/brown/cs/abeckrui/stars/PriorityComparator.class

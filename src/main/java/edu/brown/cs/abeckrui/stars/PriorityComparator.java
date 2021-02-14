@@ -1,7 +1,6 @@
 package edu.brown.cs.abeckrui.stars;
 
 import edu.brown.cs.abeckrui.CordComparable;
-
 import java.util.Comparator;
 
 public class PriorityComparator implements Comparator<CordComparable> {
@@ -26,7 +25,18 @@ public class PriorityComparator implements Comparator<CordComparable> {
     double by = b.getCoordinate(1);
     double bz = b.getCoordinate(2);
     double bDist = StarsLogic.calculateDistance(bx,by,bz,x,y,z);
-    return (-1 * Double.compare(aDist,bDist));
+    //checking if we want to randomize ties or not
+    if (Double.compare(aDist,bDist) == 0){
+      if (Math.random() < 0.5){
+        return 1;
+      }
+      else{
+        return -1;
+      }
+    }
+    else {
+      return (-1 * Double.compare(aDist, bDist));
+    }
   }
 
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 /**
- * This class handles all the search methods, data checking, and star logic.
+ * This class handles all the search methods, data checking, and star logic...
  */
 public class StarsLogic implements Method {
 
@@ -25,31 +25,34 @@ public class StarsLogic implements Method {
 
 
   @Override
-  public void run(String[] line) {
+  public List<String> run(String[] line) {
+    List<String> toPrint = new ArrayList<>();
     switch (line[0]) {
       case "stars":
         this.parseCSV(line);
         break;
       case "naive_neighbors":
-        this.naiveNeighbors(line);
+        toPrint = this.naiveNeighbors(line);
         break;
       case "naive_radius":
-        this.naiveRadius(line);
+        toPrint = this.naiveRadius(line);
         break;
       case "neighbors":
-        this.neighbors(line);
+        toPrint = this.neighbors(line);
         break;
       case "radius":
-        this.radius(line);
+        toPrint = this.radius(line);
         break;
       default:
         //shouldn't reach this, but handle error just in case
         System.err.println("ERROR: Command for stars not found.");
+        toPrint.add("ERROR: Command for stars not found.");
         break;
     }
+    return toPrint;
   }
 
-  private void parseCSV(String[] line) {
+  public void parseCSV(String[] line) {
     if (line.length != 2) {
       System.err.println("ERROR: Incorrect number of args for command. 2 are expected");
     } else {
@@ -99,23 +102,27 @@ public class StarsLogic implements Method {
   /**
    * This helper method checks that for valid commands for both neighbor methods
    * @param line a String array representing the user input line parsed by the REPL
-   * @return a boolean representing if command is valid (true if valid)
+   * @return a string representing if command is valid ("" if valid, error message if not)
    */
-  private boolean checkCommandNeighbors(String[] line) {
+  private String checkCommandNeighbors(String[] line) {
     //boolean to let me know if a name has been queried
     if (line.length == 3 || line.length == 5) {
       try {
         Integer.parseInt(line[1]);
       } catch (NumberFormatException e) {
         System.err.println("ERROR: Number of neighbors must be an int");
-        return false;
+        return "ERROR: Number of neighbors must be an int";
+      }
+      //checking if star data is null or empty
+      if (stars.size() == 0 || stars == null) {
+        System.err.println("ERROR: Please load star data and try again");
+        return "ERROR: Please load star data and try again";
       }
       if (line.length == 3) {
-        //checking that second argument is an int
         //checking that third argument is a nonempty string
         if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
           System.err.println("ERROR: Name must be a nonempty string");
-          return false;
+          return "ERROR: Name must be a nonempty string";
         }
         String name = line[2].replace("\"", "");
         boolean starFound = false;
@@ -128,7 +135,7 @@ public class StarsLogic implements Method {
         //print ERROR and exit method if no star found with name provided
         if (!starFound) {
           System.err.println("ERROR: Star not found. Please check name entered");
-          return false;
+          return "ERROR: Star not found. Please check name entered";
         }
       } else {
         //checking that rest of arguments are doubles
@@ -137,15 +144,15 @@ public class StarsLogic implements Method {
             Double.parseDouble(line[i]);
           } catch (NumberFormatException e) {
             System.err.println("ERROR: Coordinates must be int or double");
-            return false;
+            return "ERROR: Coordinates must be int or double";
           }
         }
       }
-      return true;
+      return "";
     } else {
       System.err.println("ERROR: Incorrect number or args provided. 3 or 5 expected for "
               + "neighbors methods");
-      return false;
+      return "ERROR: Incorrect number or args provided. 3 or 5 expected for neighbors methods";
     }
   }
 
@@ -154,21 +161,25 @@ public class StarsLogic implements Method {
    * @param line a String array representing the user input line parsed by the REPL
    * @return a boolean representing if command is valid (true if valid)
    */
-  private boolean checkCommandRadius(String[] line) {
+  private String checkCommandRadius(String[] line) {
     //boolean to let me know if a name has been queried
     if (line.length == 3 || line.length == 5) {
       try {
         Double.parseDouble(line[1]);
       } catch (NumberFormatException e) {
         System.err.println("ERROR: Radius must be an int or double");
-        return false;
+        return "ERROR: Radius must be an int or double";
+      }
+      //checking if star data is null or empty
+      if (stars.size() == 0 || stars == null) {
+        System.err.println("ERROR: Please load star data and try again");
+        return "ERROR: Please load star data and try again";
       }
       if (line.length == 3) {
-        //checking that second argument is an int
         //checking that third argument is a nonempty string
         if (!(line[2] instanceof String) || (line[2].equals("\"\""))) {
           System.err.println("ERROR: Name must be a nonempty string");
-          return false;
+          return "ERROR: Name must be a nonempty string";
         }
         String name = line[2].replace("\"", "");
         boolean starFound = false;
@@ -181,7 +192,7 @@ public class StarsLogic implements Method {
         //print ERROR and exit method if no star found with name provided
         if (!starFound) {
           System.err.println("ERROR: Star not found. Please check name entered");
-          return false;
+          return "ERROR: Star not found. Please check name entered";
         }
       } else {
         //checking that rest of arguments are doubles
@@ -190,30 +201,28 @@ public class StarsLogic implements Method {
             Double.parseDouble(line[i]);
           } catch (NumberFormatException e) {
             System.err.println("ERROR: Coordinates must be int or double");
-            return false;
+            return "ERROR: Coordinates must be int or double";
           }
         }
       }
-      return true;
+      return "";
     } else {
       System.err.println("ERROR: Incorrect number or args provided. 3 or 5 expected for "
               + "radius methods");
-      return false;
+      return "ERROR: Incorrect number or args provided. 3 or 5 expected for radius methods";
     }
   }
   /**
    * Naive neighbors method.
    * @param line, an array of Strings parsed by the REPL
    */
-  private void naiveNeighbors(String[] line) {
-    //checking that starData is not empty or null
-    if (stars.size() == 0 || stars == null) {
-      System.err.println("ERROR: Please load star data and try again");
-      return;
-    }
+  private List<String> naiveNeighbors(String[] line) {
+    List<String> neighborData = new ArrayList<>();
     //see helper method- checks if whole command is valid
-    if (!this.checkCommandNeighbors(line)){
-      return;
+    String returnString = this.checkCommandNeighbors(line);
+    if (!returnString.equals("")){
+      neighborData.add(returnString);
+      return neighborData;
     }
     String name = "";
     //boolean to let me know if a name has been queried
@@ -240,14 +249,17 @@ public class StarsLogic implements Method {
     }
     //return nothing if neighbors is 0
     if (neighbors == 0) {
-      return;
+      return neighborData;
     }
     //checking to see if number of neighbors > 0
     if (neighbors < 0) {
       System.err.println("ERROR: Number of neighbors cannot be negative");
-      return;
+      neighborData.add("ERROR: Number of neighbors cannot be negative");
+      return neighborData;
     }
     List<List<Double>> neighborList = new ArrayList<>();
+    //this is the list I use to return the star data
+    List<Star> neighborStarList = new ArrayList<>();
     /**
      * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
      * and stars that are tied in distance are always placed in front in the order, each competing
@@ -280,13 +292,16 @@ public class StarsLogic implements Method {
       }
       if (added) {
         neighborList.add(addIndex, currentStar);
+        neighborStarList.add(addIndex, stars.get(i));
         //want to include neighbors up to amount of neighbors asked for in command
       } else if (neighborList.size() < neighbors) {
         neighborList.add(currentStar);
+        neighborStarList.add(stars.get(i));
       }
       //want to keep list at size of number of neighbors
       if (neighborList.size() > neighbors) {
         neighborList.remove(neighborList.size() - 1);
+        neighborStarList.remove(neighborStarList.size() - 1);
       }
     }
     //printing out stars to console
@@ -294,7 +309,11 @@ public class StarsLogic implements Method {
       double iD = neighborList.get(k).get(0);
       int toPrint = (int) iD;
       System.out.println(String.valueOf(toPrint));
+      neighborData.add("ID: " + neighborStarList.get(k).getID() + " | Name: " + neighborStarList.get(k).getName()
+              + " | " + "Coordinates: " + neighborStarList.get(k).getX() + ", " + neighborStarList.get(k).getY() +
+              ", " + neighborStarList.get(k).getZ());
     }
+    return neighborData;
   }
 
   /**
@@ -302,15 +321,13 @@ public class StarsLogic implements Method {
    *
    * @param line, an array of strings parsed by the REPL
    */
-  private void naiveRadius(String[] line) {
-    //checking that starData is not empty or null
-    if (stars.size() == 0 || stars == null) {
-      System.err.println("ERROR: Please load star data and try again");
-      return;
-    }
+  private List<String> naiveRadius(String[] line) {
+    List<String> radiusData = new ArrayList<>();
     //see helper method- checks if whole command is valid
-    if (!this.checkCommandRadius(line)){
-      return;
+    String returnString = this.checkCommandRadius(line);
+    if (!returnString.equals("")){
+      radiusData.add(returnString);
+      return radiusData;
     }
     String name = "";
     //boolean to let me know if a name has been queried
@@ -338,9 +355,12 @@ public class StarsLogic implements Method {
     //checking to see if radius > 0
     if (radius < 0) {
       System.err.println("ERROR: Radius cannot be negative");
-      return;
+      radiusData.add("ERROR: Radius cannot be negative");
+      return radiusData;
     }
     List<List<Double>> radiusList = new ArrayList<>();
+    //list for storing star data
+    List<Star> radiusStarList = new ArrayList<>();
     /**
      * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
      * and stars that are tied in distance are always placed in front in the order, each competing
@@ -367,6 +387,7 @@ public class StarsLogic implements Method {
         for (int j = 0; j < radiusList.size(); j++) {
           if (radiusList.get(j).get(1) > currentDistance) {
             radiusList.add(j, currentStar);
+            radiusStarList.add(j, stars.get(i));
             added = true;
             break;
           }
@@ -374,6 +395,7 @@ public class StarsLogic implements Method {
         //add at end of list if furthest away from cordinates given
         if (!added) {
           radiusList.add(currentStar);
+          radiusStarList.add(stars.get(i));
         }
       }
     }
@@ -382,18 +404,20 @@ public class StarsLogic implements Method {
       double iD = radiusList.get(k).get(0);
       int toPrint = (int) iD;
       System.out.println(String.valueOf(toPrint));
+      radiusData.add("ID: " + radiusStarList.get(k).getID() + " | Name: " + radiusStarList.get(k).getName()
+              + " | " + "Coordinates: " + radiusStarList.get(k).getX() + ", " + radiusStarList.get(k).getY() +
+              ", " + radiusStarList.get(k).getZ());
     }
+    return radiusData;
   }
 
-  private void neighbors(String[] line){
-    //checking that starData is not empty or null
-    if (stars.size() == 0 || stars == null) {
-      System.err.println("ERROR: Please load star data and try again");
-      return;
-    }
+  private List<String> neighbors(String[] line){
+    List<String> neighborData = new ArrayList<>();
     //see helper method- checks if whole command is valid
-    if (!this.checkCommandNeighbors(line)){
-      return;
+    String returnString = this.checkCommandNeighbors(line);
+    if (!returnString.equals("")){
+      neighborData.add(returnString);
+      return neighborData;
     }
     String name = "";
     //boolean to let me know if a name has been queried
@@ -420,12 +444,13 @@ public class StarsLogic implements Method {
     }
     //return nothing if neighbors is 0
     if (neighbors == 0) {
-      return;
+      return neighborData;
     }
     //checking to see if number of neighbors > 0
     if (neighbors < 0) {
       System.err.println("ERROR: Number of neighbors cannot be negative");
-      return;
+      neighborData.add("ERROR: Number of neighbors cannot be negative");
+      return neighborData;
     }
     PriorityQueue<CordComparable> neighborQueue = new PriorityQueue<>(new PriorityComparator(x,y,z));
     Node rootNode = kdTree.getRoot();
@@ -436,9 +461,13 @@ public class StarsLogic implements Method {
     while (!neighborQueue.isEmpty()){
       print.add(neighborQueue.poll());
     }
-    for (int j = print.size() - 1; j >= 0; j--){
-      System.out.println(print.get(j).getInfo().get(0));
+    for (int i = print.size() - 1; i >= 0; i--){
+      System.out.println(print.get(i).getInfo().get(0));
+      neighborData.add("ID: " + print.get(i).getInfo().get(0) + " | Name: " + print.get(i).getInfo().get(1) + " | " +
+              "Coordinates: " + print.get(i).getCoordinate(0) + ", " + print.get(i).getCoordinate(1) +
+              ", " + print.get(i).getCoordinate(2));
     }
+    return neighborData;
   }
 
   /**
@@ -475,11 +504,22 @@ public class StarsLogic implements Method {
       double furthestZ = furthest.getCoordinate(2);
       furthestDistance = this.calculateDistance(furthestX, furthestY, furthestZ,
               targetX, targetY, targetZ);
-      if (currentDistance < furthestDistance) {
+      if (currentDistance <= furthestDistance) {
+        //don't want to add star if queried by name
         if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))) {
-          //remove furthest neighbors
-          neighborQueue.poll();
-          neighborQueue.add(currentNode.getCompObject());
+          //check if we want to randomize tied star
+          if (currentDistance == furthestDistance){
+            //this ensures that tied stars are randomly picked
+            if (Math.random() < 0.5){
+              //remove furthest neighbor
+              neighborQueue.poll();
+              neighborQueue.add(currentNode.getCompObject());
+            }
+          } else {
+            //remove furthest neighbor
+            neighborQueue.poll();
+            neighborQueue.add(currentNode.getCompObject());
+          }
         }
       }
     }
@@ -519,17 +559,17 @@ public class StarsLogic implements Method {
   }
 
   /**
-   *
-   * @param line
+   * This is the KDTree radius method.
+   * @param line representing the command input by user.
+   * @return List representing star data.
    */
-  private void radius(String[] line){
-    if (stars.size() == 0 || stars == null) {
-      System.err.println("ERROR: Please load star data and try again");
-      return;
-    }
+  public List<String> radius(String[] line){
+    List<String> radiusData = new ArrayList<>();
     //see helper method- checks if whole command is valid
-    if (!this.checkCommandRadius(line)){
-      return;
+    String returnString = this.checkCommandRadius(line);
+    if (!returnString.equals("")){
+      radiusData.add(returnString);
+      return radiusData;
     }
     String name = "";
     //boolean to let me know if a name has been queried
@@ -557,7 +597,8 @@ public class StarsLogic implements Method {
     //checking to see if number of neighbors > 0
     if (radius < 0) {
       System.err.println("ERROR: Radius cannot be negative");
-      return;
+      radiusData.add("ERROR: Radius cannot be negative");
+      return radiusData;
     }
     PriorityQueue<CordComparable> radiusQueue = new PriorityQueue<>(new PriorityComparator(x,y,z));
     Node rootNode = kdTree.getRoot();
@@ -568,9 +609,13 @@ public class StarsLogic implements Method {
     while (!radiusQueue.isEmpty()){
       print.add(radiusQueue.poll());
     }
-    for (int j = print.size() - 1; j >= 0; j--){
-      System.out.println(print.get(j).getInfo().get(0));
+    for (int i = print.size() - 1; i >= 0; i--){
+      System.out.println(print.get(i).getInfo().get(0));
+      radiusData.add("ID: " + print.get(i).getInfo().get(0) + " | Name: " + print.get(i).getInfo().get(1) + " | " +
+              "Coordinates: " + print.get(i).getCoordinate(0) + ", " + print.get(i).getCoordinate(1) +
+              ", " + print.get(i).getCoordinate(2));
     }
+    return radiusData;
   }
 
 
@@ -593,7 +638,7 @@ public class StarsLogic implements Method {
     double targetX = target.getCoordinate(0);
     double targetY = target.getCoordinate(1);
     double targetZ = target.getCoordinate(2);
-    double currentDistance = this.calculateDistance(currX,currY,currZ,targetX,targetY,targetZ);
+    double currentDistance = this.calculateDistance(currX, currY, currZ, targetX, targetY, targetZ);
     //add node to queue if within radius
     if (currentDistance <= radius) {
       if (!(searchByName && currentNode.getCompObject().getInfo().get(1).equals(name))) {
@@ -604,22 +649,22 @@ public class StarsLogic implements Method {
     if (radius > Math.abs(currentNode.getCompObject().getCoordinate(depth) -
             target.getCoordinate(depth))){
       if (currentNode.hasLeft()){
-        this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+        this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
                 currentNode.getLeft());
       }
       if (currentNode.hasRight()){
-        this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+        this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
                 currentNode.getRight());
       }
     } else{
       if(currentNode.getCompObject().getCoordinate(depth) <= target.getCoordinate(depth)){
         if (currentNode.hasRight()){
-          this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+          this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
                   currentNode.getRight());
         }
       } else{
         if (currentNode.hasLeft()){
-          this.radiusHelper(searchByName,name,radius,target,depth+1,radiusQueue,
+          this.radiusHelper(searchByName, name, radius, target, depth+1, radiusQueue,
                   currentNode.getLeft());
         }
       }
@@ -634,28 +679,29 @@ public class StarsLogic implements Method {
    */
   public static boolean checkData(String[] data) {
     if (data.length != 5) {
-      System.err.println("ERROR: Incorrect number of data fields for line:" + data);
+      System.err.println("ERROR: Incorrect number of data fields for line in file");
       return false;
     }
     for (int i = 0; i < data.length; i++) {
       //data type checking
       if (i == 0) {
         try {
-          int test = Integer.parseInt(data[i]);
+          Integer.parseInt(data[i]);
         } catch (NumberFormatException e) {
           System.err.println("ERROR: Star ID must be an int ");
           return false;
         }
       } else if (i == 1) {
         if (!(data[i] instanceof String)) {
-          System.err.println("ERROR: Starname must be a string" + data);
+          System.err.println("ERROR: Starnames must be a string");
           return false;
         }
       } else {
         try {
-          double test = Double.parseDouble(data[i]);
+          Double.parseDouble(data[i]);
         } catch (NumberFormatException e) {
-          System.err.println("ERROR: Coordinates must be a double" + data);
+          System.err.println("ERROR: Coordinates must be a double");
+          return false;
         }
       }
     }
@@ -673,16 +719,17 @@ public class StarsLogic implements Method {
     List<Node> nodes = new ArrayList<>();
     //creating nodes for every
     for (int i = 0; i < stars.size(); i++){
-      nodes.add(new Node<Star>(stars.get(i)));
+      nodes.add(new Node(stars.get(i)));
     }
-    /**
-     * this shuffle method allows tied stars to randomly be picked. Since the shuffle is random,
-     * and stars that are tied in distance are always sorted the same way when the KD tree is built,
-     * each competing star has a equal random chance to be placed in a certain spot in the tree.
-     * Therefore, each competing star has a equal random chance to be included in the final list
-     */
-    Collections.shuffle(nodes);
     kdTree = new Kdtree(nodes);
+  }
+
+  /**
+   * Getter method to get stardata in test classes.
+   * @return List representing the star data instance variable.
+   */
+  public List<Star> getStars(){
+    return stars;
   }
 
 }

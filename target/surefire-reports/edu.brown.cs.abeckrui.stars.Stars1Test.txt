@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: edu.brown.cs.abeckrui.stars.Stars1Test
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.078 s - in edu.brown.cs.abeckrui.stars.Stars1Test
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.356 s - in edu.brown.cs.abeckrui.stars.Stars1Test

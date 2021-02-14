@@ -1,0 +1,25 @@
+textarea {
+    resize: none;
+}
+
+
+.center {
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+}
+
+.container {
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+body {
+    background-color: #e3a6ec;
+}
+
+#header1 {
+    font-size: 4em;
+    color: midnightblue;
+}

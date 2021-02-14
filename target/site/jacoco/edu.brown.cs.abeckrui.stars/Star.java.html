@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Star.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">stars</a> &gt; <a href="index.source.html" class="el_package">edu.brown.cs.abeckrui.stars</a> &gt; <span class="el_source">Star.java</span></div><h1>Star.java</h1><pre class="source lang-java linenums">package edu.brown.cs.abeckrui.stars;
+
+import edu.brown.cs.abeckrui.CordComparable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Star implements CordComparable {
+
+  private int id;
+  private String name;
+  private double x;
+  private double y;
+  private double z;
+  private static final int DIMENSION = 3;
+
+<span class="fc" id="L17">  public Star(int iD, String starName, double xcord, double ycord, double zcord){</span>
+<span class="fc" id="L18">    id = iD;</span>
+<span class="fc" id="L19">    name = starName;</span>
+<span class="fc" id="L20">    x = xcord;</span>
+<span class="fc" id="L21">    y = ycord;</span>
+<span class="fc" id="L22">    z = zcord;</span>
+<span class="fc" id="L23">  }</span>
+
+  /**
+   * Returns coordinates of stars (method from Comparable interface).
+   * @param k representing current level in tree
+   * @return coordinate
+   */
+  @Override
+  public double getCoordinate(int k){
+<span class="fc bfc" id="L32" title="All 2 branches covered.">    if (k % DIMENSION == 0){</span>
+<span class="fc" id="L33">      return x;</span>
+    }
+<span class="fc bfc" id="L35" title="All 2 branches covered.">    else if (k % DIMENSION == 1){</span>
+<span class="fc" id="L36">      return y;</span>
+    }
+    else{
+<span class="fc" id="L39">      return z;</span>
+    }
+  }
+
+  @Override
+  public List&lt;String&gt; getInfo(){
+<span class="fc" id="L45">    List&lt;String&gt; info = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L46">    info.add(Integer.toString(id));</span>
+<span class="fc" id="L47">    info.add(name);</span>
+<span class="fc" id="L48">    return info;</span>
+  }
+
+
+  /**
+   * Gets star ID.
+   * @return int, representing id.
+   */
+  public int getID(){
+<span class="fc" id="L57">    return id;</span>
+  }
+
+  /**
+   * Gets star name.
+   * @return string, representing name.
+   */
+  public String getName(){
+<span class="fc" id="L65">    return name;</span>
+  }
+
+  /**
+   * Gets x cord.
+   * @return double, representing x cord.
+   */
+  public double getX(){
+<span class="fc" id="L73">    return x;</span>
+  }
+
+  /**
+   * Gets y cord.
+   * @return double, representing y cord.
+   */
+  public double getY(){
+<span class="fc" id="L81">    return y;</span>
+  }
+
+  /**
+   * Gets z cord.
+   * @return double, representing z cord.
+   */
+  public double getZ(){
+<span class="fc" id="L89">    return z;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

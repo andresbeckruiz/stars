@@ -79,8 +79,10 @@ public class MockPersonLogic implements Method {
   }
 
   @Override
-  public void run(String[] line) {
+  public List<String> run(String[] line) {
+    List<String> toPrint = new ArrayList<>();
     this.parseCSV(line);
+    return toPrint;
   }
 
   private void parseCSV(String[] line) {
