@@ -1,7 +1,14 @@
-# README
+Stars
 
-## Stars
-**TODO: Fill out this section!**
+Project Specifications:
+
+Stars 1: https://cs.brown.edu/courses/cs0320/projects/stars-part-one.html
+
+Stars 2: https://cs.brown.edu/courses/cs0320/projects/stars-part-two.html
+
+Stars 3: https://cs.brown.edu/courses/cs0320/projects/stars-part-three.html
+
+-----------------------------------------------------------------------------------------------------------------
 
 Stars 1:
 
